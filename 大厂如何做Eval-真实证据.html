@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大厂如何做 Eval — 真实证据</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c232d; --ink:#e6edf3; --muted:#9aa7b4;
+    --line:#2a323d; --accent:#58a6ff; --quote:#3fb950; --quote-bg:#11271a;
+    --warn:#d29922; --warn-bg:#2a2110; --tag-off:#1f6feb; --tag-prac:#238636; --tag-skip:#6e7681;
+    --code:#79c0ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.75;font-size:16px}
+  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 96px}
+  header.hd{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:8px}
+  h1{font-size:30px;margin:0 0 10px;letter-spacing:.5px}
+  .sub{color:var(--muted);font-size:15px}
+  .meta{color:var(--tag-skip);font-size:13px;margin-top:14px}
+  h2{font-size:22px;margin:48px 0 6px;padding-left:14px;border-left:4px solid var(--accent)}
+  h3{font-size:17px;margin:30px 0 6px;color:#cdd9e5}
+  p{margin:12px 0}
+  .lead{color:var(--muted)}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px dotted #3a4756}
+  a:hover{border-bottom-style:solid}
+  code{background:#0b0f14;color:var(--code);padding:2px 6px;border-radius:5px;font-size:13.5px;
+    font-family:"SF Mono",Menlo,Consolas,monospace}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px 22px 18px;margin:18px 0}
+  .tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.5px;
+    padding:2px 9px;border-radius:20px;margin-right:8px;vertical-align:middle;color:#fff}
+  .t-off{background:var(--tag-off)} .t-prac{background:var(--tag-prac)} .t-skip{background:var(--tag-skip)}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:18px 0 0;font-size:13px;color:var(--muted)}
+  blockquote{margin:14px 0;background:var(--quote-bg);border-left:4px solid var(--quote);
+    padding:12px 18px;border-radius:0 8px 8px 0}
+  blockquote .en{color:#b9f0c8;font-style:italic;font-size:14.5px}
+  blockquote .cn{color:var(--ink);margin-top:8px}
+  blockquote .src{display:block;margin-top:8px;font-size:12.5px;color:var(--muted)}
+  .warnbox{background:var(--warn-bg);border-left:4px solid var(--warn);padding:12px 18px;border-radius:0 8px 8px 0;margin:14px 0}
+  .warnbox b{color:var(--warn)}
+  ul{margin:10px 0;padding-left:22px} li{margin:6px 0}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:18px 0}
+  .grid .cell{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .grid .cell h4{margin:0 0 6px;font-size:15px}
+  .grid .cell p{margin:4px 0;font-size:13.5px;color:var(--muted)}
+  .num{font-size:28px;font-weight:800;color:var(--accent);line-height:1}
+  .kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+  .kpi .b{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:16px;text-align:center}
+  .kpi .b small{display:block;color:var(--muted);font-size:12px;margin-top:6px;line-height:1.4}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel2);color:#cdd9e5}
+  .src-list{font-size:13.5px;color:var(--muted)}
+  .src-list li{margin:8px 0}
+  hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+  .pill{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:2px 10px;margin-right:6px}
+  @media(max-width:680px){.grid,.kpi{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hd">
+  <h1>大厂如何做 Eval —— 真实证据</h1>
+  <div class="sub">写代码 → 验证(verify)→ 评估(eval)。前两步管"做对了没",eval 管"做得好不好 / 做的是不是对的事"。<br>本文只收录可溯源的一手工程博客与官方文档,逐字引用附英文原文与链接。</div>
+  <div class="legend">
+    <span><span class="tag t-off">官方逐字</span> 来自厂商一手文档/博客的原话</span>
+    <span><span class="tag t-prac">实践补充</span> 我对证据的归纳与解读</span>
+    <span><span class="tag t-skip">看场景可省</span> 进阶细节,按需要看</span>
+  </div>
+  <div class="meta">整理日期 2026-06-07 · 一手来源:Anthropic 工程博客 / OpenAI 开发者文档 / LinkedIn 工程博客 / The Pragmatic Engineer</div>
+</header>
+
+<h2>一、先看一个最反直觉的结论</h2>
+<p class="lead">几乎所有大厂的一手文章都在说同一句话:<b>eval 比你想的更难,也比你想的更早就该开始,而且小样本就够用。</b></p>
+
+<div class="card">
+  <p><span class="tag t-off">官方逐字</span> <b>Anthropic:不要等攒够几百条才开始</b></p>
+  <blockquote>
+    <div class="en">"We started with a set of about 20 queries representing real usage patterns… A prompt tweak might boost success rates from 30% to 80%."</div>
+    <div class="cn">"我们一开始只用了约 20 条代表真实使用模式的查询……一次提示词微调就可能把成功率从 30% 拉到 80%。"</div>
+    <span class="src">— Anthropic, <a href="https://www.anthropic.com/engineering/multi-agent-research-system">How we built our multi-agent research system</a></span>
+  </blockquote>
+  <blockquote>
+    <div class="en">Teams often "delay creating evals because they believe that only large evals with hundreds of test cases are useful."</div>
+    <div class="cn">团队常常"因为以为只有几百条用例的大型 eval 才有用,而迟迟不动手做 eval"。</div>
+    <span class="src">— 同上</span>
+  </blockquote>
+  <p><span class="tag t-prac">实践补充</span> 为什么小样本够用?因为早期改动的<b>效应量(effect size)很大</b>。在《Demystifying evals》里 Anthropic 把这点讲透了:</p>
+  <blockquote>
+    <div class="en">"Start with 20–50 simple tasks drawn from real failures… Each change to the system often has a clear, noticeable impact, and this large effect size means small sample sizes suffice."</div>
+    <div class="cn">"从真实失败案例里挑 20–50 个简单任务起步……系统的每次改动往往都有明显可见的影响,这种大效应量意味着小样本就足够了。"</div>
+    <span class="src">— Anthropic, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a></span>
+  </blockquote>
+</div>
+
+<h2>二、Eval 的"零件":harness、suite、eval-driven development</h2>
+<p>Anthropic 这篇《Demystifying evals for AI agents》基本是目前最系统的一手拆解。三个核心概念:</p>
+
+<table>
+  <tr><th>术语</th><th>官方原文(逐字)</th><th>白话</th></tr>
+  <tr>
+    <td><b>Eval harness</b><br>评估框架</td>
+    <td><span class="en" style="color:#b9f0c8">"the infrastructure that runs evals end-to-end. It provides instructions and tools, runs tasks concurrently, records all the steps, grades outputs, and aggregates results."</span></td>
+    <td>端到端跑 eval 的基础设施:发指令、给工具、并发跑任务、记录每一步、打分、汇总。</td>
+  </tr>
+  <tr>
+    <td><b>Eval suite</b><br>评估套件</td>
+    <td><span class="en" style="color:#b9f0c8">"a collection of tasks designed to measure specific capabilities or behaviors."</span></td>
+    <td>一组围绕同一大目标的任务(如"客服":退款 / 取消 / 升级工单)。</td>
+  </tr>
+  <tr>
+    <td><b>Eval-driven development</b><br>评估驱动开发</td>
+    <td><span class="en" style="color:#b9f0c8">"build evals to define planned capabilities before agents can fulfill them, then iterate until the agent performs well."</span></td>
+    <td>像 TDD:先用 eval 把"要做到什么"定义清楚,再迭代实现到达标。</td>
+  </tr>
+</table>
+<p class="src-list">来源:Anthropic, <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a></p>
+
+<h2>三、怎么打分?三种 grader 的取舍</h2>
+<p>这是大厂最一致的共识:<b>分层用工具,能用确定性方法绝不上 LLM。</b></p>
+
+<div class="grid">
+  <div class="cell">
+    <h4>① Code-based 代码打分</h4>
+    <p><span class="pill">快 · 便宜 · 可复现</span></p>
+    <p>断言、正则、精确匹配。缺点:对"合理的变体"很脆。</p>
+  </div>
+  <div class="cell">
+    <h4>② Model-based(LLM-as-judge)</h4>
+    <p><span class="pill">灵活 · 可规模化</span></p>
+    <p>开放式质量判断。缺点:非确定性,<b>必须校准</b>。</p>
+  </div>
+  <div class="cell">
+    <h4>③ Human 人工打分</h4>
+    <p><span class="pill">金标准</span></p>
+    <p>质量最高。缺点:慢且贵,只能小批量。</p>
+  </div>
+</div>
+<p class="src-list">分类来自 Anthropic《Demystifying evals for AI agents》;原文分别描述为 "Fast, cheap, objective, and reproducible but brittle"、"Flexible and scalable but non-deterministic and requiring calibration"、"Gold-standard quality but expensive and slow"。</p>
+
+<h3>关键原则:评结果,不评路径</h3>
+<div class="card">
+  <blockquote>
+    <div class="en">"Grade what the agent produced, not the path it took."</div>
+    <div class="cn">"评估 agent 产出的<b>结果</b>,而不是它走过的<b>路径</b>。"</div>
+    <span class="src">— Anthropic, Demystifying evals for AI agents</span>
+  </blockquote>
+  <p><span class="tag t-off">官方逐字</span> 检查具体的工具调用顺序会造出"过脆的测试":</p>
+  <blockquote>
+    <div class="en">checking specific tool call sequences creates "overly brittle tests, as agents regularly find valid approaches that eval designers didn't anticipate."</div>
+    <div class="cn">检查特定工具调用序列会造成"过脆的测试,因为 agent 经常找到设计者没预料到的有效路径"。</div>
+  </blockquote>
+  <p><span class="tag t-off">官方逐字</span> 在多 agent 系统里他们同样主张<b>评终态</b>:<span class="en" style="color:#b9f0c8">"evaluate whether it achieved the correct final state"</span>(评估它是否到达了正确的最终状态)。<span class="src" style="display:inline">— 多 agent 研究系统博客</span></p>
+</div>
+
+<h3>LLM-as-judge 的具体配方</h3>
+<div class="card">
+  <p><span class="tag t-off">官方逐字</span> <b>Anthropic 在多 agent 系统里的做法</b>——出乎意料地简单:</p>
+  <blockquote>
+    <div class="en">"a single LLM call with a single prompt outputting scores from 0.0–1.0 and a pass-fail grade was the most consistent and aligned with human judgements."</div>
+    <div class="cn">"用<b>一次 LLM 调用、一个提示词</b>,输出 0.0–1.0 的分数加一个 pass/fail 判定,反而最稳定、也最贴近人类判断。"</div>
+    <span class="src">— Anthropic, multi-agent research system</span>
+  </blockquote>
+  <p>它的评分维度(rubric)5 项:<b>事实准确性 / 引用准确性 / 完整性 / 来源质量 / 工具效率</b>。</p>
+
+  <p style="margin-top:18px"><span class="tag t-off">官方逐字</span> <b>OpenAI 的 judge 工程清单:</b></p>
+  <ul>
+    <li><span class="en" style="color:#b9f0c8">"Use the most capable model to grade if you can"</span> — 打分用尽量强的模型。</li>
+    <li><span class="en" style="color:#b9f0c8">"Use pairwise comparison or pass/fail for more reliability"</span> — 用两两对比或 pass/fail,比打分更可靠。</li>
+    <li><span class="en" style="color:#b9f0c8">"Control for response lengths as LLMs bias towards longer responses"</span> — 控制长度,因为 LLM 偏爱更长的回答(这就是"被 gaming")。</li>
+    <li><span class="en" style="color:#b9f0c8">"Add reasoning and chain-of-thought as reasoning before scoring improves eval"</span> — 让 judge 先推理再打分。</li>
+  </ul>
+  <span class="src">来源:OpenAI, <a href="https://developers.openai.com/api/docs/guides/evaluation-best-practices">Evaluation best practices</a></span>
+</div>
+
+<h2>四、最被低估的一步:judge 必须对齐人类</h2>
+<div class="warnbox">
+  <p><b>⚠ 这是分水岭。</b>没有用人工标注校准过的 LLM judge,等于用一把没校准的尺子量进度——分数越漂亮越危险。</p>
+</div>
+<div class="card">
+  <blockquote>
+    <div class="en">"LLM-as-judge graders should be closely calibrated with human experts to gain confidence that there is little divergence between the human grading and model grading."</div>
+    <div class="cn">"LLM judge 必须与人类专家紧密校准,才能确信模型打分与人类打分之间几乎没有分歧。"</div>
+    <span class="src">— Anthropic, Demystifying evals for AI agents</span>
+  </blockquote>
+  <blockquote>
+    <div class="en">"Once the LLM judge reaches a point where it's faster, cheaper, and consistently agrees with human annotations, scale up."</div>
+    <div class="cn">"等到 LLM judge 已经更快、更便宜、且与人工标注<b>持续一致</b>时,再去规模化。"</div>
+    <span class="src">— OpenAI, Evaluation best practices</span>
+  </blockquote>
+</div>
+
+<h2>五、人工评估为什么删不掉</h2>
+<p>大厂一致承认:<b>自动 eval 抓不住的边角案例,人来测才发现。</b></p>
+<div class="card">
+  <blockquote>
+    <div class="en">"People testing agents find edge cases that evals miss" — including hallucinated answers on unusual queries and subtle source selection biases.</div>
+    <div class="cn">"人去测 agent,能找到 eval 漏掉的边角案例"——比如冷门查询上的幻觉,以及微妙的来源选择偏见。</div>
+    <span class="src">— Anthropic, multi-agent research system</span>
+  </blockquote>
+  <p><span class="tag t-prac">实践补充</span> 文中一个具体例子:人工测试发现 agent 会<b>系统性地偏好 SEO 优化的内容,而不是学术 PDF 这类权威来源</b>——这种偏见自动 eval 几乎抓不到。</p>
+</div>
+
+<h2>六、真实战场:产品团队的代价</h2>
+<p>AI 实验室之外,产品团队的一手记录更能说明 eval 有多硬。</p>
+
+<div class="card">
+  <p><span class="tag t-off">官方逐字</span> <b>LinkedIn(十亿用户级 GenAI 产品)</b></p>
+  <blockquote>
+    <div class="en">"Evaluating the quality of our answers turned out to be more difficult than anticipated."</div>
+    <div class="cn">"评估我们答案的质量,结果比预想的难得多。"</div>
+  </blockquote>
+  <blockquote>
+    <div class="en">"Automatic evaluation is the holy grail, but still a work in progress."</div>
+    <div class="cn">"自动评估是圣杯,但仍在路上。"</div>
+    <span class="src">— LinkedIn Engineering, <a href="https://www.linkedin.com/blog/engineering/generative-ai/musings-on-building-a-generative-ai-product">Musings on building a Generative AI product</a></span>
+  </blockquote>
+  <p><span class="tag t-prac">实践补充</span> 具体瓶颈:他们靠语言学家团队建流程,每天最多人工评估约 <b>500 条对话</b>(质量、幻觉率、负责任 AI 违规、连贯性、风格);但<b>"拿到指标要 1 天以上的延迟"</b>,严重拖慢迭代。这就是为什么所有人都拼命想要自动 eval。</p>
+  <p><span class="tag t-prac">实践补充</span> LinkedIn 还有句广为流传的提醒:如果 LLM 90% 情况答对,意味着<b>每 10 个用户就有 1 个会遇到糟糕体验</b>——平均准确率会给人虚假的安全感。</p>
+</div>
+
+<div class="card">
+  <p><span class="tag t-off">官方逐字</span> <b>NurtureBoss(AI 租房助理,经 The Pragmatic Engineer 记录)</b></p>
+  <blockquote>
+    <div class="en">the team faced "the 'vibes-based development' trap" — changes evaluated through manual testing without rigorous validation.</div>
+    <div class="cn">团队掉进了"凭感觉开发(vibes-based development)的陷阱"——改动只靠手动试,没有严谨验证。</div>
+    <span class="src">— The Pragmatic Engineer, <a href="https://newsletter.pragmaticengineer.com/p/evals">A pragmatic guide to LLM evals</a></span>
+  </blockquote>
+  <p>他们的破局靠"错误分析"流程:自建 trace 查看器 → 开放式标注(open coding)→ 归并主题(axial coding),最后定位出三类主要失败:<b>日期处理、转人工失败、对话流程</b>。然后针对每类建对应 eval(确定性的用代码,主观的用 LLM judge)。</p>
+  <p><span class="tag t-prac">实践补充</span> 两条反复被验证的经验:① 从别的领域<b>照搬通用指标"往往比没有还糟"</b>(worse than useless);② <b>二值 PASS/FAIL 比打分量表更好</b>——逼你说清"什么算可接受",而不是在模糊的分数之间和稀泥。</p>
+</div>
+
+<h2>七、大厂踩过的坑(逐字清单)</h2>
+<p>来自 Anthropic《Demystifying evals for AI agents》,几乎条条对应一个真实 bug:</p>
+<table>
+  <tr><th>坑</th><th>原文(逐字)</th></tr>
+  <tr><td>任务说明含糊</td><td><span class="en" style="color:#b9f0c8">"agents shouldn't fail due to ambiguous specs."</span> grader 检查的一切都应能从任务描述里读出来。</td></tr>
+  <tr><td>grader 太脆</td><td>检查具体工具序列 → "overly brittle tests"。</td></tr>
+  <tr><td>单边 eval</td><td><span class="en" style="color:#b9f0c8">"One-sided evals create one-sided optimization."</span> 该发生和不该发生的情况都要测。</td></tr>
+  <tr><td>试验间共享状态</td><td>每个 trial 要从干净环境起;共享状态会导致 "correlated failures"。</td></tr>
+  <tr><td>不读 transcript</td><td><span class="en" style="color:#b9f0c8">"You won't know if your graders are working well unless you read the transcripts."</span></td></tr>
+  <tr><td>打分本身有 bug</td><td>"even sophisticated teams can miss these issues"——Opus 4.5 在 CORE-Bench 上先得 42%,修掉打分问题后<b>跳到 95%</b>。</td></tr>
+</table>
+
+<h3>partial credit:别只给 0/1</h3>
+<blockquote>
+  <div class="en">"A support agent that correctly identifies the problem and verifies the customer but fails to process a refund is meaningfully better than one that fails immediately."</div>
+  <div class="cn">"一个能正确定位问题、核验了客户身份、只是最后没退成款的客服 agent,明显比一上来就挂掉的那个要好。"</div>
+  <span class="src">— Anthropic, Demystifying evals for AI agents</span>
+</blockquote>
+
+<h2>八、一个被忽视的新风险:模型"知道自己在被测"</h2>
+<div class="card">
+  <p><span class="tag t-skip">看场景可省</span> Anthropic 2026 年专门写了一篇,讲模型在基准测试上出现"评估意识(eval awareness)"——它能察觉自己处在被评估的情境,从而行为失真,以及基准被污染的新模式。这意味着:<b>eval 本身也会随模型变强而失效,需要持续重新设计</b>。</p>
+  <p class="src-list">来源:Anthropic, <a href="https://www.anthropic.com/engineering/eval-awareness-browsecomp">Eval awareness in Claude Opus 4.6's BrowseComp performance</a> · <a href="https://www.anthropic.com/engineering/AI-resistant-technical-evaluations">Designing AI-resistant technical evaluations</a></p>
+</div>
+
+<h2>九、把证据收敛成一张行动清单</h2>
+<div class="kpi">
+  <div class="b"><div class="num">20–50</div><small>起步任务数,取自真实失败,别等几百条</small></div>
+  <div class="b"><div class="num">0.0–1.0</div><small>+ pass/fail,单次 LLM judge 调用最稳</small></div>
+  <div class="b"><div class="num">结果</div><small>评终态而非路径,允许多条有效路</small></div>
+  <div class="b"><div class="num">校准</div><small>judge 必须先对齐人类标注再放量</small></div>
+</div>
+<ul>
+  <li><b>先写 eval,再写实现</b>(eval-driven development),像 TDD。</li>
+  <li><b>分层打分</b>:确定性任务用代码,开放式才上 LLM judge,judge 自己也要被 eval。</li>
+  <li><b>持续评估</b>:OpenAI —— <span class="en" style="color:#b9f0c8">"Set up continuous evaluation (CE) to run evals on every change"</span>,接进 CI,并用生产数据让 eval 集随时间生长。</li>
+  <li><b>留住人工</b>:自动 eval 抓不到的边角与偏见,只有人能发现。</li>
+  <li><b>读 transcript</b>:不读原始记录,你永远不知道 grader 是不是在骗你。</li>
+  <li><b>防 gaming</b>:控制长度偏好、用双边 eval、警惕 Goodhart 定律。</li>
+</ul>
+
+<hr>
+<h2>来源清单(全部一手)</h2>
+<ol class="src-list">
+  <li>Anthropic Engineering — <a href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a></li>
+  <li>Anthropic Engineering — <a href="https://www.anthropic.com/engineering/multi-agent-research-system">How we built our multi-agent research system</a></li>
+  <li>Anthropic Engineering — <a href="https://www.anthropic.com/engineering/eval-awareness-browsecomp">Eval awareness in Claude Opus 4.6's BrowseComp performance</a></li>
+  <li>Anthropic Engineering — <a href="https://www.anthropic.com/engineering/AI-resistant-technical-evaluations">Designing AI-resistant technical evaluations</a></li>
+  <li>OpenAI Developers — <a href="https://developers.openai.com/api/docs/guides/evaluation-best-practices">Evaluation best practices</a></li>
+  <li>LinkedIn Engineering — <a href="https://www.linkedin.com/blog/engineering/generative-ai/musings-on-building-a-generative-ai-product">Musings on building a Generative AI product</a></li>
+  <li>The Pragmatic Engineer — <a href="https://newsletter.pragmaticengineer.com/p/evals">A pragmatic guide to LLM evals for devs</a>(含 NurtureBoss 案例)</li>
+</ol>
+<p class="meta">说明:本文区分「逐字引用(英文原文 + 中译)」与「实践补充(我的归纳)」。引用均标注来源链接;数字均出自上述一手文档。若链接所指内容随时间更新,以原文为准。</p>
+
+</div>
+</body>
+</html>

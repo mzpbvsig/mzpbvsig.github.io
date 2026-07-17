@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code 的 Phase / Task / Sprint 清单 · 真实用法（逐字）</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:26px 0 4px}
+h3{font-size:15px;margin:16px 0 4px;color:#cdeccf}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-off{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-comm{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-real{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:14px 0;overflow:hidden}
+.card .hd{padding:10px 15px;border-bottom:1px solid var(--line);font-weight:600;font-size:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.card .hd .cite{margin-left:auto;font-size:11.5px}
+.card .bd{padding:6px 15px 14px}
+pre{background:#0b1f17;border:1px solid #143126;border-radius:8px;padding:11px 13px;margin:10px 0;overflow-x:auto;
+font:12.5px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#cfe9d6;white-space:pre}
+pre .c{color:#5b8c6f}            /* comment-ish */
+.zh{color:#dbe7ff;font-size:13.5px;margin:8px 0}
+.zh b{color:#fff}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.7px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+.flow{font:12.5px/1.5 ui-monospace,monospace;color:#cdeccf;background:#10211a;border:1px solid #1f3d2b;border-radius:8px;padding:12px 14px;white-space:pre;overflow-x:auto;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Claude Code 的 Phase / Task / Sprint 清单 · 真实用法</h1>
+  <p class="lead">很多人会把需求拆成 <b>Phase（阶段）→ Task（原子任务）→ 勾选清单</b> 写进一个 <code>tasks.md</code>，让 Claude Code 逐条实现、边做边打勾。下面是<b>逐字、来自真实仓库</b>的两种主流形态（含一份真正用过、已打勾的文件），右侧配中文讲解。它是 spec 接力里"③ tasks"那一环的具体长相。</p>
+
+  <div class="disc">
+    <b>真实性说明：</b>下面的 markdown 块均为<b>从公开仓库逐字拉取</b>，未改写。两种约定：① GitHub 官方 <b>spec-kit</b>（agent 无关，含 Claude Code）；② 社区 <b>Pimzino/claude-code-spec-workflow</b>（专为 Claude Code）。注意：这跟 Claude Code <b>自带</b>的任务系统（<code>~/.claude/tasks/</code> / TodoWrite）是<b>两回事</b>——这里讲的是"你写进仓库、用来驱动 agent 的 markdown 清单"。
+  </div>
+
+  <div class="flow">需求 → 设计 → <b>任务清单(tasks.md)</b> → 实现
+spec.md   design.md   <b>Phase→Task→[ ]</b>     逐条做、打勾[x]、跑测试
+                       ↑ 本文讲的就是这一格</div>
+
+  <!-- ============ 形态 1 ============ -->
+  <h2>形态 1 · GitHub spec-kit 官方模板（Phase + 任务ID + 并行/故事标记）</h2>
+  <div class="card">
+    <div class="hd"><span class="tag t-off">官方逐字</span>templates/tasks-template.md（节选，原样）<a class="cite" href="https://github.com/github/spec-kit/blob/main/templates/tasks-template.md" target="_blank">github/spec-kit ↗</a></div>
+    <div class="bd">
+<pre>## Format: `[ID] [P?] [Story] Description`
+- **[P]**: Can run in parallel (different files, no dependencies)
+- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- Include exact file paths in descriptions
+
+## Phase 1: Setup (Shared Infrastructure)
+**Purpose**: Project initialization and basic structure
+- [ ] T001 Create project structure per implementation plan
+- [ ] T002 Initialize [language] project with [framework] dependencies
+- [ ] T003 [P] Configure linting and formatting tools
+
+## Phase 2: Foundational (Blocking Prerequisites)
+**Purpose**: Core infrastructure that MUST be complete before ANY user story
+**⚠️ CRITICAL**: No user story work can begin until this phase is complete
+- [ ] T004 Setup database schema and migrations framework
+- [ ] T005 [P] Implement authentication/authorization framework
+- [ ] T007 Create base models/entities that all stories depend on
+**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+
+## Phase 3: User Story 1 - [Title] (Priority: P1) 🎯 MVP
+**Goal**: [Brief description of what this story delivers]
+**Independent Test**: [How to verify this story works on its own]
+### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
+> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
+### Implementation for User Story 1
+- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
+- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
+**Checkpoint**: User Story 1 should be fully functional and testable independently</pre>
+      <div class="zh"><b>中文讲解：</b>这套约定把工作切成 <b>Phase 1 搭基建 → Phase 2 阻塞性地基 → Phase 3+ 每个用户故事一个阶段</b>。每条任务带：</div>
+      <table>
+        <tr><th>标记</th><th>含义</th></tr>
+        <tr><td><code>T001</code></td><td>任务唯一 ID，方便引用与表达依赖</td></tr>
+        <tr><td><code>[P]</code></td><td>可并行（改的是不同文件、无依赖）——给并行执行用</td></tr>
+        <tr><td><code>[US1]</code></td><td>归属哪个用户故事（User Story 1），让每个故事能独立实现/测试/交付为 MVP 增量</td></tr>
+        <tr><td><code>(depends on T012, T013)</code></td><td>显式依赖：被依赖项没完成就不能动</td></tr>
+        <tr><td><code>**Checkpoint**</code></td><td>检查点：到这儿该能独立跑通、可验证</td></tr>
+        <tr><td><code>- [ ]</code></td><td>勾选框，做完改成 <code>- [x]</code></td></tr>
+      </table>
+      <div class="zh"><b>顺序纪律（逐字）：</b>"Write these tests FIRST, ensure they FAIL before implementation" —— 先写测试、确认失败，再实现（TDD）；且 models → services → endpoints 的顺序。</div>
+    </div>
+  </div>
+
+  <!-- ============ 形态 2 ============ -->
+  <h2>形态 2 · Pimzino/claude-code-spec-workflow（原子任务 + Leverage/Requirements 回链）</h2>
+  <div class="card">
+    <div class="hd"><span class="tag t-comm">社区逐字</span>.claude/templates/tasks-template.md（节选，原样）<a class="cite" href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/templates/tasks-template.md" target="_blank">Pimzino ↗</a></div>
+    <div class="bd">
+<pre>## Atomic Task Requirements
+- **File Scope**: Touches 1-3 related files maximum
+- **Time Boxing**: Completable in 15-30 minutes
+- **Single Purpose**: One testable outcome per task
+- **Specific Files**: Must specify exact files to create/modify
+
+## Good vs Bad Task Examples
+❌ "Implement authentication system" (affects many files, multiple purposes)
+✅ "Create User model in models/user.py with email/password fields"
+
+## Tasks
+- [ ] 2. Create base model class in src/models/FeatureModel.ts
+  - File: src/models/FeatureModel.ts
+  - Implement base model extending BaseModel class
+  - Purpose: Provide data layer foundation for feature
+  - _Leverage: src/models/BaseModel.ts, src/utils/validation.ts_
+  - _Requirements: 2.1_
+- [ ] 3. Add specific model methods to FeatureModel.ts
+  - File: src/models/FeatureModel.ts (continue from task 2)
+  - Implement create, update, delete methods
+  - _Requirements: 2.2, 2.3_</pre>
+      <div class="zh"><b>中文讲解：</b>这套更强调"<b>原子任务</b>"——每条只碰 1–3 个文件、15–30 分钟能完成、单一可测产出、必须写明确切文件路径。每条任务额外带两条回链：</div>
+      <table>
+        <tr><th>字段</th><th>含义</th></tr>
+        <tr><td><code>File:</code></td><td>本任务要创建/修改的确切文件</td></tr>
+        <tr><td><code>Purpose:</code></td><td>这步要达成的单一目的</td></tr>
+        <tr><td><code>_Leverage: …_</code></td><td>可复用的现有代码（让 Claude 别重造轮子）</td></tr>
+        <tr><td><code>_Requirements: X.Y_</code></td><td>回链到 requirements 文档的需求编号，保证可追溯</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="hd"><span class="tag t-real">真实用过 · 已打勾</span>.claude/specs/typescript-conversion/tasks.md（某真实项目，节选原样）<a class="cite" href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/specs/typescript-conversion/tasks.md" target="_blank">真实文件 ↗</a></div>
+    <div class="bd">
+<pre># Implementation Plan - TypeScript Frontend Conversion
+## Status: ✅ APPROVED
+
+## Tasks
+### Phase 1: TypeScript Infrastructure Setup
+- [x] 1. Create frontend TypeScript configuration
+  - Create `src/dashboard/client/tsconfig.json` extending main config
+  - Configure for browser environment (DOM lib, ES2020 target)
+  - _Leverage: tsconfig.json_
+  - _Requirements: 1.1, 1.2, 1.3_
+- [x] 2. Set up frontend bundling system
+  - Install esbuild as dev dependency
+  - Add bundle scripts to package.json (build:frontend, watch:frontend)
+  - _Requirements: 1.1, 1.5_
+
+### Phase 2: Single Dashboard Removal
+- [x] 4. Remove single-project dashboard files
+  - Delete `src/dashboard/public/app.js` (423 lines)
+  - _Requirements: 3.1, 3.2, 3.5_
+- [x] 5. Update server routes for unified dashboard
+  - Remove single dashboard route from `src/dashboard/server.ts`
+  - _Leverage: src/dashboard/server.ts_</pre>
+      <div class="zh"><b>这是关键证据：</b>它不是模板，而是<b>真实跑过的</b>文件——<code>## Status: ✅ APPROVED</code>（spec 经过审批闸门）、任务全部 <code>[x]</code> 已完成、用 <code>### Phase 1/2…</code> 分阶段、每条都写死确切文件与 <code>_Requirements_</code> 回链。这就是"sprint/task/phase 清单"在真实项目里落地的样子。</div>
+    </div>
+  </div>
+
+  <!-- ============ 驱动循环 ============ -->
+  <h2>清单是怎么被"驱动"的（实现阶段循环）</h2>
+  <div class="card">
+    <div class="hd"><span class="tag t-comm">社区逐字</span>Requirements → Design → Tasks → Implementation</div>
+    <div class="bd">
+      <div class="zh">Pimzino 工作流原话：用 <b>Requirements → Design → Tasks → Implementation</b> 驱动新功能（bug 则走 <b>Report → Analyze → Fix → Verify</b>）。到实现阶段，对 <b>每一条任务</b>循环：</div>
+      <div class="flow">for 每条 task in tasks.md:
+    Implement   →   Review   →   log-implementation   →   Mark completed([x])
+    实现             审查           记录实现              在清单里打勾</div>
+      <div class="zh">每个阶段之间有<b>审批闸门(approval gate)</b>：Requirements/Design/Tasks 各自要你点头才进下一步。这把"大功能"切成"可逐条验收、可随时中断续接"的流水。</div>
+      <a class="cite" href="https://github.com/Pimzino/claude-code-spec-workflow" target="_blank">Pimzino README ↗</a>
+    </div>
+  </div>
+
+  <!-- ============ 速查 ============ -->
+  <h2>两种形态速查对照</h2>
+  <table>
+    <tr><th>维度</th><th>spec-kit（官方）</th><th>Pimzino（社区，专为 CC）</th></tr>
+    <tr><td>分层</td><td>Phase 1 Setup / Phase 2 Foundational / Phase 3+ 每用户故事</td><td>### Phase N（按实现顺序）</td></tr>
+    <tr><td>任务标识</td><td><code>T001</code> + <code>[P]</code>并行 + <code>[US1]</code>故事</td><td><code>- [ ] N.</code> 序号</td></tr>
+    <tr><td>每条带什么</td><td>确切文件路径、依赖<code>(depends on …)</code></td><td><code>File:</code> <code>Purpose:</code> <code>_Leverage_</code> <code>_Requirements_</code></td></tr>
+    <tr><td>原子性</td><td>tests→models→services→endpoints</td><td>1–3 文件 / 15–30 分钟 / 单一产出</td></tr>
+    <tr><td>检查点</td><td><code>**Checkpoint**</code> 每故事可独立跑通</td><td>每任务 Implement→Review→Mark</td></tr>
+    <tr><td>TDD</td><td>测试先写并确认 FAIL（可选）</td><td>任务里可含测试任务</td></tr>
+  </table>
+
+  <div class="note">
+    <b>怎么用它对齐需求：</b>大功能在 spec 接力的"③ tasks"环节，让 Claude 产出这种 <code>tasks.md</code>（带 Phase、确切文件、依赖、Requirements 回链、勾选框）；实现时让它<b>逐条做、做完打 [x]、每条跑验证</b>，并在阶段闸门处停下等你确认。这样长任务可中断可续接、每步可验收。<br><br>
+    <b>诚实边界：</b>① 这两套是<b>社区/工具包约定</b>（spec-kit 是 GitHub 官方工具包但 agent 无关；Pimzino 是社区），<b>不是</b> Claude Code 内置强制格式。② Claude Code 另有<b>自带</b>的任务追踪（<code>~/.claude/tasks/</code>、TodoWrite，支持依赖/阻塞/跨会话），与本文的 markdown 清单是两套东西——可配合用，但别混为一谈。
+    <hr style="border-color:var(--line)">
+    <div class="srcs"><b>来源（均逐字可核）：</b>
+      <a href="https://github.com/github/spec-kit/blob/main/templates/tasks-template.md" target="_blank">github/spec-kit · tasks-template.md</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/templates/tasks-template.md" target="_blank">Pimzino · tasks-template.md</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/specs/typescript-conversion/tasks.md" target="_blank">Pimzino · 真实 tasks.md</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow" target="_blank">Pimzino README</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

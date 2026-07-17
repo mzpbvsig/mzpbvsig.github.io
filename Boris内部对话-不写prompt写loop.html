@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boris 内部对话:不写 prompt,写 loop</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --line:#30363d;
+    --txt:#c9d1d9; --txt2:#8b949e; --hi:#e6edf3;
+    --accent:#58a6ff; --green:#3fb950; --amber:#d29922; --purple:#bc8cff; --pink:#f778ba;
+    --quote:#7ee787;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.75;font-size:16px}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 24px 96px}
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:36px}
+  h1{font-size:30px;color:var(--hi);margin:0 0 14px;line-height:1.3}
+  .sub{color:var(--txt2);font-size:15px}
+  .meta{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-size:14px}
+  .meta a{color:var(--accent);text-decoration:none}
+  .meta a:hover{text-decoration:underline}
+  .meta b{color:var(--hi)}
+
+  section{background:var(--panel);border-radius:12px;margin:22px 0;padding:24px 26px 22px;
+    border-left:4px solid var(--accent);position:relative}
+  section.s1{border-left-color:var(--accent)}
+  section.s2{border-left-color:var(--green)}
+  section.s3{border-left-color:var(--purple)}
+  section.s4{border-left-color:var(--pink)}
+  section.s5{border-left-color:var(--amber)}
+  h2{color:var(--hi);font-size:21px;margin:0 0 4px}
+  .h2note{color:var(--txt2);font-size:13px;margin-bottom:16px}
+
+  .tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:5px;padding:2px 8px;margin-right:8px;vertical-align:2px;letter-spacing:.3px}
+  .t-quote{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4)}
+  .t-prac{background:rgba(88,166,255,.15);color:var(--accent);border:1px solid rgba(88,166,255,.4)}
+  .t-opt{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.4)}
+
+  .row{margin:18px 0;padding-top:4px}
+  .row .label{margin-bottom:8px}
+  p{margin:8px 0}
+  .hi{color:var(--hi)}
+
+  blockquote{margin:10px 0;background:var(--panel2);border-left:3px solid var(--quote);
+    border-radius:0 8px 8px 0;padding:12px 16px}
+  blockquote .zh{color:var(--hi);font-size:15.5px}
+  blockquote .en{color:var(--txt2);font-size:13.5px;font-style:italic;margin-top:8px;display:block}
+  blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:12.5px;color:var(--txt2)}
+  blockquote cite a{color:var(--accent);text-decoration:none}
+  blockquote cite a:hover{text-decoration:underline}
+
+  code{background:#010409;border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+    font-family:"SF Mono",Consolas,Monaco,monospace;font-size:13.5px;color:var(--quote)}
+  ul{margin:8px 0;padding-left:22px}
+  li{margin:5px 0}
+
+  .timeline{display:flex;gap:0;flex-wrap:wrap;margin:14px 0;font-size:13.5px}
+  .timeline div{flex:1;min-width:150px;background:var(--panel2);border:1px solid var(--line);padding:12px;border-radius:8px;margin:4px}
+  .timeline b{color:var(--hi);display:block;margin-bottom:4px}
+
+  .verdict{background:linear-gradient(180deg,#11161d,#0d1117);border:1px solid var(--line);
+    border-radius:12px;padding:20px 22px;margin:26px 0}
+  .verdict h3{margin:0 0 10px;color:var(--hi);font-size:17px}
+
+  footer{margin-top:40px;border-top:1px solid var(--line);padding-top:20px;color:var(--txt2);font-size:13px}
+  footer a{color:var(--accent);text-decoration:none}
+  .legend{font-size:12.5px;color:var(--txt2);margin-top:10px}
+  .warn{color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>不跟 agent 对话,跟 loop 对话<br>—— Boris 一周年内部复盘里到底说了什么</h1>
+  <div class="sub">把网上流传的那段"信息密度极高的 20 分钟对话"还原到出处,并逐条核对四个高传播金句的原话。</div>
+  <div class="meta">
+    <b>视频出处:</b> 《Reflecting on a year of Claude Code》——Boris Cherny(Claude Code 负责人)与 Cat Wu(产品负责人)对谈<br>
+    <b>发布:</b> 2026-06-08 · <b>平台:</b> YouTube · <a href="https://www.youtube.com/watch?v=Hth_tLaC2j8" target="_blank">youtube.com/watch?v=Hth_tLaC2j8</a><br>
+    <span class="warn">⚠️ 它不是"泄露的内部会议",是 Claude Code 一周年(GA 满一年)的官方公开复盘对谈。本文逐字引用以视频/官方贴文为准;部分整理转引自社区站点 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a>(汇编自 Boris 公开推文 + 该视频)。</span>
+    <div class="legend">标签:<span class="tag t-quote">官方逐字</span> 视频/官方原话 ·
+      <span class="tag t-prac">实践补充</span> 我补的用法/背景 ·
+      <span class="tag t-opt">看场景可省</span> 可选项,不是必须</div>
+  </div>
+</header>
+
+<!-- 1 -->
+<section class="s1">
+  <h2>① 不跟 agent 对话,跟 loop 对话</h2>
+  <div class="h2note">你转述的:"让 loop 替我来 prompt" —— 核对结果:✅ 属实,是 Boris 最核心的范式转变</div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-quote">官方逐字</span></div>
+    <blockquote>
+      <span class="zh">"我已经不再给 Claude 写 prompt 了。我跑的是一堆 loop,是它们在 prompt Claude、在决定该做什么。我的工作是写 loop。"</span>
+      <span class="en">"I don't prompt Claude anymore. I have loops running. They're the ones prompting Claude and figuring out what to do. My job is to write loops."</span>
+      <cite>—— Boris Cherny,转引自 <a href="https://www.productmarketfit.tech/p/stop-prompting-ai-and-start-building" target="_blank">Product Market Fit</a> · 同句被 <a href="https://digg.com/ai/q0idpj2w" target="_blank">Digg</a> 报道</cite>
+    </blockquote>
+  </div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-prac">实践补充</span> 怎么理解"写 loop 而不是 prompt"</div>
+    <p>一条 prompt 给你<span class="hi">一次性的输出</span>;一个 loop 给你<span class="hi">会复利累积的操作</span>。loop 就是一个"壳":它自己去发现"有哪些活要干"→ 把一块丢给 agent → 检查 agent 交回来的东西 → 再循环。人不再是步骤之间的"连接组织",你写的是那个"替你去写 prompt 的东西"。</p>
+    <p>Claude Code 里把它产品化成了三档,按"要跑多久"区分:</p>
+    <ul>
+      <li><code>/loop</code> —— 本地循环,最长跑 <span class="hi">3 天</span>,按间隔重复跑你的 prompt。典型:盯 PR、自动修构建、Slack 摘要、盯部署。</li>
+      <li><code>/schedule</code> —— 云端任务,<span class="hi">关掉笔记本也在跑</span>,可无限期。Anthropic 内部用它自动修 CI、自动更新文档。</li>
+      <li><code>/goal</code> —— 一直跑到"条件满足"为止(社区叫"内置版 Ralph loop"),例:<code>/goal all tests in test/auth pass and lint is clean</code>。</li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-opt">看场景可省</span> "人力不足"是故意的</div>
+    <p>Boris 提到一个组织策略:给 4 人量的项目只派 2 个工程师。<span class="hi">这种刻意的人手紧缺,逼着大家去搭 loop 和自动化</span>,把预算从人力挪到 token 消耗上。这是团队管理视角的延伸,个人用不一定照搬。</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="s2">
+  <h2>② 从 4.6 起不用 plan mode,全开 auto mode</h2>
+  <div class="h2note">你转述的:"从 4.6 起就不用 plan mode 了,全开 auto mode" —— 核对结果:✅ 几乎逐字属实</div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-quote">官方逐字</span> 弃用 plan mode</div>
+    <blockquote>
+      <span class="zh">"以前是 plan mode,我现在不用那个了,我用 auto mode……新的模型其实不需要一个单独的规划步骤。它对 Opus 4 到 4.5 非常重要,但从 4.6 开始、到 4.7 就更是如此——它根本不需要了。"</span>
+      <span class="en">"What it used to be is plan mode. I don't use that anymore. I use auto mode... The newer models don't actually need a planning step. It was really important for Opus 4 through 4.5, but starting with 4.6, and definitely with 4.7, it just doesn't need it."</span>
+      <cite>—— Boris Cherny,《Reflecting on a year of Claude Code》(2026-06-08),整理见 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></cite>
+    </blockquote>
+  </div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-quote">官方逐字</span> 为什么 auto mode 反而更"安全"</div>
+    <blockquote>
+      <span class="zh">"auto mode 比逐条读权限提示更安全,因为它让你只盯最重要的那件事。"</span>
+      <span class="en">"Auto mode is more safe than reading every single permission prompt because it means you're only paying attention to the most important thing."</span>
+      <cite>—— 同上。配套那句:"当你 99% 的请求都点同意,你的眼睛就麻木了 (your eyes glaze over)。"</cite>
+    </blockquote>
+    <p><span class="tag t-prac">实践补充</span> auto mode 的机制:每个动作不是丢给人审,而是<span class="hi">过一个分类器</span>判断风险;Anthropic 用上千份 transcript、红队测试、prompt-injection 评测做过加固。它是介于 default(逐条手批)和 bypassPermissions(完全不查)之间的中间档。</p>
+    <p><span class="tag t-prac">实践补充</span> 入口:CLI 里 <code>Shift+Tab</code> 在 plan → auto → normal 之间循环;桌面/VSCode 用下拉选。</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="s3">
+  <h2>③ 不做 prompt engineering,也不做 context engineering</h2>
+  <div class="h2note">你转述的:"给模型最精简的必要上下文和工具,让模型自己探索" —— 核对结果:✅ 属实,Boris 称之为"context minimalism(上下文极简)"</div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-prac">实践补充</span> 三个时代的演进(Boris 的原话框架)</div>
+    <div class="timeline">
+      <div><b>Sonnet 3.5 时代</b>prompt engineering<br><span style="color:var(--txt2)">精雕 prompt</span></div>
+      <div><b>Opus 4 时代</b>context engineering<br><span style="color:var(--txt2)">精心喂上下文</span></div>
+      <div><b>现在</b>context <span style="color:var(--quote)">minimalism</span><br><span style="color:var(--txt2)">给最少,让它自己找</span></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-quote">官方逐字</span></div>
+    <blockquote>
+      <span class="zh">"你给它尽可能精简的 system prompt、尽可能精简的工具,然后让模型自己把事情想明白。"</span>
+      <span class="en">"You give it the minimal possible system prompt, the minimal possible tools, and then you let the model figure it out."</span>
+      <cite>—— Boris Cherny,同视频</cite>
+    </blockquote>
+    <blockquote>
+      <span class="zh">"只告诉模型它需要知道的,剩下让它自己搞定。你给它太多上下文,就等于在微管理它。"</span>
+      <span class="en">"Tell the model only what it needs to know and let it figure it out. When you give the model too much context, it's like you're micromanaging it."</span>
+      <cite>—— Cat Wu,同视频</cite>
+    </blockquote>
+  </div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-opt">看场景可省 / 注意边界</span></div>
+    <p>"极简"不等于"含糊":<span class="hi">目标要说清,省的是中间的微步骤</span>。做法是给一个精炼的任务说明 + 一条<span class="hi">让它能自己取上下文的路</span>(文件、搜索、MCP),而不是把一大坨上下文和工具列表一次塞满。</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="s4">
+  <h2>④ 一半工程在手机上完成,走路时语音对话</h2>
+  <div class="h2note">你转述的:"一半的工程在手机上完成,走路时和 agent 语音对话" —— 核对结果:✅ 方向属实(手机 + 语音 + 远程是核心工作流);"一半"这个比例是社区转述,未见 Boris 给出确切数字</div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-prac">实践补充</span> Boris 的移动工作流由三块拼成</div>
+    <ul>
+      <li><span class="hi">手机 App 直接写</span>:Claude Code 有原生 iOS/Android App,带完整 Code tab,Boris "很大一部分代码是在 iOS App 上写的"。</li>
+      <li><span class="hi">语音输入为主</span>:Boris"大部分编码是对着 Claude 说,而不是打字"。CLI 用 <code>/voice</code> 然后按住空格;macOS 双击 <code>fn</code> 听写;iOS 用系统听写。</li>
+      <li><span class="hi">远程触发 + 会话穿越</span>:<code>claude remote-control</code> 能从手机把任务踢到你自己机器上跑;<code>--teleport</code> / <code>/teleport</code> 让同一会话在手机/网页/桌面/终端之间搬。Boris 在 <code>/config</code> 里"对所有会话开了 Remote Control"。</li>
+    </ul>
+  </div>
+  <div class="row">
+    <blockquote>
+      <span class="zh">"离开工位、走着走着想到点什么,就从手机上踢起一个任务——Claude 在你自己机器上跑。"</span>
+      <span class="en">"Walk away from your desk, think of something, and kick off a task from mobile — Claude runs on your machine."</span>
+      <cite>—— Boris,整理见 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- 5 bonus -->
+<section class="s5">
+  <h2>⑤ 视频里另外两条同等关键、但你没提的</h2>
+  <div class="h2note">既然要"到底怎么做",这两条是把上面四条串起来的关键,值得一起记</div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-quote">官方逐字</span> 错误不要重新 prompt,要写进 CLAUDE.md</div>
+    <blockquote>
+      <span class="zh">"每次 Claude 犯错,我不会告诉它换个做法。我会让它把这条写进 CLAUDE.md,或者做成一个 skill。能做到这点,Claude 就能一直跑下去。"</span>
+      <span class="en">"Every single time Claude makes a mistake, I don't tell it to do it differently. I tell it to write it to the CLAUDE.md, or make a skill, or something. If you can do this, then Claude can just run forever."</span>
+      <cite>—— Boris,同视频</cite>
+    </blockquote>
+    <p><span class="tag t-prac">实践补充</span> 为什么这条是 loop 能成立的前提:对话里纠正 = 一次性补丁;写进 CLAUDE.md/skill = <span class="hi">对所有未来运行的永久修复</span>。错误率持续往下走,同样的错不再复发,loop 才敢长期无人值守地跑。这正是 ① 的地基。</p>
+  </div>
+
+  <div class="row">
+    <div class="label"><span class="tag t-quote">官方逐字</span> 最重要的一条:给 Claude 一条"自我验证"的路</div>
+    <blockquote>
+      <span class="zh">"想从 Claude Code 拿到好结果,最重要的事大概就是:给 Claude 一个验证自己工作的方法。有了这个反馈回路,最终结果质量会翻 2–3 倍。"</span>
+      <span class="en">"Probably the most important thing to get great results out of Claude Code — give Claude a way to verify its work. If Claude has that feedback loop, it will 2-3x the quality of the final result."</span>
+      <cite>—— Boris(其 #1 tip),整理见 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></cite>
+    </blockquote>
+    <p><span class="tag t-prac">实践补充</span> 验证方式按场景:跑 bash 命令、跑测试、浏览器测试(Claude 的 Chrome 插件)、模拟器。"会自检"是 auto mode 敢全开、loop 敢长跑的另一半地基。</p>
+  </div>
+</section>
+
+<div class="verdict">
+  <h3>一句话总结他到底怎么做</h3>
+  <p>Boris 把自己从"对话者"退成"系统设计者":<span class="hi">先用 CLAUDE.md + skill 把"别犯这个错"固化成规则,再给 Claude 一条能自检的验证回路,然后把模型放进 auto mode 全自动跑,自己只写决定"干什么、干到什么程度"的 loop / schedule / goal</span>——而这些指挥动作,很多是走在路上用手机语音、或远程踢到自己机器上完成的。</p>
+  <p style="color:var(--txt2);font-size:14px;margin-top:12px">底层信念:模型已经强到不需要你精雕 prompt、不需要 plan mode、不需要堆上下文。你越微管理,越拖它后腿。你该做的是<span class="hi">给最少的必要信息 + 一条取上下文的路 + 一条自检的路</span>,剩下交给它。</p>
+</div>
+
+<footer>
+  <b>来源</b>
+  <ul>
+    <li>视频原片:<a href="https://www.youtube.com/watch?v=Hth_tLaC2j8" target="_blank">《Reflecting on a year of Claude Code》(YouTube, 2026-06-08)</a></li>
+    <li>引用汇编:<a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a>(社区整理 Boris 公开推文 + 该视频,标注到具体 Part)</li>
+    <li>"写 loop 不写 prompt":<a href="https://www.productmarketfit.tech/p/stop-prompting-ai-and-start-building" target="_blank">Product Market Fit</a> · <a href="https://digg.com/ai/q0idpj2w" target="_blank">Digg 报道</a> · <a href="https://addyosmani.com/blog/loop-engineering/" target="_blank">Addy Osmani: Loop Engineering</a></li>
+  </ul>
+  <p class="warn">说明:本文逐字引用以视频原片与官方贴文为准。社区汇编站点便于检索,但属二手整理,如需 100% 精确字句请以视频为准。"一半工程在手机上"未见 Boris 给出确切比例,标注为社区转述。</p>
+  <p>生成于 2026-06-09</p>
+</footer>
+
+</div>
+</body>
+</html>

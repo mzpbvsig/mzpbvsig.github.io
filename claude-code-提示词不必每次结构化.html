@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>提示词不必每次都结构化 · 真实证据</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 6px}
+h3{font-size:15.5px;margin:16px 0 4px;color:#cdd5e0}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-opt{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.good{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.s1{border-left:4px solid var(--accent)}
+.card.s2{border-left:4px solid var(--blue)}
+.card.s3{border-left:4px solid var(--amber)}
+.tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;overflow-x:auto;border-radius:8px;padding:14px 16px;margin:8px 0}
+.tree.g{background:#0b1f17;border:1px solid #143126;color:#cfe9d6}
+.tree.b{background:#0d1622;border:1px solid #1b2c44;color:#dbe7ff}
+.quote{border-left:3px solid var(--accent);background:#0c1712;padding:8px 12px;margin:8px 0;color:#bfe9cf;font-size:13px;font-style:italic}
+.quote .en{color:#8fe3b0}.quote .c{color:#7f93ab;font-style:normal}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+.x{color:#ff8f6b;font-weight:700}.ok{color:#7af0b0;font-weight:700}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.chat{background:#0d1117;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:13.5px}
+.u{color:#bcd3ff;margin:5px 0}.u::before{content:"你 › ";color:#5b76a8;font-weight:700}
+.a{color:#9aa4b2;margin:5px 0 5px 14px;font-size:12.5px}.a::before{content:"CC ⟩ ";color:#3f7a5a}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+b.k{color:#fff}
+.big{font-size:16px;text-align:center;background:#12181f;border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0;line-height:1.8}
+.big b{color:#ffce94}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>提示词不必每次都结构化</h1>
+  <p class="lead">你的直觉：真实开发里输入的 prompt 不该每次都那么结构化，应该贴近自然语言习惯；每次都精雕很累，也不符合"小修改"的意图。<b>——官方文档明确支持这个判断。</b>结构化是个<b>旋钮</b>，只在"赌注高/不看着跑"时才拧大，不是常态税。</p>
+
+  <div class="big">
+    结构化程度 ∝ <b>(出错代价 × 模糊度)</b><br>
+    小修改 → 短句直说；探索 → 故意模糊；只有<b>大/有风险/无人看管</b>才上结构
+  </div>
+
+  <!-- 证据1 -->
+  <h2>证据：官方原话就叫你别每次都结构化</h2>
+  <div class="card s1">
+    <div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"For tasks where the scope is clear and the fix is small (like fixing a typo, adding a log line, or renaming a variable) ask Claude to do it directly."</span><br><span class="c">小而明确的事——typo、加日志、重命名——直接说就行。</span></div>
+    <div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"If you could describe the diff in one sentence, skip the plan."</span><br><span class="c">一句话能描述改动，就跳过计划。</span></div>
+    <div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"Vague prompts can be useful when you're exploring and can afford to course-correct."</span><br><span class="c">模糊的 prompt 在探索、能边走边纠时反而有用。</span></div>
+    <div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"Ask Claude questions you'd ask a senior engineer... No special prompting required: ask questions directly."</span><br><span class="c">像问资深同事一样直接问，不需要特殊措辞。</span></div>
+  </div>
+
+  <!-- 核心:为什么不累 -->
+  <h2>为什么"不必精雕"——靠对话累积，不靠单句完美</h2>
+  <div class="card s2">
+    <div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"The best results come from tight feedback loops... correcting it quickly generally produces better solutions faster."</span><br><span class="c">最好的结果来自紧反馈环——快速纠正比一次写对更快更好。</span></div>
+    <p style="margin:6px 0 4px">关键机制：<b>会话本身记着上下文</b>，所以每一句都是<b>增量</b>，不用重述背景。这就是你不必每次精雕的原因——精确性是<b>跨多轮累积</b>出来的，不是压在第一句里。</p>
+    <div class="chat">
+      <div class="u">把这个按钮改成蓝色</div>
+      <div class="a">改好了（utils/Button.tsx）</div>
+      <div class="u">不对，用主题色那个变量</div>
+      <div class="a">已换成 theme.primary</div>
+      <div class="u">顺手把 hover 也加上</div>
+      <div class="a">已加 hover 态</div>
+    </div>
+    <p style="margin:2px 0 0;color:var(--mut);font-size:12.5px">每句都口语、都很短——精确度是这几轮<b>叠</b>出来的，没有一句是"结构化模板"。这才是真实的日常。</p>
+  </div>
+
+  <!-- 纠正工具 -->
+  <h2>支撑这种"随口说+随手纠"的官方工具</h2>
+  <div class="card s2">
+    <table>
+      <tr><th>动作</th><th>怎么做</th><th>官方原文</th></tr>
+      <tr><td>叫停改方向</td><td><code>Esc</code></td><td><i>"stop Claude mid-action... Context is preserved, so you can redirect."</i></td></tr>
+      <tr><td>撤掉刚才的改</td><td>说 <code>"Undo that"</code></td><td><i>"have Claude revert its changes."</i></td></tr>
+      <tr><td>回到上一个检查点</td><td><code>Esc Esc</code> / <code>/rewind</code></td><td><i>"restore previous conversation and code state."</i></td></tr>
+      <tr><td>纠正超 2 次就重开</td><td><code>/clear</code> + 更好的一句</td><td><i>"a clean session with a better prompt almost always outperforms a long session with accumulated corrections."</i></td></tr>
+    </table>
+    <p style="margin:2px 0 0;color:var(--mut);font-size:12.5px">→ 有"随手撤/随手回退"兜底，你<b>敢</b>随口说；不用怕一句没说全就翻车。</p>
+  </div>
+
+  <!-- 三档 -->
+  <h2>结构化是旋钮：三档，按场景拧</h2>
+  <table>
+    <tr><th>场景</th><th>提示词长这样</th><th>结构化程度</th></tr>
+    <tr>
+      <td><b>小修改</b><br>（typo/改色/加日志）</td>
+      <td class="ok">"把登录按钮改蓝色"<br>"这个函数加个日志"</td>
+      <td>近乎为零，口语直说</td>
+    </tr>
+    <tr>
+      <td><b>探索 / 想要新视角</b></td>
+      <td class="ok">"这文件有什么能改进的？"<br>"为什么这里用 foo 不用 bar？"</td>
+      <td>故意模糊，留空间</td>
+    </tr>
+    <tr>
+      <td><b>大功能 / 有风险 / 无人看管跑</b></td>
+      <td>点名文件+约束+验收+"跑测试直到通过"</td>
+      <td class="x">才上结构化</td>
+    </tr>
+  </table>
+  <div class="disc warn"><b>关键认知：</b>文档里那些"before/after 结构化模板"，是<b>"当你想少来回纠正时"的可选工具</b>，<b>不是每次的硬性要求</b>。官方原话：<i>"The more precise your instructions, the fewer corrections you'll need."</i>——这是<b>权衡</b>（精确↔纠正次数），不是命令。赌注小，就用纠正换省事。</div>
+
+  <!-- 何时值得多写 -->
+  <h2>那什么时候才值得多写几句？</h2>
+  <div class="card s3">
+    <p style="margin:2px 0 6px">只有当"出错代价 × 模糊度"高时——多写的那几句才回本：</p>
+    <ul>
+      <li><b class="k">无人看管跑</b>（<code>claude -p</code> 批处理 / auto 模式）：没人能随手纠，必须把验收写进 prompt。</li>
+      <li><b class="k">改动跨多文件、你又不熟这块代码</b>：官方说这时才"most useful" 上 plan。</li>
+      <li><b class="k">一次性要对</b>（迁移、删改危险区）：错了回滚贵，前置精确划算。</li>
+    </ul>
+    <p style="margin:4px 0 0;color:var(--mut);font-size:12.5px">反过来：你在旁边看着、改动小、能随手撤——<b>别精雕，口语说，错了纠</b>。</p>
+  </div>
+
+  <div class="disc good"><b>结论：</b>你想得对。真实日常 80% 是<b>短的、口语的、增量的</b> prompt + 随手纠正；结构化只在"赌注高 / 不看着它跑"时才拧大。把它当<b>旋钮</b>，不是当<b>税</b>。官方反复强调：<b>紧反馈环 &gt; 一次完美</b>。</div>
+
+  <div class="note">
+    <b>一句话：</b>结构化程度 ∝ 出错代价 × 模糊度。小修改随口说、探索故意模糊、靠对话累积上下文、用 Esc/undo/rewind 兜底——只有大/险/无人看管才上结构。
+    <hr style="border-color:var(--line)">
+    <div class="srcs"><b>来源：</b>
+      <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Anthropic: Best practices</a>（小改直接说 / 跳过 plan / 模糊prompt有用 / 紧反馈环 / Esc·undo·rewind·/clear，均逐字） ·
+      <a href="https://www.mdpi.com/2079-9292/15/4/903" target="_blank">MDPI: Prompt-Driven Development（7420 行 TUI 全靠自然语言迭代）</a> ·
+      <a href="https://www.builder.io/blog/claude-code-tips-best-practices" target="_blank">Builder.io: 50 daily tips</a> ·
+      <a href="https://baransel.dev/post/claude-code-prompts-i-use-every-day-developer/" target="_blank">Baransel: prompts I use every day</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

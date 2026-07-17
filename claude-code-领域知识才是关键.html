@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>领域知识与业务，才是真正的关键</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 6px}
+h3{font-size:15.5px;margin:16px 0 4px;color:#cdd5e0}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-opt{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.good{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.s1{border-left:4px solid var(--mut)}
+.card.s2{border-left:4px solid var(--accent)}
+.card.s3{border-left:4px solid var(--purple)}
+.card.s4{border-left:4px solid var(--amber)}
+.tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;overflow-x:auto;border-radius:8px;padding:14px 16px;margin:8px 0}
+.tree.g{background:#0b1f17;border:1px solid #143126;color:#cfe9d6}
+.tree.b{background:#0d1622;border:1px solid #1b2c44;color:#dbe7ff}
+.tree.p{background:#170f22;border:1px solid #33214a;color:#e3cdf5}
+.tree .hl{color:#ff8f6b;font-weight:700}.tree .c{color:#7f93ab}
+.quote{border-left:3px solid var(--accent);background:#0c1712;padding:8px 12px;margin:8px 0;color:#bfe9cf;font-size:13px;font-style:italic}
+.quote .en{color:#8fe3b0}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+.x{color:#ff8f6b;font-weight:700}.ok{color:#7af0b0;font-weight:700}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+b.k{color:#fff}
+.big{font-size:17px;text-align:center;color:#e6e8eb;background:#12181f;border:1px solid var(--line);border-radius:12px;padding:18px;margin:14px 0;line-height:1.8}
+.big b{color:#ffce94}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>领域知识与业务，才是真正的关键</h1>
+  <p class="lead">你已经学完了所有<b>机制</b>（流程 / spec / 文件夹 / 复查）。一个对的结论浮现了：这些机制是<b>通用管道</b>，谁都能学会、很快趋同；真正拉开产出差距的，是你往管道里灌的 <b>领域知识与业务理解</b>。本文用证据印证它，并把你学过的每个机制重新解释成"装领域知识的容器"。</p>
+
+  <div class="big">
+    机制（流程·spec·文件夹·复查）= <b>管道</b>，会贬值、会趋同<br>
+    领域知识 + 业务理解 = <b>你灌进管道的水</b>，才是差异与价值所在
+  </div>
+
+  <!-- 证据 -->
+  <h2>证据：业界已得出同样结论</h2>
+  <div class="card s2">
+    <div class="quote"><span class="tag t-prac">SDD 研究</span> <span class="en">"specifications should use domain-oriented ubiquitous language to describe business intent rather than specific tech-bound implementations."</span><br><span class="c">—— spec 要用「领域通用语言」表达业务意图，而不是绑死技术实现。</span></div>
+    <div class="quote"><span class="tag t-prac">Augment</span> <span class="en">"creating specifications accurate enough for AI generation requires reverse-engineering years of implicit business logic."</span><br><span class="c">—— 让 spec 精确到能给 AI 生成，难点是把多年「隐性业务逻辑」逆向出来。</span></div>
+    <div class="quote"><span class="tag t-verb">Anthropic 官方</span> <span class="en">CLAUDE.md "gives Claude persistent context it can't infer from code alone."</span><br><span class="c">—— CLAUDE.md 给的是代码里推不出来的上下文（= 领域/业务知识）。</span></div>
+    <div class="quote"><span class="tag t-verb">Anthropic 官方</span> <span class="en">Skills "extend Claude's knowledge with information specific to your project, team, or domain."</span><br><span class="c">—— skills 就是往 Claude 里加你项目/团队/领域专属知识。</span></div>
+    <p style="margin:6px 0 0;color:var(--mut);font-size:12.5px">→ 三方独立说同一件事：瓶颈不在工具，在"把隐性领域/业务知识显性化"。</p>
+  </div>
+
+  <!-- 核心论证 -->
+  <h2>为什么工具不是关键</h2>
+  <div class="card s1">
+    <ul>
+      <li><b class="k">机制会趋同：</b>plan mode、4 阶段、spec 文件夹、对抗式复查——都是公开文档，人人能照抄，<b>不构成壁垒</b>。</li>
+      <li><b class="k">最大失败模式是"解决错问题"：</b>官方原话 <i>"code that solves the wrong problem"</i>。流程再标准，<b>需求理解错了全白做</b>——而需求理解 = 业务/领域。</li>
+      <li><b class="k">AI 把"写代码"变便宜了：</b>当生成代码近乎免费，价值就上移到<b>"该写什么、为什么、边界在哪"</b>——这恰恰是领域知识回答的。</li>
+      <li><b class="k">幻觉的根因是缺上下文：</b>Claude 不是不会写，是<b>不知道你这行的规则</b>。补领域知识 > 调 prompt 技巧。</li>
+    </ul>
+  </div>
+
+  <!-- 重新解释机制 -->
+  <h2>关键转念：你学的每个机制，都是"领域知识的容器"</h2>
+  <div class="card s3">
+    <p style="margin:2px 0 8px">把前面学的东西重看一遍——它们的<b>价值不在结构本身，在里面装的领域/业务内容</b>：</p>
+    <table>
+      <tr><th>机制（容器）</th><th>它真正承载的领域/业务知识</th></tr>
+      <tr><td><code>CLAUDE.md</code></td><td>本项目的约定、命令、踩坑点、架构决策——"代码里推不出来"的隐性规则</td></tr>
+      <tr><td><code>steering/product.md</code></td><td><b>业务方向</b>：为谁做、解决什么、成功标准</td></tr>
+      <tr><td><code>steering/tech.md</code></td><td>本领域的技术栈与取舍</td></tr>
+      <tr><td><code>steering/structure.md</code></td><td>本项目代码组织的领域约定</td></tr>
+      <tr><td><code>constitution.md</code></td><td><b>项目宪法</b>：不可逾越的业务/合规原则</td></tr>
+      <tr><td><code>spec.md / requirements.md</code></td><td><b>业务意图</b>：用户故事、验收标准、边界、不做什么</td></tr>
+      <tr><td><code>.claude/skills/</code></td><td>可复用的<b>领域专长</b>（API 约定、合规规则、行业算法）</td></tr>
+    </table>
+    <div class="disc good" style="margin-top:10px"><b>所以：</b>你不是"学会了 spec-kit / Pimzino"，你是<b>学会了往哪些槽位灌业务知识</b>。槽位是死的，灌得好不好取决于你对业务有多懂。</div>
+  </div>
+
+  <!-- 怎么做 -->
+  <h2>那该把精力放哪（务实落地）</h2>
+  <div class="card s4">
+    <ul>
+      <li><b class="k">① 把隐性业务逻辑写下来：</b>那些"老员工才懂"的规则、例外、为什么这样设计——逆向出来写进 <code>steering/</code> 与 <code>spec.md</code>。这是最高杠杆的活。</li>
+      <li><b class="k">② 用领域通用语言：</b>spec 写"业务发生了什么"，别写"调哪个函数"。让业务方能看懂、能纠错。</li>
+      <li><b class="k">③ 把验收标准写成业务可验证的：</b>"登录失败 3 次锁定 15 分钟"这种，才挡得住 AI 想当然。</li>
+      <li><b class="k">④ 复用沉淀成 skill：</b>反复用到的领域规则 → 抽成 <code>.claude/skills/</code>，按需加载、不占上下文（progressive disclosure）。</li>
+      <li><b class="k">⑤ 你做"领域翻译官 + 验收官"：</b>AI 负责实现，<b>你负责"对不对、合不合业务"</b>——这是 AI 替不掉的位置。</li>
+    </ul>
+  </div>
+
+  <div class="disc warn"><b>一句话提醒：</b>流程和工具学到头，边际收益递减；<b>对业务/领域的理解，是没有上限、且 AI 越强越值钱的资产</b>。把时间从"调工具"挪到"把业务知识显性化"。</div>
+
+  <div class="note">
+    <b>结论：</b>机制是通用管道、会趋同；<b>领域知识与业务理解是你灌进去的水，才是差异化价值</b>。你学过的 CLAUDE.md / steering / spec / skills 全是"装领域知识的容器"——价值取决于你往里装什么。把精力从调工具，转向"把隐性业务逻辑显性化、写成 AI 能执行的规格"。
+    <hr style="border-color:var(--line)">
+    <div class="srcs"><b>来源：</b>
+      <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Anthropic: Best practices</a>（CLAUDE.md/skills 承载领域知识，逐字） ·
+      <a href="https://code.claude.com/docs/en/skills" target="_blank">Anthropic: Extend Claude with skills</a> ·
+      <a href="https://www.augmentcode.com/guides/what-is-spec-driven-development" target="_blank">Augment: What Is SDD</a>（逆向隐性业务逻辑） ·
+      <a href="https://www.thoughtworks.com/en-us/insights/blog/agile-engineering-practices/spec-driven-development-unpacking-2025-new-engineering-practices" target="_blank">Thoughtworks: SDD</a>（领域通用语言/业务意图） ·
+      <a href="https://www.hedgineer.io/content/claude-skills-knowledge-layer/" target="_blank">Hedgineer: Company-wide knowledge layer with skills</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

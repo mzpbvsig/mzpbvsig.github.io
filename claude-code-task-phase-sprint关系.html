@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task / Phase / Sprint 三者关系 · 真实证据</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:26px 0 6px}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-agile{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-spec{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-make{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.agile{border-left:4px solid var(--blue)}
+.card.spec{border-left:4px solid var(--accent)}
+.card.make{border-left:4px solid var(--amber)}
+.tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;overflow-x:auto;
+border-radius:8px;padding:14px 16px;margin:8px 0}
+.tree.b{background:#0d1622;border:1px solid #1b2c44;color:#dbe7ff}
+.tree.g{background:#0b1f17;border:1px solid #143126;color:#cfe9d6}
+.tree.a{background:#1f1810;border:1px solid #3d2f17;color:#f1dcb6}
+.tree .hl{color:#ff8f6b;font-weight:700}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+.x{color:#ff8f6b;font-weight:700}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+b.k{color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Task / Phase / Sprint 三者关系</h1>
+  <p class="lead">这三个词分属<b>两个不同体系</b>，而且 <b>"Phase" 在两边层级正好相反</b>，<b>"Sprint" 在真正的 Claude Code spec 工具里根本不出现</b>。本文把两套层级、冲突点、以及"想合成一套时的务实映射"讲清，并标注哪些是真实证据、哪些是构造建议。</p>
+
+  <div class="disc warn"><b>一句话先记住：</b>Agile 里 <b>Phase &gt; Sprint &gt; Task</b>；spec-kit 里 <b>Feature &gt; User Story &gt; Phase &gt; Task</b>（无 Sprint）。同一个词 "Phase"，一个在 Sprint 之上、一个在 User Story 之下——这是最大歧义来源。</div>
+
+  <!-- 体系 A -->
+  <h2><span class="tag t-agile">体系 A · 真实证据</span>通用 Agile / Scrum</h2>
+  <div class="card agile">
+    <div class="tree b">Project  项目
+  └─ <span class="hl">Phase / Iteration</span>  阶段 / 迭代      ← 这里的 Phase = 高层"生命周期阶段"
+       └─ Sprint  冲刺（1–4 周<b>时间盒</b>）
+            └─ Task  任务（从 backlog 拉进 sprint backlog）
+                 └─ Subtask  子任务</div>
+    <ul>
+      <li><b class="k">层级：</b>Phase &gt; Sprint &gt; Task。</li>
+      <li><b class="k">Sprint：</b>一个固定时长的时间盒；sprint 里"装"从产品 backlog 挑出的任务/故事。</li>
+      <li><b class="k">Phase：</b>项目级的大阶段（在 sprint <b>之上</b>）。</li>
+    </ul>
+    <a class="cite" href="https://www.tempo.io/glossary/project-sprint" target="_blank">证据：Tempo / Flowlu Agile 规划 ↗</a>
+  </div>
+
+  <!-- 体系 B -->
+  <h2><span class="tag t-spec">体系 B · 逐字证据</span>Claude Code 的 spec 工具（spec-kit / Pimzino）</h2>
+  <div class="card spec">
+    <div class="tree g">Feature  功能
+  └─ User Story  用户故事（P1 / P2… 优先级）
+       └─ <span class="hl">Phase</span>  阶段        ← 这里的 Phase = 一个 tasks.md <b>内部的分组</b>
+            │   Phase 1 Setup · Phase 2 Foundational · Phase 3+ 每故事一段
+            └─ Task  任务（T001 · [P]并行 · [US1]归属 · 依赖 · [ ]→[x]）
+                 └─ （任务里的 bullet 步骤 / File / Requirements）</div>
+    <ul>
+      <li><b class="k">层级：</b>Feature &gt; User Story &gt; Phase &gt; Task。<b>没有 Sprint。</b></li>
+      <li><b class="k">Phase：</b><b>不是</b>时间盒，只是某个功能的任务清单里的逻辑分段（搭建→地基→各故事）。</li>
+      <li><b class="k">来源：</b>这套层级来自前面逐字拉取的 spec-kit / Pimzino 真实模板。</li>
+    </ul>
+    <a class="cite" href="https://github.com/github/spec-kit/blob/main/templates/tasks-template.md" target="_blank">证据：spec-kit tasks-template.md ↗</a>
+    <span class="srcs"> · 详见同目录 <a href="claude-code-task-phase清单-真实用法.html">task-phase清单-真实用法.html</a></span>
+  </div>
+
+  <!-- 冲突 -->
+  <h2>关键冲突（最容易踩的坑）</h2>
+  <table>
+    <tr><th>词</th><th>Agile 里的层级</th><th>spec-kit 里的层级</th></tr>
+    <tr><td><b>Phase</b></td><td>在 Sprint <b>之上</b>（项目级阶段）</td><td>在 User Story <b>之下</b>（tasks.md 内部分组）</td></tr>
+    <tr><td><b>Sprint</b></td><td>存在，是<b>时间盒</b></td><td><span class="x">不存在</span></td></tr>
+    <tr><td><b>Task</b></td><td>sprint 里的活儿</td><td>phase 里的原子任务（T001…）</td></tr>
+  </table>
+  <div class="disc">同一个 "Phase"，两边指的不是一个层级——讨论时一定要先说清"你说的 phase 是哪套"。</div>
+
+  <!-- 合成 -->
+  <h2><span class="tag t-make">体系 C · 构造建议（非官方）</span>想把三者合成一套时的务实映射</h2>
+  <div class="card make">
+    <div class="tree a">Sprint  冲刺（你这一轮要交付的范围 / 时间盒）
+  └─ Feature / User Story  这轮挑的功能 / 故事
+       └─ Phase  阶段（spec-kit 的 Setup → Foundational → 每故事）
+            └─ Task  原子任务（T001，[ ] → [x]）
+                 └─ Subtask / steps  子步骤</div>
+    <ul>
+      <li><b class="k">含义：</b><b>Sprint 决定"这轮做哪些故事"</b>（范围+时间），<b>Phase / Task 决定"每个故事怎么一步步落地"</b>（执行）。</li>
+      <li><b class="k">用法：</b>用 Sprint 做"挑活儿 + 收口节奏"；进到每个故事，就用 spec 工具的 <code>tasks.md</code>（Phase + Task + 勾选 + 验证）来驱动 Claude Code 逐条实现。</li>
+    </ul>
+    <div class="disc warn" style="margin:6px 0 0"><b>诚实标注：</b>体系 C 是<b>把 Agile 的 Sprint 叠在 spec 工具之上</b>的务实组合，<b>不是</b>哪个工具的官方定义；spec-kit / Pimzino 本身<b>不含 Sprint 概念</b>。按需采用。</div>
+  </div>
+
+  <div class="note">
+    <b>怎么对齐需求：</b>如果你只在 Claude Code 里做一个功能 → 用<b>体系 B</b>（Feature→Story→Phase→Task）就够，别引入 Sprint 徒增混乱。若你在团队 Agile 节奏里 → 用<b>体系 C</b>：Sprint 管范围与节奏，每个故事落到 <code>tasks.md</code> 的 Phase/Task 去执行。
+    <hr style="border-color:var(--line)">
+    <div class="srcs"><b>来源：</b>
+      <a href="https://www.tempo.io/glossary/project-sprint" target="_blank">Tempo: Project Sprint</a> ·
+      <a href="https://www.flowlu.com/blog/project-management/agile-planning-step-by-step-guide-for-agile-projects-and-sprints/" target="_blank">Flowlu: Agile Planning</a> ·
+      <a href="https://asana.com/resources/work-breakdown-structure" target="_blank">Asana: Work Breakdown Structure</a> ·
+      <a href="https://www.augmentcode.com/guides/ai-spec-driven-development-workflows" target="_blank">Augment: AI spec-driven workflows</a> ·
+      <a href="https://github.com/github/spec-kit/blob/main/templates/tasks-template.md" target="_blank">github/spec-kit</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow" target="_blank">Pimzino</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

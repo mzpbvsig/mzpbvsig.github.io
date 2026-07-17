@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatGPT Pro + DevSpace MCP 的 Codex 设计研究</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e8ebef;--mut:#9aa4b2;--line:#272d38;--green:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--red:#fb7185;--cyan:#67e8f9;--violet:#c084fc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.68 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:30px 18px 88px}
+h1{font-size:27px;line-height:1.28;margin:0 0 8px}
+h2{font-size:20px;line-height:1.35;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+h3{font-size:16px;margin:18px 0 6px;color:#dbe3ee}
+p{margin:7px 0}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:#0c1b15;border:1px solid #173626;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:7px 0 7px 20px;padding:0}
+li{margin:4px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+th{background:#1e2430;color:#c8d0dc}
+td b{color:#fff}
+.meta{font-size:12.5px;color:var(--mut);margin:0 0 14px}
+.lead{color:#b8c2d0;margin:0 0 12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:14px 0}
+.s1{border-left:4px solid var(--red)}
+.s2{border-left:4px solid var(--blue)}
+.s3{border-left:4px solid var(--amber)}
+.s4{border-left:4px solid var(--green)}
+.s5{border-left:4px solid var(--violet)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:800;margin-right:5px;white-space:nowrap;vertical-align:1px}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#17243a;color:#bdd5ff;border:1px solid #2a4875}
+.t-opt{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.t-risk{background:#3b1420;color:#ffb3c8;border:1px solid #733044}
+.big{font-size:16px;line-height:1.82;text-align:center;background:#121821;border:1px solid var(--line);border-radius:13px;padding:18px;margin:16px 0}
+.big b{color:#ffce94}
+.quote{background:#0c1712;border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:9px 12px;margin:10px 0;color:#bfe9cf;font-size:13px}
+.quote .en{display:block;color:#8fe3b0;font-style:italic;margin-bottom:3px}
+.quote .cn{display:block;color:#c8d0dc}
+.quote .src{display:block;color:#7d8796;font-size:11.5px;margin-top:4px}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:13px 0}
+.step{background:#151a22;border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:10px;padding:10px 11px;min-height:86px}
+.step b{display:block;font-size:13.5px;color:#fff}
+.step span{display:block;color:var(--mut);font-size:12.3px;margin-top:3px}
+.warn{background:#241b12;border:1px dashed #6b4f1c;color:#f4d59a;border-radius:10px;padding:12px 14px;margin:12px 0;font-size:13px}
+.ok{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6;border-radius:10px;padding:12px 14px;margin:12px 0;font-size:13px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kvs{display:grid;grid-template-columns:150px 1fr;gap:5px 12px;font-size:13px;margin:8px 0}
+.kvs .k{color:var(--mut)}
+.mono{font:12.7px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap;background:#10151d;border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:#d5deea;overflow-x:auto}
+.callout-title{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.srcs{font-size:12.5px;color:var(--mut);line-height:1.85;border-top:1px solid var(--line);padding-top:14px;margin-top:30px}
+.srcs b{color:#d5deea}
+.small{font-size:12.5px;color:var(--mut)}
+@media(max-width:800px){.flow,.grid2{grid-template-columns:1fr}.kvs{grid-template-columns:1fr}.wrap{padding:22px 14px 70px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ChatGPT Pro + DevSpace MCP 的 Codex 设计研究</h1>
+  <p class="meta">当前日期：2026-06-19 · 研究对象：<a href="https://github.com/Waishnav/devspace/tree/main" target="_blank">Waishnav/devspace</a>、ChatGPT MCP、OpenAI Codex、MCP 官方规格 · 方法：Context7 解析 MCP 文档 + 官方 OpenAI Codex manual + DevSpace 仓库源码/文档 + OpenAI Help Center。</p>
+  <p class="lead">这份研究回答一个很具体的问题：能不能用 <b>ChatGPT Pro + DevSpace MCP</b> 做出接近 <b>Codex</b> 的本地 coding-agent 工作流？结论不绕：DevSpace 的设计很像 Codex loop，但 <b>ChatGPT Pro 当前不是完整写入/修改型 MCP 的最佳承载面</b>。</p>
+
+  <h2>结论先行</h2>
+  <div class="big">
+    <b>DevSpace 是一个很聪明的“Codex 式 MCP 桥”</b>：它把本机项目、文件编辑、搜索、shell、worktree、AGENTS/CLAUDE 指令和 skills 暴露给 MCP host。<br>
+    但如果目标明确写成 <b>ChatGPT Pro 变 Codex</b>，关键限制是：OpenAI 官方 Help 当前写明 <b>Full MCP 只给 Business / Enterprise / Edu</b>，Pro 只能连接 read/fetch 权限的 MCP。
+  </div>
+
+  <div class="card s1">
+    <p><span class="tag t-risk">官方逐字</span><b>高风险结论：</b>按 2026-06-19 可查官方资料，ChatGPT Pro 不应被设计成 DevSpace 的完整 code-edit/shell 执行宿主。DevSpace 的主卖点是 read/write/edit/bash/worktree；这些能力和 Pro 当前公开说明中的 read/fetch 边界不匹配。</p>
+    <div class="quote">
+      <span class="en">“Full MCP is only available to Business and Enterprise/Edu users, currently.”</span>
+      <span class="cn">中文：完整 MCP 当前只面向 Business 与 Enterprise/Edu 用户。</span>
+      <span class="src">来源：<a href="https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt" target="_blank">OpenAI Help Center · Developer mode and MCP apps in ChatGPT</a></span>
+    </div>
+  </div>
+
+  <div class="card s2">
+    <p><span class="tag t-prac">实践补充</span><b>最稳的设计路线：</b>把 DevSpace 定位为「ChatGPT workspace plans 的本地开发 MCP 后端」或「研究原型」，不要把它定位成「Pro 个人号可替代官方 Codex」。如果你只是要本地编程代理，优先用 OpenAI Codex App / CLI；如果你要把 ChatGPT Web 作为 host，优先确认 Business/Enterprise/Edu 的 full MCP 与 app action controls。</p>
+  </div>
+
+  <div class="card s4">
+    <p><span class="tag t-prac">实践补充</span><b>推荐落地形态：</b>DevSpace 跑在本机或专用开发机；项目根目录白名单保持很窄；默认用 worktree；shell 运行在低权限账户或隔离 VM；连接层优先用 OpenAI Secure MCP Tunnel 或带身份控制的 Cloudflare/Tailscale/ngrok；ChatGPT 侧只发布经过审核的 actions。</p>
+  </div>
+
+  <h2>证据摘录</h2>
+  <div class="grid2">
+    <div class="card s2">
+      <div class="callout-title"><span class="tag t-verb">官方逐字</span><b>DevSpace 的自我定位</b></div>
+      <div class="quote">
+        <span class="en">“Bring a Codex-style coding workflow to ChatGPT.”</span>
+        <span class="cn">中文：把 Codex 风格的编码工作流带到 ChatGPT。</span>
+        <span class="src">来源：<a href="https://github.com/Waishnav/devspace/tree/main" target="_blank">DevSpace README</a></span>
+      </div>
+      <p>转述：DevSpace 是自托管 MCP server，让 ChatGPT 读、写、搜索并运行本机项目代码；安装要求 Node <code>&gt;=20.12 &lt;27</code>，推荐 Node 22 LTS。</p>
+    </div>
+
+    <div class="card s1">
+      <div class="callout-title"><span class="tag t-verb">官方逐字</span><b>Pro 计划的 MCP 边界</b></div>
+      <div class="quote">
+        <span class="en">“Pro users can connect MCPs with read/fetch permissions in developer mode.”</span>
+        <span class="cn">中文：Pro 用户可在开发者模式连接具备 read/fetch 权限的 MCP。</span>
+        <span class="src">来源：<a href="https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt" target="_blank">OpenAI Help Center</a></span>
+      </div>
+      <p>转述：如果 DevSpace 暴露 edit/write/bash，这已经超出 read/fetch 研究用途，应视为不适合用个人 Pro 直接承载完整 loop。</p>
+    </div>
+
+    <div class="card s3">
+      <div class="callout-title"><span class="tag t-verb">官方逐字</span><b>MCP 本身的能力边界</b></div>
+      <div class="quote">
+        <span class="en">“Tools represent arbitrary code execution and must be treated with appropriate caution.”</span>
+        <span class="cn">中文：工具代表任意代码执行路径，必须谨慎对待。</span>
+        <span class="src">来源：<a href="https://modelcontextprotocol.io/specification/2025-06-18" target="_blank">MCP Specification 2025-06-18</a></span>
+      </div>
+      <p>转述：MCP 是连接协议，不是安全沙箱。安全必须靠 host 权限、服务端白名单、认证、审批、日志和运行隔离共同完成。</p>
+    </div>
+
+    <div class="card s4">
+      <div class="callout-title"><span class="tag t-verb">官方逐字</span><b>Codex 自带的安全基线</b></div>
+      <div class="quote">
+        <span class="en">“By default, the agent runs with network access turned off.”</span>
+        <span class="cn">中文：默认情况下，agent 运行时网络访问关闭。</span>
+        <span class="src">来源：<a href="https://developers.openai.com/codex/agent-approvals-security" target="_blank">OpenAI Codex · Agent approvals & security</a></span>
+      </div>
+      <p>转述：Codex 本地表面有 OS sandbox 与 approval policy；DevSpace 则把本机 shell 暴露给 MCP host，需要你自己搭出等价的信任边界。</p>
+    </div>
+  </div>
+
+  <h2>DevSpace 是什么</h2>
+  <table>
+    <tr><th>层</th><th>DevSpace 设计</th><th>研究判断</th></tr>
+    <tr>
+      <td><b>MCP server</b></td>
+      <td>仓库 <code>package.json</code> 描述为 “Expose a secure local coding workspace through an MCP server.”，依赖 <code>@modelcontextprotocol/sdk</code> 与 <code>@modelcontextprotocol/ext-apps</code>。</td>
+      <td><span class="tag t-verb">官方逐字</span>它确实是 MCP server，不是单纯 prompt 模板或浏览器插件。来源：<a href="https://github.com/Waishnav/devspace/blob/main/package.json" target="_blank">package.json</a></td>
+    </tr>
+    <tr>
+      <td><b>工具面</b></td>
+      <td>源码注册 <code>open_workspace</code>、<code>read</code>、<code>write</code>、<code>edit</code>、<code>bash</code>，非 minimal 模式还有 <code>grep</code>、<code>glob</code>、<code>ls</code>。</td>
+      <td><span class="tag t-prac">实践补充</span>这已经覆盖一个 coding agent 的基本 loop：定位、读取、修改、验证、展示变更。来源：<a href="https://raw.githubusercontent.com/Waishnav/devspace/main/src/server.ts" target="_blank">src/server.ts</a></td>
+    </tr>
+    <tr>
+      <td><b>工作区状态</b></td>
+      <td><code>open_workspace</code> 返回 <code>workspaceId</code>，后续所有工具复用该 ID；支持 checkout 与 worktree 模式。</td>
+      <td><span class="tag t-prac">实践补充</span>这和 Codex 线程绑定项目/工作树的心智模型相近，有利于长期任务不乱切根目录。</td>
+    </tr>
+    <tr>
+      <td><b>指令层</b></td>
+      <td>DevSpace 打开 workspace 时会加载根级 <code>AGENTS.md</code>/<code>CLAUDE.md</code>，并返回 nested instruction files；也能发现本地 skills。</td>
+      <td><span class="tag t-prac">实践补充</span>这正是在模拟 Codex 的 durable instructions + progressive disclosure。</td>
+    </tr>
+    <tr>
+      <td><b>展示层</b></td>
+      <td>支持 ChatGPT Apps-compatible hosts 的 tool cards 与可选 change summary / <code>show_changes</code>。</td>
+      <td><span class="tag t-opt">看场景可省</span>如果 host 不支持 iframe/widget，仍可用纯文本工具结果，但体验会弱很多。</td>
+    </tr>
+  </table>
+
+  <h2>和 Codex 的对应关系</h2>
+  <div class="flow">
+    <div class="step"><b>ChatGPT / Codex host</b><span>发起任务、选择工具、解释结果、向用户要确认</span></div>
+    <div class="step"><b>MCP 连接层</b><span>Streamable HTTP / OAuth / tunnel / action controls</span></div>
+    <div class="step"><b>DevSpace server</b><span>workspaceId、文件工具、shell、worktree、skills</span></div>
+    <div class="step"><b>本机项目</b><span>真实文件、git、依赖、测试、终端环境</span></div>
+  </div>
+
+  <table>
+    <tr><th>Codex 能力</th><th>DevSpace 对应物</th><th>差异</th><th>设计建议</th></tr>
+    <tr>
+      <td>读写代码、运行测试</td>
+      <td><code>read</code>/<code>edit</code>/<code>write</code>/<code>bash</code></td>
+      <td>Codex 有本地 sandbox/approval；DevSpace 的 shell 是本机用户权限。</td>
+      <td>shell 只做测试、build、git；文件变更只走 edit/write；DevSpace 外再加 OS/VM 隔离。</td>
+    </tr>
+    <tr>
+      <td>AGENTS.md</td>
+      <td>打开 workspace 时加载 <code>AGENTS.md</code>/<code>CLAUDE.md</code></td>
+      <td>Codex 官方只定义 AGENTS 链；DevSpace 兼容 CLAUDE，利于迁移但要避免冲突。</td>
+      <td>把 repo 规范写在 AGENTS；CLAUDE 只保留兼容性说明或去重。</td>
+    </tr>
+    <tr>
+      <td>Skills</td>
+      <td>从 <code>DEVSPACE_AGENT_DIR</code>、项目 <code>.pi/skills</code>、<code>DEVSPACE_SKILL_PATHS</code> 发现</td>
+      <td>DevSpace 默认 <code>DEVSPACE_AGENT_DIR=~/.codex</code>；但 skill path 可能在 workspace 外。</td>
+      <td>只暴露可审计 skill；skill 的脚本能力要按生产依赖对待。</td>
+    </tr>
+    <tr>
+      <td>Worktrees</td>
+      <td><code>open_workspace({mode:"worktree"})</code>，默认路径 <code>~/.devspace/worktrees</code></td>
+      <td>两者都不是安全边界，只是并行/隔离工作流边界。</td>
+      <td>默认用 worktree 做非 trivial 任务，合并前再回到主 checkout 检查。</td>
+    </tr>
+    <tr>
+      <td>MCP 扩展</td>
+      <td>DevSpace 自身就是 MCP server</td>
+      <td>Codex MCP 配在 <code>config.toml</code>；ChatGPT MCP 受计划、workspace、developer mode、action controls 限制。</td>
+      <td>个人 Pro 不设计写入型工具；workspace plan 再启用 full MCP。</td>
+    </tr>
+  </table>
+
+  <div class="quote">
+    <span class="en">“Codex reads `AGENTS.md` files before doing any work.”</span>
+    <span class="cn">中文：Codex 在工作前读取 AGENTS.md。</span>
+    <span class="src">来源：<a href="https://developers.openai.com/codex/guides/agents-md" target="_blank">OpenAI Codex · AGENTS.md</a></span>
+  </div>
+  <div class="quote">
+    <span class="en">“Model Context Protocol (MCP) connects models to tools and context.”</span>
+    <span class="cn">中文：MCP 把模型连接到工具和上下文。</span>
+    <span class="src">来源：<a href="https://developers.openai.com/codex/mcp" target="_blank">OpenAI Codex · MCP</a></span>
+  </div>
+
+  <h2>ChatGPT Pro 能不能用</h2>
+  <table>
+    <tr><th>目标</th><th>ChatGPT Pro</th><th>Business / Enterprise / Edu</th><th>建议</th></tr>
+    <tr>
+      <td><b>读项目、做解释、检索上下文</b></td>
+      <td>官方说明支持 read/fetch 权限 MCP，但仍需 developer mode。</td>
+      <td>支持 app / connector / company knowledge 相关能力，管理员可管控。</td>
+      <td>Pro 可做轻量研究；如果 DevSpace 暴露了写入工具，不建议直接发布给 Pro。</td>
+    </tr>
+    <tr>
+      <td><b>编辑文件、生成 diff</b></td>
+      <td>不适合当完整方案。</td>
+      <td>full MCP beta 支持 write/modify，但需要 workspace 管理、发布与 action controls。</td>
+      <td>用 workspace plan，或直接用 Codex app/CLI。</td>
+    </tr>
+    <tr>
+      <td><b>运行 shell / 测试 / build</b></td>
+      <td>高风险且不匹配 read/fetch 边界。</td>
+      <td>可做，但必须当远程访问开发机处理。</td>
+      <td>专用低权限账号、窄根目录、worktree、审批、日志和网络隔离。</td>
+    </tr>
+    <tr>
+      <td><b>生产团队使用</b></td>
+      <td>缺少管理面。</td>
+      <td>可配 RBAC、action control、app 发布审核。</td>
+      <td>先做一台专用开发 host 的小范围试点，不直接接全员主力仓库。</td>
+    </tr>
+  </table>
+
+  <div class="warn">
+    <span class="tag t-risk">风险边界</span>
+    OpenAI Help 同页还写明：ChatGPT “Not directly” 连接本地 MCP server；私网、本机或内网 MCP server 应使用 Secure MCP Tunnel。DevSpace README 允许 Cloudflare Tunnel、ngrok、Pinggy、Tailscale Funnel 等公共 HTTPS base URL；两者并不冲突，但对于 OpenAI 产品生态内的长期方案，Secure MCP Tunnel 更贴合官方安全模型。
+  </div>
+
+  <h2>连接与安全设计</h2>
+  <div class="quote">
+    <span class="en">“without exposing them to the public internet.”</span>
+    <span class="cn">中文：不把私有 MCP server 暴露到公网。</span>
+    <span class="src">来源：<a href="https://developers.openai.com/api/docs/guides/secure-mcp-tunnels" target="_blank">OpenAI Developers · Secure MCP Tunnel</a></span>
+  </div>
+
+  <div class="card s3">
+    <h3>建议的防线</h3>
+    <ul>
+      <li><span class="tag t-prac">实践补充</span><b>文件边界：</b><code>DEVSPACE_ALLOWED_ROOTS</code> 只放具体项目父目录，不放 <code>~</code>、<code>/</code>、<code>C:\</code>。</li>
+      <li><span class="tag t-prac">实践补充</span><b>连接边界：</b>优先 Secure MCP Tunnel；若用公网 tunnel，加 Cloudflare Access / Tailscale 身份控制，不把 URL 当秘密。</li>
+      <li><span class="tag t-prac">实践补充</span><b>身份边界：</b><code>DEVSPACE_OAUTH_OWNER_TOKEN</code> 用长随机值，<code>~/.devspace/auth.json</code> 不同步、不提交。</li>
+      <li><span class="tag t-prac">实践补充</span><b>执行边界：</b>DevSpace shell 运行在专用低权限 OS 用户、容器、WSL distro 或一次性 VM 内。</li>
+      <li><span class="tag t-prac">实践补充</span><b>工具边界：</b>默认 <code>DEVSPACE_TOOL_MODE=minimal</code>，让搜索走 <code>bash rg</code> 或开启 full 模式时只发布必要读工具。</li>
+      <li><span class="tag t-prac">实践补充</span><b>日志边界：</b>默认不要开 <code>DEVSPACE_LOG_SHELL_COMMANDS=1</code>，命令里可能带 secret。</li>
+    </ul>
+  </div>
+
+  <div class="card s1">
+    <div class="callout-title"><span class="tag t-verb">官方逐字</span><b>DevSpace 自己也承认 shell 的边界</b></div>
+    <div class="quote">
+      <span class="en">“The shell tool is powerful by design.”</span>
+      <span class="cn">中文：shell 工具按设计就是强能力。</span>
+      <span class="src">来源：<a href="https://github.com/Waishnav/devspace/blob/main/docs/security.md" target="_blank">DevSpace Security Model</a></span>
+    </div>
+    <p>转述：DevSpace 文件工具做路径 containment，但 shell 命令按本地用户权限运行；所以 MCP client 必须被当作可信 coding partner，而不是普通检索机器人。</p>
+  </div>
+
+  <h2>推荐工作流</h2>
+  <div class="card s4">
+    <h3>Worktree-first coding loop</h3>
+    <div class="mono">1. ChatGPT/Codex host 调用 open_workspace(path, mode="worktree")
+2. 读取根 AGENTS.md / CLAUDE.md；进入子目录前读取 nested instruction file
+3. 先 search/read，再制定小步修改计划
+4. 文件修改只走 edit/write，不用 shell 重定向写文件
+5. bash 只跑 test/build/git/package scripts
+6. 调用 show_changes 或让 widget 展示 aggregate diff
+7. 用户审核 diff 与测试输出，再决定合并/提交/继续</div>
+    <p><span class="tag t-prac">实践补充</span>这条 loop 对齐 DevSpace server instructions，也对齐 Codex 的工作树心智：后台并行、前台审查、必要时交接到主 checkout。</p>
+  </div>
+
+  <div class="quote">
+    <span class="en">“worktrees let Codex run multiple independent tasks in the same project”</span>
+    <span class="cn">中文：worktree 让 Codex 在同一项目里并行运行多个独立任务。</span>
+    <span class="src">来源：<a href="https://developers.openai.com/codex/app/worktrees" target="_blank">OpenAI Codex app · Worktrees</a></span>
+  </div>
+
+  <h2>三种方案取舍</h2>
+  <table>
+    <tr><th>方案</th><th>适合谁</th><th>优点</th><th>缺点</th><th>结论</th></tr>
+    <tr>
+      <td><b>A. ChatGPT Pro + DevSpace</b></td>
+      <td>个人研究、只读/检索、概念验证</td>
+      <td>ChatGPT 入口熟悉；可研究 MCP 与本地项目桥接</td>
+      <td>官方 full MCP 不覆盖 Pro；DevSpace 核心写入/shell 能力无法稳妥发挥</td>
+      <td><span class="tag t-opt">看场景可省</span>可试，但不要当生产 coding agent。</td>
+    </tr>
+    <tr>
+      <td><b>B. Workspace plan + DevSpace</b></td>
+      <td>团队、内部工具、需要 ChatGPT Web + 本机/内网代码工作区</td>
+      <td>full MCP、developer mode、发布审核、action controls、RBAC</td>
+      <td>需要管理员与安全治理；仍要解决 shell 与隧道风险</td>
+      <td><span class="tag t-prac">实践补充</span>这是 DevSpace 最合理的 ChatGPT 承载路线。</td>
+    </tr>
+    <tr>
+      <td><b>C. OpenAI Codex App / CLI</b></td>
+      <td>个人或团队日常本地开发</td>
+      <td>官方 Codex sandbox、approval、AGENTS、skills、MCP、worktree 原生集成</td>
+      <td>不是 ChatGPT 对话主界面；需要安装/配置 Codex 表面</td>
+      <td><span class="tag t-prac">实践补充</span>如果目标是“做代码”，这是默认推荐。</td>
+    </tr>
+  </table>
+
+  <h2>最小实施清单</h2>
+  <div class="grid2">
+    <div class="card s2">
+      <h3>DevSpace 侧</h3>
+      <ul>
+        <li>安装 Node <code>&gt;=20.12 &lt;27</code>，Windows 用 Git Bash 或 WSL。</li>
+        <li>初始化：<code>npx @waishnav/devspace init</code></li>
+        <li>检查：<code>npx @waishnav/devspace doctor</code></li>
+        <li>启动：<code>npx @waishnav/devspace serve</code></li>
+        <li>配置 public base URL 时不要带 <code>/mcp</code>，MCP client 连接时才使用 <code>/mcp</code>。</li>
+      </ul>
+    </div>
+    <div class="card s4">
+      <h3>治理侧</h3>
+      <ul>
+        <li>先用一个非敏感 repo 试点。</li>
+        <li>用专用 OS 用户或 VM 跑 DevSpace。</li>
+        <li>默认 worktree 模式，不直接改主 checkout。</li>
+        <li>记录每次工具调用，但不要记录 shell command preview 中的 secret。</li>
+        <li>明确“谁能发布 app、谁能启用 write actions、谁能看 tunnel”。</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>我的设计建议</h2>
+  <div class="card s5">
+    <p><span class="tag t-prac">实践补充</span><b>产品定位：</b>不要叫“ChatGPT Pro 变 Codex”，改成“DevSpace：MCP host 的本地代码工作区”。这样不会和 Pro 的 full MCP 限制冲突，也更准确。</p>
+    <p><span class="tag t-prac">实践补充</span><b>首版范围：</b>先做 read/search/explain/review 的只读模式。如果要 edit/write/bash，就把目标客户改成 Business/Enterprise/Edu workspace，并强制管理员 action review。</p>
+    <p><span class="tag t-prac">实践补充</span><b>默认策略：</b>worktree-first、narrow-root、low-privilege shell、explicit diff、human approval。把“本地 shell 能做任何用户能做的事”写进产品 onboarding，而不是藏在安全文档深处。</p>
+  </div>
+
+  <div class="ok">
+    <span class="tag t-prac">最终判断</span>
+    DevSpace 的工程方向是成立的：它把 Codex 的核心 loop 拆成 MCP host + 本机工具 server。但对 ChatGPT Pro 来说，当前官方能力边界让它更适合作为只读研究原型；真正的“Codex 式改代码 + 跑测试 + 展 diff”应落到 Codex App/CLI，或 ChatGPT Business/Enterprise/Edu 的 full MCP 环境。
+  </div>
+
+  <h2>不确定项</h2>
+  <ul>
+    <li><span class="tag t-risk">不确定</span>ChatGPT MCP 与 apps 仍处 beta/rollout 状态，OpenAI Help 明确提示 UI、权限、功能可能变化；本文按 2026-06-19 可查资料判断。</li>
+    <li><span class="tag t-risk">不确定</span>DevSpace 通过 OpenAI Secure MCP Tunnel 转发时的 OAuth/metadata 细节需要实测；OpenAI 文档说 tunnel 可连接 HTTP MCP server，但具体 app 配置仍需现场验证。</li>
+    <li><span class="tag t-risk">不确定</span>DevSpace 仓库 main 的 <code>package.json</code> 显示版本 <code>1.0.1</code>，GitHub release 侧可见 latest release 是 <code>v1.0.0</code>（2026-06-16）。安装前若要求复现实验，应再查 npm 当前版本。</li>
+  </ul>
+
+  <div class="srcs">
+    <b>主要来源</b><br>
+    1. DevSpace README：<a href="https://github.com/Waishnav/devspace/tree/main" target="_blank">https://github.com/Waishnav/devspace/tree/main</a><br>
+    2. DevSpace Setup Guide：<a href="https://github.com/Waishnav/devspace/blob/main/docs/setup.md" target="_blank">docs/setup.md</a><br>
+    3. DevSpace ChatGPT Coding Workflow：<a href="https://github.com/Waishnav/devspace/blob/main/docs/chatgpt-coding-workflow.md" target="_blank">docs/chatgpt-coding-workflow.md</a><br>
+    4. DevSpace Security Model：<a href="https://github.com/Waishnav/devspace/blob/main/docs/security.md" target="_blank">docs/security.md</a><br>
+    5. DevSpace server source：<a href="https://raw.githubusercontent.com/Waishnav/devspace/main/src/server.ts" target="_blank">src/server.ts raw</a><br>
+    6. OpenAI Help Center：<a href="https://help.openai.com/en/articles/12584461-developer-mode-and-mcp-apps-in-chatgpt" target="_blank">Developer mode and MCP apps in ChatGPT</a><br>
+    7. OpenAI Developers：<a href="https://developers.openai.com/api/docs/guides/secure-mcp-tunnels" target="_blank">Secure MCP Tunnel</a><br>
+    8. OpenAI Codex：<a href="https://developers.openai.com/codex/agent-approvals-security" target="_blank">Agent approvals & security</a>、<a href="https://developers.openai.com/codex/mcp" target="_blank">MCP</a>、<a href="https://developers.openai.com/codex/guides/agents-md" target="_blank">AGENTS.md</a>、<a href="https://developers.openai.com/codex/app/worktrees" target="_blank">Worktrees</a><br>
+    9. MCP 官方规格：<a href="https://modelcontextprotocol.io/specification/2025-06-18" target="_blank">Specification 2025-06-18</a>、<a href="https://modelcontextprotocol.io/docs/getting-started/intro" target="_blank">What is MCP?</a><br>
+    <span class="small">注：MCP 文档查询按本目录 AGENTS.md 要求先用 Context7 CLI resolve/fetch，再以官方网页做可点击来源核验。</span>
+  </div>
+</div>
+</body>
+</html>

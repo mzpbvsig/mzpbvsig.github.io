@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPEC 文档怎么分类 · 存哪些文件夹（真实约定）</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 6px}
+h3{font-size:15.5px;margin:16px 0 4px;color:#cdd5e0}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-opt{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.t-num{background:#241733;color:#e5c2ff;border:1px solid #5a3a7e}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.good{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.s0{border-left:4px solid var(--mut)}
+.card.s1{border-left:4px solid var(--accent)}
+.card.s2{border-left:4px solid var(--blue)}
+.card.s3{border-left:4px solid var(--purple)}
+.tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;overflow-x:auto;border-radius:8px;padding:14px 16px;margin:8px 0}
+.tree.g{background:#0b1f17;border:1px solid #143126;color:#cfe9d6}
+.tree.b{background:#0d1622;border:1px solid #1b2c44;color:#dbe7ff}
+.tree.a{background:#1f1810;border:1px solid #3d2f17;color:#f1dcb6}
+.tree.p{background:#170f22;border:1px solid #33214a;color:#e3cdf5}
+.tree .hl{color:#ff8f6b;font-weight:700}
+.tree .c{color:#7f93ab}
+.quote{border-left:3px solid var(--accent);background:#0c1712;padding:8px 12px;margin:8px 0;color:#bfe9cf;font-size:13px;font-style:italic}
+.quote .en{color:#8fe3b0}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+.x{color:#ff8f6b;font-weight:700}
+.ok{color:#7af0b0;font-weight:700}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+b.k{color:#fff}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin:10px 0 4px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>SPEC 文档怎么分类 · 要不要保存 · 存哪些文件夹</h1>
+  <p class="lead">回答三件事：<b>① 每个功能的 spec 怎么分类</b>、<b>② 文档要不要持续保存</b>、<b>③ 存到哪些文件夹</b>。基于三套真实约定（Anthropic 官方 / GitHub spec-kit / Pimzino），标 <span class="tag t-verb">官方逐字</span> 的是原文引用。</p>
+
+  <div class="legend">
+    <span><i class="dot" style="background:#22c55e"></i>官方逐字</span>
+    <span><i class="dot" style="background:#7aa2ff"></i>实践补充</span>
+    <span><i class="dot" style="background:#f59e0b"></i>看场景</span>
+  </div>
+
+  <div class="disc warn"><b>一句话先记住：</b><b>一个功能 = 一个文件夹</b>，夹里放「需求 / 设计 / 任务」三件套；<b>持续保存并 check 进 git</b>（它是"为什么有这段代码"的永久档案）；位置二选一 —— <code>specs/001-功能名/</code>（spec-kit，可见强排序）或 <code>.claude/specs/功能名/</code>（Pimzino，跟配置放一起）。</div>
+
+  <!-- 结论表 -->
+  <h2>三个问题，直接答</h2>
+  <table>
+    <tr><th>问题</th><th>答案</th></tr>
+    <tr><td><b>每个功能怎么分类</b></td><td><b>一功能一夹</b>。要排序用 <code>001-短名</code>；要语义用 <code>功能名</code>。夹内固定放需求/设计/任务三件套</td></tr>
+    <tr><td><b>要持续保存吗</b></td><td><b class="ok">要</b>，而且 <b>check 进 git</b>。它是 source of truth、"为什么代码长这样"的永久记录，新会话出问题可 pin 回来当恢复点</td></tr>
+    <tr><td><b>存哪</b></td><td><code>specs/</code>（spec-kit）或 <code>.claude/specs/</code>（Pimzino）；<b>全局</b>长期文件单独放 <code>.specify/memory/</code> 或 <code>.claude/steering/</code></td></tr>
+  </table>
+
+  <!-- 体系1 官方 -->
+  <h2><span class="tag t-opt">最轻量</span>① Anthropic 官方：只要 SPEC.md，不规定文件夹</h2>
+  <div class="card s0">
+    <div class="tree b">项目根/
+├── <span class="hl">SPEC.md</span>      <span class="c"># 访谈产出的规格</span>
+├── PLAN.md      <span class="c"># 计划，复查时拿它对照</span>
+└── CLAUDE.md</div>
+    <div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"start a fresh session to execute it... you have a written spec to reference."</span></div>
+    <p style="margin:4px 0 0;color:var(--mut);font-size:12.5px">适合单功能、小项目。文件直接放根目录，不分夹。</p>
+  </div>
+
+  <!-- 体系2 spec-kit -->
+  <h2><span class="tag t-verb">逐字证据</span>② GitHub spec-kit：<code>specs/</code> + 编号文件夹</h2>
+  <div class="card s1">
+    <div class="quote"><span class="en">"Each feature created generates a new numbered folder with the feature short name in the specs folder."</span></div>
+    <div class="tree g">项目根/
+├── <span class="hl">.specify/</span>                  <span class="c"># 系统盘（隐藏，别污染主视图）</span>
+│   ├── memory/constitution.md <span class="c"># 项目宪法/原则（全局长期）</span>
+│   ├── scripts/               <span class="c"># create-new-feature.sh 等</span>
+│   └── templates/             <span class="c"># spec/plan/tasks 模板</span>
+└── <span class="hl">specs/</span>
+    ├── 001-user-login/        <span class="c"># 一功能一编号夹</span>
+    │   ├── spec.md            <span class="c"># 目标 + 需求</span>
+    │   ├── plan.md            <span class="c"># 架构/方案</span>
+    │   └── tasks.md           <span class="c"># 原子任务 T001…</span>
+    ├── 002-oauth/
+    └── 003-payment/</div>
+    <p style="margin:4px 0 0"><b class="k">分类法：</b><code>编号 + 短名</code>（<code>001-user-login</code>）—— 编号=创建顺序，天然排序、不重名。</p>
+    <a class="cite" href="https://github.com/github/spec-kit/blob/main/spec-driven.md" target="_blank">证据：github/spec-kit ↗</a>
+  </div>
+
+  <!-- 体系3 Pimzino -->
+  <h2><span class="tag t-verb">逐字证据</span>③ Pimzino：<code>.claude/specs/</code> + 功能名文件夹</h2>
+  <div class="card s2">
+    <div class="quote"><span class="en">"spec-driven development for new features (Requirements → Design → Tasks → Implementation)."</span></div>
+    <div class="tree p">项目根/.claude/
+├── <span class="hl">steering/</span>          <span class="c"># 跨功能指导文件（全局长期）</span>
+│   ├── product.md     <span class="c"># 产品方向</span>
+│   ├── tech.md        <span class="c"># 技术栈</span>
+│   └── structure.md   <span class="c"># 代码结构约定</span>
+├── <span class="hl">specs/</span>
+│   ├── user-login/    <span class="c"># 一功能一名字夹</span>
+│   │   ├── requirements.md  <span class="c"># 需求：用户故事/验收标准</span>
+│   │   ├── design.md        <span class="c"># 设计</span>
+│   │   └── tasks.md         <span class="c"># 任务</span>
+│   └── oauth/
+├── bugs/              <span class="c"># bug 流程 Report→Analyze→Fix→Verify</span>
+└── templates/</div>
+    <p style="margin:4px 0 0"><b class="k">分类法：</b><code>功能名</code>（<code>user-login</code>）—— 靠语义，不靠编号。</p>
+    <a class="cite" href="https://github.com/Pimzino/claude-code-spec-workflow" target="_blank">证据：Pimzino/claude-code-spec-workflow ↗</a>
+  </div>
+
+  <!-- 对比 -->
+  <h2>关键区别：<code>specs/</code> vs <code>.claude/specs/</code></h2>
+  <table>
+    <tr><th></th><th>spec-kit <code>specs/</code></th><th>Pimzino <code>.claude/specs/</code></th></tr>
+    <tr><td>位置</td><td>项目根（<b>可见</b>）</td><td><code>.claude/</code> 下（<b>半隐藏</b>）</td></tr>
+    <tr><td>分类</td><td><code>001-编号-短名</code></td><td><code>功能名</code></td></tr>
+    <tr><td>三件套</td><td>spec / plan / tasks</td><td>requirements / design / tasks</td></tr>
+    <tr><td>全局文件</td><td><code>.specify/memory/constitution.md</code></td><td><code>.claude/steering/*.md</code></td></tr>
+    <tr><td>适合</td><td>想可见、强排序、可审计</td><td>想 spec 跟 Claude 配置放一起</td></tr>
+  </table>
+
+  <!-- 生命周期 -->
+  <h2><span class="tag t-prac">实践变体</span>进阶：按"生命周期"再分夹</h2>
+  <div class="card s3">
+    <p style="margin:2px 0 6px">有人在 <code>specs/</code> 里再开状态夹，让"在做/已做"一目了然，做完就把功能夹挪过去：</p>
+    <div class="tree a">specs/
+├── plans/           <span class="c"># 待办：高层架构决策</span>
+├── in-progress/     <span class="c"># 在做：当前工作的"上下文锚点"</span>
+└── plans-executed/  <span class="c"># 已做：为什么存在这段代码的永久史</span></div>
+    <a class="cite" href="https://todatabeyond.substack.com/p/how-to-structureclaude-folder-for" target="_blank">证据：How to Structure .claude/ Folder ↗</a>
+  </div>
+
+  <!-- 选择建议 -->
+  <h2>怎么选（务实建议）</h2>
+  <div class="disc good">
+    <ul style="margin:0">
+      <li><b>单人 / 小项目</b> → 官方法，根目录 <code>SPEC.md</code> 就够，别上文件夹体系。</li>
+      <li><b>想可见、强排序、给人审计</b> → spec-kit：<code>specs/001-功能名/</code>。</li>
+      <li><b>想 spec 和 Claude 配置统一管</b> → Pimzino：<code>.claude/specs/功能名/</code>。</li>
+      <li><b>功能多、要分在做/已做</b> → 叠生命周期夹（plans / in-progress / plans-executed）。</li>
+      <li><b class="k">铁律：</b>全局长期文件（产品/技术/结构/宪法）放 <code>.specify/memory/</code> 或 <code>.claude/steering/</code>，<b>别</b>塞进单个功能夹。</li>
+    </ul>
+  </div>
+
+  <div class="note">
+    <b>结论：</b>一功能一夹（需求/设计/任务三件套）→ 持续保存 + check 进 git（永久档案、可作恢复点）→ 存 <code>specs/</code> 或 <code>.claude/specs/</code>，全局文件单独放。
+    <hr style="border-color:var(--line)">
+    <div class="srcs"><b>来源：</b>
+      <a href="https://github.com/github/spec-kit/blob/main/spec-driven.md" target="_blank">github/spec-kit</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow" target="_blank">Pimzino/claude-code-spec-workflow</a> ·
+      <a href="https://todatabeyond.substack.com/p/how-to-structureclaude-folder-for" target="_blank">How to Structure .claude/ Folder</a> ·
+      <a href="https://code.claude.com/docs/en/best-practices" target="_blank">Best practices for Claude Code</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

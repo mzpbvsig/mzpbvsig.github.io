@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>官方解读 · HTML 的不合理有效性</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 6px}
+h3{font-size:15.5px;margin:16px 0 4px;color:#cdd5e0}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.good{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.s1{border-left:4px solid var(--accent)}
+.card.s2{border-left:4px solid var(--blue)}
+.card.s3{border-left:4px solid var(--amber)}
+.quote{border-left:3px solid var(--accent);background:#0c1712;padding:8px 12px;margin:8px 0;color:#bfe9cf;font-size:13px;font-style:italic}
+.quote .en{color:#8fe3b0}.quote .c{color:#7f93ab;font-style:normal}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+b.k{color:#fff}
+.meta{font-size:12.5px;color:var(--mut);margin:2px 0 10px}
+.big{font-size:16px;text-align:center;background:#12181f;border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0;line-height:1.8}
+.big b{color:#ffce94}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>官方解读 · HTML 的不合理有效性</h1>
+  <p class="meta">原文：<a href="https://claude.com/blog/using-claude-code-the-unreasonable-effectiveness-of-html" target="_blank">Using Claude Code: The unreasonable effectiveness of HTML</a> · 作者 Thariq Shihipar · 2026-05-20 · Claude 官方博客</p>
+  <p class="lead">这篇官方文章的核心：<b>让 Claude Code 用 HTML 而不是 Markdown 输出</b>，能拿到更高信息密度、更清晰的视觉组织、更易分享、可交互、更好地吸纳多源上下文。<span class="tag t-verb">它正好印证了你"一律生成 HTML"的做法</span>——你不是个人偏好，是踩在官方观点上。</p>
+
+  <div class="big">官方结论：<b>HTML &gt; Markdown</b> 作为 Claude Code 的产出格式<br><span style="font-size:13px;color:#9aa4b2">作者原话：用 HTML 是因为它让我"<b style="color:#ffce94">feel much more in the loop with Claude</b>"</span></div>
+
+  <!-- 5 理由 -->
+  <h2>为什么用 HTML：官方给的 5 个理由</h2>
+  <div class="card s1">
+    <table>
+      <tr><th>理由</th><th>说什么</th></tr>
+      <tr><td><b>① 信息密度</b><br>Information Density</td><td>HTML 能塞表格、CSS、SVG 图、代码块、JS 交互、空间排布、内嵌图片——<b>比 Markdown 承载多得多</b>的数据</td></tr>
+      <tr><td><b>② 视觉清晰</b><br>Visual Clarity</td><td>大文档用 tab/插图/链接组织后更可读。作者原话：<i>"I tend to not actually read more than a 100-line Markdown file"</i>——长 Markdown 根本不会看</td></tr>
+      <tr><td><b>③ 易分享</b><br>Shareability</td><td>HTML 能当<b>链接</b>发，无需特殊渲染；同事更愿意点开看规格/报告（Markdown 附件常被忽略）</td></tr>
+      <tr><td><b>④ 双向交互</b><br>Two-way</td><td>HTML 可放滑块/可调参数，用户改了设计能<b>导回 Claude Code</b></td></tr>
+      <tr><td><b>⑤ 上下文吸纳</b><br>Data Ingestion</td><td>Claude Code 能从文件系统、MCP（Slack/Linear）、Chrome、git 历史取更广上下文——<b>直接用 Claude.ai 拿不到这些</b></td></tr>
+    </table>
+  </div>
+
+  <!-- 5 用例 -->
+  <h2>官方推荐的 5 类用法</h2>
+  <div class="card s2">
+    <table>
+      <tr><th>场景</th><th>HTML 怎么用</th></tr>
+      <tr><td><b>规格 / 计划</b></td><td>做"探索文件"，<b>多方案并排</b>对比，标清各自取舍 ← 你的 spec 接力/关系图正是这类</td></tr>
+      <tr><td><b>代码评审</b></td><td>渲染 diff + 行内批注 + <b>按严重度配色</b>的发现</td></tr>
+      <tr><td><b>设计</b></td><td>带可调参数的交互动画原型 + 一键复制</td></tr>
+      <tr><td><b>报告</b></td><td>多源数据综合成可读文档 + SVG 图 ← 你这一整套研究文档</td></tr>
+      <tr><td><b>编辑</b></td><td>做一次性 HTML 表单，导出按钮把数据/prompt 以 <b>JSON 回传</b></td></tr>
+    </table>
+    <div class="disc good"><b>对照你的文档集：</b>你做的"规格并排对比 / 多源研究报告 / 配色标注证据"——<b>三类全命中官方推荐用法</b>。说明这条 CLAUDE.md 规则方向是对的。</div>
+  </div>
+
+  <!-- 核心金句 -->
+  <h2>最该记住的一句</h2>
+  <div class="card s3">
+    <div class="quote"><span class="tag t-verb">作者逐字</span> <span class="en">"the real reason I use HTML instead of Markdown is that it helps me feel much more in the loop with Claude."</span><br><span class="c">用 HTML 的真正理由：它让我对 Claude 在做什么<b>更有掌控感、更跟得上</b>。</span></div>
+    <p style="margin:6px 0 0">→ 价值不只在"好看"，在<b>人能更快看懂、更愿意读、从而更早发现问题</b>——这跟官方反复强调的"<b>紧反馈环 / 给自己能读的证据</b>"是同一回事。HTML 是把"证据"做得让人愿意读的载体。</p>
+  </div>
+
+  <!-- 怎么落地 -->
+  <h2>怎么开始（Getting started 要点）</h2>
+  <div class="card s2">
+    <ul>
+      <li>直接让 Claude Code "把结果做成<b>单独的 HTML</b>"，而不是默认 Markdown。</li>
+      <li>大主题 → 让它用 <b>tab / 折叠 / 链接</b> 组织，别堆成长文。</li>
+      <li>要对比 → 让它<b>并排</b>列方案 + 标取舍。</li>
+      <li>要回传数据 → 让它在 HTML 里放<b>导出按钮</b>（输出 JSON 或 prompt）。</li>
+    </ul>
+    <div class="disc"><b>你已经在做的：</b>暗色统一风格、左色条分段、配色标签、来源链接——等于把官方"信息密度 + 视觉清晰 + 易分享"三条工程化成了模板。</div>
+  </div>
+
+  <div class="note">
+    <b>一句话：</b>官方专门撰文说 <b>HTML 作为 Claude Code 产出格式"不合理地有效"</b>——信息密度高、可读、可分享、可交互、能吸更多上下文，核心好处是让人"more in the loop"。<b>你的"一律生成 HTML"规则与官方立场一致。</b>
+    <hr style="border-color:var(--line)">
+    <div class="srcs"><b>来源：</b>
+      <a href="https://claude.com/blog/using-claude-code-the-unreasonable-effectiveness-of-html" target="_blank">claude.com/blog — The unreasonable effectiveness of HTML（Thariq Shihipar, 2026-05-20）</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>长程自主任务通用方法论 · 从 Deli_AutoResearch 抽取（对抗验证修正版）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f17; --bg2:#11161f; --card:#151c28; --card2:#1a2230;
+    --line:#26303f; --line2:#323e50;
+    --txt:#e6edf3; --txt2:#9aa7b8; --txt3:#6b7689;
+    --blue:#5eb1ff; --blue-bg:rgba(94,177,255,.08);
+    --green:#7ee787; --green-bg:rgba(126,231,135,.08);
+    --amber:#f0c674; --amber-bg:rgba(240,198,116,.10);
+    --red:#ff7b72; --red-bg:rgba(255,123,114,.10);
+    --purple:#c792ea; --purple-bg:rgba(199,146,234,.08);
+    --cyan:#56d4dd; --cyan-bg:rgba(86,212,221,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--txt);
+    font-family:'Inter','Noto Sans SC',system-ui,sans-serif;
+    font-size:15.5px; line-height:1.72;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:48px 40px 120px}
+
+  /* hero */
+  header.hero{
+    border-left:5px solid var(--blue); background:linear-gradient(90deg,var(--blue-bg),transparent 60%);
+    padding:30px 34px; border-radius:0 12px 12px 0; margin-bottom:14px;
+  }
+  header.hero h1{margin:0 0 10px; font-size:30px; font-weight:800; letter-spacing:-.01em; line-height:1.3}
+  header.hero .sub{color:var(--txt2); font-size:15px; max-width:80ch}
+  .metaline{display:flex; flex-wrap:wrap; gap:8px; margin-top:18px}
+  .chip{font-family:'JetBrains Mono',monospace; font-size:12px; padding:4px 10px; border-radius:6px;
+    background:var(--card2); border:1px solid var(--line); color:var(--txt2)}
+  .chip b{color:var(--cyan); font-weight:500}
+
+  /* section */
+  section{margin-top:46px; scroll-margin-top:20px}
+  .sec-head{display:flex; align-items:baseline; gap:12px; margin-bottom:8px}
+  .sec-num{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--txt3); font-weight:600}
+  h2{font-size:23px; font-weight:700; margin:0; letter-spacing:-.01em;
+    padding-left:14px; border-left:4px solid var(--blue)}
+  h3{font-size:17.5px; font-weight:600; margin:26px 0 10px; color:var(--txt)}
+  h4{font-size:15.5px; font-weight:600; margin:18px 0 6px; color:var(--txt)}
+  p{margin:10px 0}
+  .lead{color:var(--txt2); font-size:15px}
+
+  /* tag system (核心约定) */
+  .tag{display:inline-block; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
+    padding:2px 8px; border-radius:4px; vertical-align:middle; margin-right:6px; white-space:nowrap}
+  .t-official{background:var(--blue-bg); color:var(--blue); border:1px solid rgba(94,177,255,.3)}
+  .t-practice{background:var(--green-bg); color:var(--green); border:1px solid rgba(126,231,135,.3)}
+  .t-optional{background:var(--amber-bg); color:var(--amber); border:1px solid rgba(240,198,116,.3)}
+  .t-bound{background:var(--red-bg); color:var(--red); border:1px solid rgba(255,123,114,.3)}
+  .t-add{background:var(--purple-bg); color:var(--purple); border:1px solid rgba(199,146,234,.3)}
+
+  /* card with left color bar */
+  .card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 22px; margin:14px 0;
+    border-left:4px solid var(--line2)}
+  .card.b-blue{border-left-color:var(--blue)}
+  .card.b-green{border-left-color:var(--green)}
+  .card.b-amber{border-left-color:var(--amber)}
+  .card.b-red{border-left-color:var(--red)}
+  .card.b-purple{border-left-color:var(--purple)}
+  .card.b-cyan{border-left-color:var(--cyan)}
+  .card h4{margin-top:0}
+  .card .why{color:var(--txt2); font-size:14.5px}
+  .card .src{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--cyan); margin-top:8px}
+
+  /* english quote block */
+  .en{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--txt2);
+    background:var(--bg2); border-left:3px solid var(--line2); padding:8px 12px; margin:8px 0; border-radius:0 6px 6px 0}
+  .src-link{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--txt3)}
+  .src-link a{color:var(--cyan); text-decoration:none}
+  .src-link a:hover{text-decoration:underline}
+
+  /* inline */
+  code{font-family:'JetBrains Mono',monospace; font-size:.88em; background:var(--bg2);
+    padding:1px 6px; border-radius:4px; color:var(--cyan); border:1px solid var(--line)}
+  strong{color:#fff; font-weight:600}
+  .k{color:var(--blue); font-weight:500}
+  ul,ol{padding-left:22px}
+  li{margin:5px 0}
+  a{color:var(--blue)}
+
+  /* table */
+  .tbl-wrap{overflow-x:auto; margin:14px 0}
+  table{border-collapse:collapse; width:100%; font-size:14px; min-width:560px}
+  th,td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+  th{background:var(--card2); color:var(--txt2); font-weight:600; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em}
+  td code{font-size:12.5px}
+  tr:hover td{background:rgba(255,255,255,.015)}
+
+  /* principle block */
+  .principle{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:0; margin:16px 0; overflow:hidden}
+  .principle .ph{padding:14px 22px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .principle .ph .idx{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--txt3); font-weight:600}
+  .principle .ph .pname{font-size:16px; font-weight:600}
+  .principle .pb{padding:14px 22px}
+  .principle .pb p{margin:6px 0}
+  .principle .lbl{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--txt3); font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-right:6px}
+
+  /* callouts */
+  .callout{border-radius:8px; padding:14px 18px; margin:16px 0; font-size:14.5px}
+  .callout.red{background:var(--red-bg); border:1px solid rgba(255,123,114,.3); border-left:4px solid var(--red)}
+  .callout.amber{background:var(--amber-bg); border:1px solid rgba(240,198,116,.3); border-left:4px solid var(--amber)}
+  .callout.green{background:var(--green-bg); border:1px solid rgba(126,231,135,.3); border-left:4px solid var(--green)}
+  .callout.purple{background:var(--purple-bg); border:1px solid rgba(199,146,234,.3); border-left:4px solid var(--purple)}
+  .callout .ct{font-weight:600; font-family:'JetBrains Mono',monospace; font-size:12px; display:block; margin-bottom:4px; text-transform:uppercase; letter-spacing:.05em}
+
+  /* nav */
+  nav.toc{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 24px; margin:24px 0}
+  nav.toc h4{margin:0 0 10px; color:var(--txt2); font-size:13px; text-transform:uppercase; letter-spacing:.06em}
+  nav.toc ol{margin:0; padding-left:20px; columns:2; column-gap:32px}
+  nav.toc li{margin:3px 0; font-size:14px}
+  nav.toc a{color:var(--txt); text-decoration:none}
+  nav.toc a:hover{color:var(--blue)}
+
+  /* flow diagram */
+  .flow{font-family:'JetBrains Mono',monospace; background:var(--bg2); border:1px solid var(--line);
+    border-radius:8px; padding:18px 20px; font-size:13px; line-height:1.6; overflow-x:auto; white-space:pre; color:var(--txt2)}
+  .flow b{color:var(--cyan); font-weight:600}
+  .flow em{color:var(--green); font-style:normal}
+
+  hr.sep{border:none; border-top:1px solid var(--line); margin:40px 0}
+  .foot{color:var(--txt3); font-size:13px; margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <h1>长程自主任务通用方法论<span style="color:var(--txt3); font-weight:500; font-size:18px"> · 从 Deli_AutoResearch skill 抽取</span></h1>
+  <div class="sub">把一个面向学术研究的自主 agent 协议，剥离 research 语境后提炼成一套「如何设计任何长程（数天–数周）无人值守 agent 框架」的可复用设计原则与组件清单。<strong>本版已经过 3 个对抗视角（忠实性 / 通用性 / 完备性）验证并修正</strong>，标注了原文出处、过度泛化的边界、以及迁移时必须重新标定的部分。</div>
+  <div class="metaline">
+    <span class="chip"><b>来源</b> Deli_AutoResearch SKILL.md</span>
+    <span class="chip"><b>网页</b> victorchen96.github.io/auto_research</span>
+    <span class="chip"><b>产出</b> dynamic workflow · 8 agents</span>
+    <span class="chip"><b>流程</b> 4维分析 → 综合 → 3视角对抗验证</span>
+    <span class="chip"><b>日期</b> 2026-06-22</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h4>目录</h4>
+  <ol>
+    <li><a href="#s0">一句话本质</a></li>
+    <li><a href="#s1">三大失败模式（设计起点）</a></li>
+    <li><a href="#s2">通用设计原则（12 条 · 修正后）</a></li>
+    <li><a href="#s3">五层架构</a></li>
+    <li><a href="#s4">六个反馈环</a></li>
+    <li><a href="#s5">一次迭代的 6 步状态机</a></li>
+    <li><a href="#s6">迁移到非研究任务</a></li>
+    <li><a href="#s7">⚠️ 通用性边界与反例（验证产出）</a></li>
+    <li><a href="#s8">诚实边界（Limits）</a></li>
+    <li><a href="#s9">常见陷阱速查</a></li>
+    <li><a href="#s10">一页纸速查表</a></li>
+  </ol>
+</nav>
+
+<!-- ===== S0 ESSENCE ===== -->
+<section id="s0">
+  <div class="sec-head"><span class="sec-num">00</span><h2>一句话本质</h2></div>
+  <div class="card b-blue">
+    <p style="font-size:17px; margin:0">长程自主 agent 的可靠性<strong>来自工程脚手架而非模型能力</strong>——用<strong>状态外化</strong>把对话降级为缓存、用<strong>独立监督</strong>消除自评偏差、用<strong>分层看门狗</strong>覆盖静默死亡、用<strong>强制多样性与结构转向</strong>逃逸局部最优，并始终把人类<strong>降级为异常处理器而非必经节点</strong>。</p>
+  </div>
+  <div class="card b-amber">
+    <span class="tag t-optional">看场景可省 · 前提</span>
+    <p style="margin:6px 0 0"><strong>本方法论默认任务满足两个前提：</strong>① 无人值守（人不在关键路径上）；② 任务允许「重启 / 回滚」而非「绝不失败」。生产运维中<strong>不可回滚</strong>的高风险动作（删库、对外通知、schema 迁移）必须保留人类授权门——见 <a href="#s7">§7 通用性边界</a>。</p>
+  </div>
+</section>
+
+<!-- ===== S1 FAILURE MODES ===== -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">01</span><h2>三大失败模式（设计起点）</h2></div>
+  <p class="lead">整套方法论不是从理论推导，而是从三类<strong>经验失败</strong>归纳。每一条机制都能追溯到下面之一。这是世界观基线——原文明确：<strong>共同原因是缺少工程脚手架，不是模型能力不足</strong>。</p>
+
+  <div class="en">"The common cause of all three is missing engineering scaffolding, not insufficient model capability. Every mechanism in this framework targets the failure modes above."</div>
+  <div class="src-link">— SKILL.md §1 Motivation · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">framework.html</a></div>
+
+  <div class="card b-red">
+    <span class="tag t-official">官方逐字</span> <strong>① 认知循环（Cognitive Loop）</strong>
+    <p class="why">连续迭代尝试相似方向、收益递减，无法自行逃出局部最优。<span class="tag t-bound" style="float:none">本质</span>算法/搜索问题——单点无法自拔。</p>
+    <div class="en">"successive iterations try similar directions with diminishing returns, unable to escape a local optimum on their own"</div>
+  </div>
+
+  <div class="card b-red">
+    <span class="tag t-official">官方逐字</span> <strong>② 停滞（Stalling）</strong>
+    <p class="why">agent 做完一段就输出摘要、等待用户反馈。外部看会话还活着、轮询还在跑，但工作已实际停止。<span class="tag t-bound" style="float:none">本质</span>语义/边界问题——比崩溃<strong>更常见</strong>。</p>
+    <div class="en">"Externally the session looks alive and polling runs, but work has effectively stopped. Run logs show this is more common than crashes."</div>
+  </div>
+
+  <div class="callout amber"><span class="ct" style="color:var(--amber)">实践补充 · 优先级依据</span>原文承认「停滞比崩溃更常见」——因此监控资源应<strong>优先</strong>投入「内容启发式停滞检测」（最后输出是问句 / 无增量），而非只做活性崩溃检测。任何长程 agent 仪表盘，停滞类告警优先级应高于崩溃类。</div>
+
+  <div class="card b-red">
+    <span class="tag t-official">官方逐字</span> <strong>③ 运行时脆弱（Runtime Fragility）</strong>
+    <p class="why">context compaction 静默打断循环；关闭会话会带走寄生其上的定时器。失败默认不被察觉。<span class="tag t-bound" style="float:none">本质</span>系统/运维问题——隐蔽死亡。</p>
+    <div class="en">"context compaction silently breaks the loop; closing a session takes down the timers parasitic on it. Failures go unnoticed by default."</div>
+  </div>
+</section>
+
+<!-- ===== S2 DESIGN PRINCIPLES ===== -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">02</span><h2>通用设计原则（12 条 · 对抗验证修正后）</h2></div>
+  <p class="lead">原 skill 的 5 条行为约束 + 6 条工程约束 + 关键架构决策，剥离 research 语义后归纳为这 12 条。每条标注：原文出处（附英文）、为什么、迁移示例。其中 <span class="tag t-bound">⚠️边界</span> 标注的是<strong>对抗验证发现</strong>的过度泛化点——套用前必须确认适用条件。</p>
+
+  <!-- P1 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P1</span><span class="pname">状态外化 / 进程无状态化</span><span class="tag t-official">官方逐字</span><span class="tag t-practice">实践补充</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>把工作内存从易失的对话上下文迁移到持久化、可注入的介质，使每个工作单元成为无状态、可重启的节点。</p>
+      <p><span class="lbl">为什么</span>对话上下文<strong>既</strong>是认知循环的载体（旧推理污染新决策）<strong>又</strong>是运行时脆弱的根因（compaction 一发生循环就静默死亡）。把状态搬到比运行载体更持久的介质，使「重启」成为廉价日常操作而非灾难恢复——与数据库 WAL、systemd restart、k8s 无状态 pod 同构。</p>
+      <div class="en">"Persist state to files — all progress is written to state/ files, not conversation memory. Each iteration starts a fresh session, injecting only curated state; never use resume."<br>"context accumulation is the primary cause of cognitive loops"</div>
+      <div class="src-link">— SKILL.md §2.4 BC4 / §3 / §9.2 EC2 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>持续开发 agent：每个迭代结束把「当前 backlog / 已合入 PR / 已知回归失败」写入 <code>repo-state.json</code>，下次会话 fresh 启动只读该文件，不靠对话回忆昨天的进度。</p>
+    </div>
+  </div>
+
+  <!-- P2 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P2</span><span class="pname">执行 / 评价分离</span><span class="tag t-official">官方逐字</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>把「评价者」与「执行者」解耦到不同进程/会话，评价基于<strong>量化指标</strong>而非主观判断。</p>
+      <p><span class="lbl">为什么</span>模型存在自我确认偏差，倾向于认为自己仍在进展（要么过乐观继续死磕、要么过悲观轻易放弃）。把判停权交给不做事的层，基于硬指标决策，才能客观区分「真在跑」与「假装在跑」。</p>
+      <div class="en">"Separate execution from evaluation — the agent doing the work does not judge its own progress; stall determination is made by the orchestration layer based on quantitative metrics."</div>
+      <div class="src-link">— SKILL.md §3 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>运维自愈 agent：执行层负责重启/扩容/回滚；独立 SLO 评测层只读监控指标（错误率/延迟）判定「是否恢复」，执行层无权宣称自己成功。</p>
+    </div>
+  </div>
+
+  <!-- P3 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P3</span><span class="pname">结构性转向优于战术调参</span><span class="tag t-official">官方逐字</span><span class="tag t-bound">⚠️ 边界</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>当参数空间内寻优<strong>连续失败</strong>时，应跳跃到更高层的结构空间搜索（换环境/框架/约束），而非在同一框架内更用力调参。</p>
+      <p><span class="lbl">为什么</span>在同一吸引盆地里做梯度下降只会原地打转。「连续失败次数」是从「局部搜索」切换到「结构重构」的硬阈值信号，与演化计算中「突变率随停滞升高」异曲同工。</p>
+      <div class="en">"stale_count >= 2 → change a structural constraint, not tactical parameters ... the decisive gain usually comes from correcting the environment/structural constraint itself, not from tuning strategy parameters harder inside the existing frame."</div>
+      <div class="src-link">— SKILL.md §6 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>持续集成 flaky 测试：连续 2 次只调 retry/超时（战术）无效时，应换测试运行器、拆微服务、改数据隔离（结构），而不是再加一次 retry。</p>
+      <div class="callout red"><span class="ct" style="color:var(--red)">⚠️ 边界 · 仅适用于多盆地搜索任务</span>对抗验证发现：本原则<strong>仅适用于「多模态/多吸引盆地」的探索式任务</strong>（研究、架构选型、根因排查）。对<strong>确定性收敛任务</strong>（生产 bug 修复、ETL）——根因只有一个、正确解只有一个——强行「结构转向」（换框架/换架构）是浪费甚至制造故障。<strong>诊断原语：</strong>任务是否有「唯一正确解」决定是否套用。对收敛式任务改为「根因深挖优先（5-why、二分定位），穷尽根因空间后才升级结构层」。</div>
+    </div>
+  </div>
+
+  <!-- P4 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P4</span><span class="pname">分层冗余 + 故障域正交的看门狗</span><span class="tag t-official">官方逐字</span><span class="tag t-bound">⚠️ 边界</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>用多个<strong>依赖关系正交、互不依赖</strong>的独立监督层互相覆盖单点失效，任一层死亡都能被其他层发现恢复。</p>
+      <p><span class="lbl">为什么</span>业务循环本身不可靠；任何单一守护层（含寄生在会话上的定时器）都会随会话关闭被一起带走。关键不是堆三份冗余，而是让三层的<strong>失效模式不重叠</strong>——任一种死法都有存活者能发现。与 k8s 多级探针、Apollo 三余度飞控同构。</p>
+      <div class="en">"Three mutually-checking layers ... L0: resident shell guard (no session) / L1: durable cron, hourly (a living session) / L2: business loop (each its own session). Any one layer dying can be detected and recovered by another."</div>
+      <div class="src-link">— SKILL.md §7 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>数据管道：L2=job 内部回调首行写心跳；L1=Airflow scheduler 每小时查各 job 心跳并重启；L0=独立于调度器的常驻进程，调度器本身死亡时由它拉起。</p>
+      <div class="callout red"><span class="ct" style="color:var(--red)">⚠️ 边界 · 抽象为 N≥2 层</span>对抗验证发现：L0/L1/L2 <strong>预设了特定运行环境</strong>（有 resident shell guard、能起 headless agent、有 durable cron）。在托管 SaaS（Vercel/Lambda/Cloud Run）里无法直接落地。<strong>正确抽象：</strong>「至少存在两个失效模式不重叠的监督层（N≥2，按环境能力取最大）」。Serverless 场景：外部独立监控（UptimeRobot/Datadog）作 L0、平台 cron 作 L1、函数回调作 L2。</div>
+    </div>
+  </div>
+
+  <!-- P5 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P5</span><span class="pname">强制多样性 / 反早熟收敛</span><span class="tag t-official">官方逐字</span><span class="tag t-practice">实践补充</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>维持「已尝试集合」，强制新尝试与集合全部元素<strong>相异</strong>（不是「尽量不同」而是「必须不同」），停滞后注入结构化扰动以逃逸局部最优。</p>
+      <p><span class="lbl">为什么</span>模型天然倾向在熟悉区域贪心搜索，没有显式约束会反复试相似方向、收益递减。等价于模拟退火需要「温度」、遗传算法需要「变异算子」——任何搜索型长程任务都需要反贪心机制。</p>
+      <div class="en">"Enforced direction diversity — a new direction must differ from all history ... after a stall, inject a perturbation strategy ... prefer adding diversity over digging one deeper."</div>
+      <div class="src-link">— SKILL.md §3 / §6 / §9.5 EC5 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>内容生产 agent：维护 <code>topics_tried.json</code>，每篇新选题必须与历史在主题/角度/体裁全部不同；连续两篇互动下降时注入「反观点选题」或「跨域类比选题」扰动。</p>
+    </div>
+  </div>
+
+  <!-- P6 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P6</span><span class="pname">自主性边界 / 默认即执行</span><span class="tag t-official">官方逐字</span><span class="tag t-bound">⚠️ 边界（最高优先级）</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>把人类从「必经节点」降级为「异常处理器」：进入自治区间后不等待外部输入，歧义自行裁决并审计，<strong>可逆的</strong>常规操作无需确认。</p>
+      <p><span class="lbl">为什么</span>在长程无监督系统里，「暂停等确认」不是谨慎而是<strong>停机伪装</strong>。依赖人类即时反馈 = 退化成有监督的短任务。</p>
+      <div class="en">"Zero interaction — no prompting the user during a run: no Plan Mode, no question tool, no ending on a question ... Ready means execute — the most common hidden violation: finishing all preparation and then asking 'should I submit?'."</div>
+      <div class="src-link">— SKILL.md §2.1 BC1 / §2.2 BC2 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>持续部署 agent：测试通过即自动部署到 staging，不问「要不要部署」；只有部署失败且自动回滚也失败时才升级通知 oncall。</p>
+      <div class="callout red"><span class="ct" style="color:var(--red)">⚠️ 边界 · 必须加「爆炸半径」维度（对抗验证 high 优先级）</span>本原则<strong>只适用于可逆/低爆炸半径动作</strong>。生产运维中大量操作不可回滚（删数据、发用户通知、停付费实例、改 schema、对外公告）——对它们照搬「默认即执行」是灾难。<strong>可逆性三级分类：</strong>
+        <ul style="margin:8px 0 0">
+          <li><code>reversible</code>（可回滚：部署、配置）→ <strong>执行-回滚</strong>，无需确认</li>
+          <li><code>compensable</code>（可补偿：发通知→再发更正）→ <strong>执行-通知</strong>，事后告知</li>
+          <li><code>irreversible</code>（不可逆：删库、schema 迁移、对外公告）→ <strong>请求-授权</strong>，保留人类门</li>
+        </ul>
+        即便对 irreversible 动作，仍应消除「问句结尾」式停滞——把授权做成显式 gate，而非 conversational stall。
+      </div>
+    </div>
+  </div>
+
+  <!-- P7 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P7</span><span class="pname">分级负反馈 + 阶梯式升级</span><span class="tag t-official">官方逐字</span><span class="tag t-add">✏️ 阈值修正</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>偏差量级决定纠偏层级：小偏差就地纠正、中偏差换结构约束、大偏差升级人类。阈值刻意梯度化——<strong>低成本错误早抓、高成本动作晚动</strong>。</p>
+      <p><span class="lbl">为什么</span>任何闭环控制器都应有多档响应而非单一动作。自愿性停滞廉价可逆应早抓，结构性卡死需换框架应慎重，人类介入成本最高应最后动——控制论的分层调度律。</p>
+      <div class="en">"stale_count >= 2 → change a structural constraint, not tactical parameters; >= 4 → flag for human attention ... The 2h threshold is deliberately shorter than the 4h stuck-task threshold."</div>
+      <div class="src-link">— SKILL.md §6 / §7 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>监控告警：P3 告警 5 分钟自愈脚本处理；连续 2 次自愈失败→改配置/扩容（结构层）；连续 4 次失败或影响 SLO→page oncall。</p>
+      <div class="callout amber"><span class="ct" style="color:var(--amber)">✏️ 忠实性修正 · 阈值与升级链</span>对抗验证发现方法论初稿凭空加了「≥1 告警」档、并把「4h stuck-task」错挂到「升级人类」。修正后：<strong>①</strong> stale_count 仅 <code>≥2</code> 触发结构转向、<code>≥4</code> 触发人类升级——<strong>无 ≥1 档</strong>；<strong>②</strong> 「4h stuck-task」触发的是<strong>结构性重开（换框架/方向）</strong>而非人类升级；<strong>③</strong> 人类升级<strong>仅由 stale_count≥4（计数）触发，不由时长直接触发</strong>。<strong>④</strong> 原文 §5 另写「stale_count>=3 generate a fresh direction」与 §6 的 >=2 存在内部不一致——采用者需自行裁定并统一。</div>
+    </div>
+  </div>
+
+  <!-- P8 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P8</span><span class="pname">最小权限监督者 + 封闭动作集</span><span class="tag t-official">官方逐字</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>监督组件只能对被监督对象执行<strong>预定义的白名单动作</strong>，禁止读写其业务数据或代其发声，把失败半径收窄。</p>
+      <p><span class="lbl">为什么</span>若监督者能任意读写工作层状态，监督者自己出错时会污染被监督者，引入新的脆弱源（网页补充：一次巡检越界造成上下文污染、上报漂移、并发写风险）。封闭动作集让监督者既能救火又不能篡权——多 agent/多进程系统的安全边界。</p>
+      <div class="en">"a heartbeat patrol may take only three actions on tasks that aren't its own: liveness-check, restart, nudge. It does not read their data, modify their state, or report for them."</div>
+      <div class="src-link">— SKILL.md §2.5 BC5 / Limits #4 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>多服务运维平台：监控服务对业务服务只能调 health endpoint、触发 restart、发轻量提醒，不能读业务数据库、不能改业务配置、不能代业务发用户通知。</p>
+    </div>
+  </div>
+
+  <!-- P9 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P9</span><span class="pname">工作单元硬上限 + 迭代间强制验证</span><span class="tag t-official">官方逐字</span><span class="tag t-bound">⚠️ 边界</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>每个工作单元设资源预算和时长天花板，强制定期交还控制权，并对已知易腐产物高频小批量校验。</p>
+      <p><span class="lbl">为什么</span>单次工作单元无界膨胀会拖垮全局（上下文爆炸/成本失控）；错误若不在迭代边界被拦截会层层放大成结构性偏差。CI 的「每构建即验证、fail fast」在 agent 迭代层的映射。</p>
+      <div class="en">"At most 5 large files per iteration; no single file over 300 lines ... a single work session caps at 15 rounds or 30 minutes ... Validation must run between iterations ... Citation-like content is verified every 20 entries, never batched up."</div>
+      <div class="src-link">— SKILL.md §9.1 EC1 / §6 / §9.3 EC3 / §9.4 EC4 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>长文档翻译 agent：每个会话最多译 3000 字即收尾保存；每段后跑术语一致性检查；每 20 段跑一次全篇术语/数字核验，不积压到最后。</p>
+      <div class="callout amber"><span class="ct" style="color:var(--amber)">⚠️ 边界 · 数值是示例标定</span>对抗验证发现：「15 轮/30 分钟、5 文件/300 行、每 20 条」都是<strong>研究任务迭代粒度的偶然标定</strong>，不是通用常量。<strong>重标方法：</strong>时间窗 ≈ k × 单次工作单元典型耗时（k≈3–5 留余量），且必须 &lt; 业务对该工作单元的 SLA。实时任务：硬截止=SLA 的 50%；大计算任务：改用「检查点间隔」而非「会话时长上限」。核验频率应 &gt; 单产物「潜伏到爆发」的时长。</div>
+    </div>
+  </div>
+
+  <!-- P10 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P10</span><span class="pname">绝不静默失败 / 故障必升级</span><span class="tag t-official">官方逐字</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>不可恢复的错误必须升级（完整报告 + 通知 owner + 轮询回复），禁止把外部依赖失败静默吞掉导致任务表面继续实际空转。</p>
+      <p><span class="lbl">为什么</span>silent failure 是分布式系统最危险的故障类别。无监督长程运行中，外部依赖失败若被吞掉，任务会表面继续实际空转，整条产物链可能基于缺失数据。</p>
+      <div class="en">"Unresolvable external-dependency failures escalate: full report + notify the owner + poll for a reply; never abandon silently."</div>
+      <div class="src-link">— SKILL.md §9.6 EC6 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>ETL 数据管道：上游 API 重试 N 次仍失败，必须写死信队列 + 通知数据 owner + 定时轮询恢复，绝不静默跳过该批次让下游仪表盘悄悄显示错误数据。</p>
+    </div>
+  </div>
+
+  <!-- P11 补全 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P11</span><span class="pname">回调即报活（进程内自检自愈）</span><span class="tag t-official">官方逐字</span><span class="tag t-add">补全 · 升格为独立原则</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>每个长循环的恢复入口（尤其 context compaction 后），<strong>第一动作</strong>必须是：① 刷新自身 <code>last_seen</code>；② 自检活性；③ 失败立即重启并记录。业务逻辑排在报活之后。</p>
+      <p><span class="lbl">为什么</span>对抗验证指出：这条原被埋在可靠性清单里，但它其实是<strong>与分层看门狗不同层级的自愈原语</strong>——它是<strong>进程内</strong>的自检自愈（防 compaction 静默死，对应 L2），而看门狗是<strong>进程外</strong>的兜底恢复（L0/L1）。混淆两者会误判防护层级。</p>
+      <div class="en">"Callback means report-alive — after context compaction the loop dies silently. The first action of every callback is to update its own last_seen, then check liveness; on detecting failure it restarts immediately and logs it."</div>
+      <div class="src-link">— SKILL.md §2.3 BC3 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>任何被 compaction/restart 影响的长循环（webhook 处理器、长轮询 worker），恢复后首条指令 = 刷新活性戳 + 自检 + 失败即重启。</p>
+    </div>
+  </div>
+
+  <!-- P12 补全 -->
+  <div class="principle">
+    <div class="ph"><span class="idx">P12</span><span class="pname">可委派工作单元契约</span><span class="tag t-official">官方逐字</span><span class="tag t-add">补全 · 完备性缺口</span></div>
+    <div class="pb">
+      <p><span class="lbl">定义</span>每个被委派的无状态工作单元，其<strong>委托规格</strong>必须包含五要素：<strong>背景 / 可验证交付物 / 工作目录 / 资源·规模上限 / 完成标准</strong>。</p>
+      <p><span class="lbl">为什么</span>对抗验证（完备性 critic）发现这是原 skill 的硬洞察却被方法论漏掉——它是<strong>无状态工作单元的入场券</strong>，与 P1（状态外化）是一对：P1 定义「状态如何进」，P12 定义「任务如何被指定」，缺一不可。</p>
+      <div class="en">"A subagent prompt should include: background, a verifiable deliverable, working directory, file/line caps, and completion criteria."</div>
+      <div class="src-link">— SKILL.md §8 末句 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+      <p><span class="lbl">迁移</span>运维恢复子代理：背景=故障上下文；交付物=恢复后 health check 通过；工作目录=受影响服务；上限=最多 N 次操作；完成标准=SLO 恢复且维持 10 分钟。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S3 ARCHITECTURE ===== -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">03</span><h2>五层架构</h2></div>
+  <p class="lead">原 skill 的两层（编排/执行）+ 状态层，补全后抽象为五层。每层职责单一、边界封闭，层间<strong>只通过文件通信</strong>，无共享内存、无直接调用。</p>
+
+  <div class="flow">┌─ <b>编排层</b> Orchestrator（监督控制层）──────────────────────┐
+│  读 state → 检测停滞（量化指标）→ 生成新方向 → 启动/重启/nudge worker │
+└──┬──────────────────────────────────────────────────────────┘
+   │  （只写 state 文件，不直接调用 worker 内存）
+   ▼
+┌─ <b>执行层</b> Worker（各任务 fresh session，无状态、可重启）────────┐
+│  接受注入的目标+状态 → 执行 → 产可验证交付物 → 写回 state            │
+└──┬──────────────────────────────────────────────────────────┘
+   │  ← 三层看门狗在外部巡检活性（不读写 worker 业务数据）
+   ▼
+┌─ <b>持久状态层</b> state/ 文件系统（层间唯一契约）─────────────────┐
+│  task_spec.md · progress.json · findings.jsonl(append-only)         │
+│  directions_tried.json · iteration_log.jsonl  ＋ logs/{work,orch,heartbeat}.jsonl │
+└─────────────────────────────────────────────────────────────────────┘
+   ▲ 巡检结果 / 升级报告
+┌─ <b>看门狗层</b> Watchdog（L0 常驻 / L1 cron / L2 回调，依赖关系正交）┐
+│  只做三件事：<em>liveness-check / restart / nudge</em>（封闭动作集）   │
+└─────────────────────────────────────────────────────────────────────┘
+┌─ <b>人类异常处理层</b>（stale_count≥4 或不可自愈外部失败时才调用）────┐
+│  异常处理器，<strong>非</strong>必经节点；零交互已把人移出关键路径       │
+└─────────────────────────────────────────────────────────────────────┘</div>
+
+  <div class="card b-cyan">
+    <span class="tag t-practice">实践补充</span> <strong>两个关键不对称</strong>
+    <p class="why" style="margin:6px 0 0">① <strong>停滞判定是单向的</strong>（编排层用定量指标判 worker 停滞），<strong>看门狗三向检查是对称的</strong>（L0/L1/L2 任一层死都能被另一层发现）——前者解决局部最优，后者解决单点故障，是两种不同的控制论问题，刻意分开处理。</p>
+    <p class="why" style="margin:6px 0 0">② <strong>状态文件是唯一的层间耦合点</strong>：所有交互通过标准化文件进行，没有任何进程间直接通信——使任何一方都可被替换、重启、人工接管而不破坏协议。文件即消息队列。</p>
+  </div>
+</section>
+
+<!-- ===== S4 FEEDBACK LOOPS ===== -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">04</span><h2>六个反馈环</h2></div>
+  <p class="lead">修正后的反馈环清单。对抗验证修正了阈值（删除凭空的 ≥1 档、纠正 4h 的归属、补全异步作业轮询环）。</p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>反馈环</th><th>检测信号</th><th>纠正动作</th><th>阈值 / 升级</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>① 停滞计数负反馈</strong><br><span class="tag t-official">官方逐字</span></td>
+        <td>迭代级：单次迭代 0 新产物 <em>或</em> 定量指标下降</td>
+        <td>stale_count+1；<code>≥2</code> 改结构约束（Pivot structure）；<code>≥4</code> 升级人类</td>
+        <td><strong>无 ≥1 档</strong>（✏️修正）。连结构重构都失败→任务定义本身需重写，由人类层处理</td>
+      </tr>
+      <tr>
+        <td><strong>② 双层活性检测</strong><br><span class="tag t-official">官方逐字</span></td>
+        <td>行为+内容双信号：progress 无更新 <code>&gt;2h</code> <strong>且</strong> 最后输出是问句</td>
+        <td>启动 nudge 子代理（轻量干预）</td>
+        <td>连续 <code>3 次</code> nudge 无进展→判结构性卡死，<strong>换框架/方向重开</strong>（✏️修正：非人类升级）；stuck-task <code>4h</code> 仍未动→同样结构性重开</td>
+      </tr>
+      <tr>
+        <td><strong>③ 心跳看门狗三层互监</strong><br><span class="tag t-official">官方逐字</span></td>
+        <td>L1 cron 每小时巡检各循环 <code>last_seen</code></td>
+        <td>回调首动作刷新 last_seen；L1 检测到 <code>last_seen &gt; interval×3</code> 即重启</td>
+        <td>L1 自身死亡→L0 常驻守卫检测到<strong>通用 heartbeat stale &gt; 2h</strong>（✏️修正：不限 L1）→ headless agent 拉起紧急巡检</td>
+      </tr>
+      <tr>
+        <td><strong>④ 迭代间验证门</strong><br><span class="tag t-official">官方逐字</span></td>
+        <td>每个迭代闭环到可验证产物：迭代间跑 test/compile/check</td>
+        <td>验证失败即修复并重提</td>
+        <td>迭代间验证反复失败（≥2）→触发结构性转向，不在同一代码结构内修 bug</td>
+      </tr>
+      <tr>
+        <td><strong>⑤ 易腐产物抽检</strong><br><span class="tag t-official">官方逐字</span><span class="tag t-optional">看场景可省·对象需重定义</span></td>
+        <td>易腐产物（引用/事实/数据）累积达小批量</td>
+        <td>高频小批量核验，错误就地修正</td>
+        <td>每 <code>20</code> 条（示例值，需按领域重标）；明确禁止积压。单批错误率超阈→整条产物链回溯核验</td>
+      </tr>
+      <tr>
+        <td><strong>⑥ 外部依赖失败升级</strong><br><span class="tag t-official">官方逐字</span></td>
+        <td>外部依赖（API/服务/数据源）失败，自愈耗尽</td>
+        <td>完整报告 + 通知 owner + 轮询等待回复</td>
+        <td>轮询超时仍无回复→标记 blocked 并继续轮询；<strong>绝不静默跳过</strong></td>
+      </tr>
+      <tr style="background:var(--purple-bg)">
+        <td><strong>⑦ 异步作业主动轮询</strong>（补全）<br><span class="tag t-add">补全·完备性</span><span class="tag t-official">官方逐字</span></td>
+        <td>提交后离开主循环的异步作业（构建/训练/批处理/部署）</td>
+        <td>提交方<strong>立即</strong>启动分钟级轮询，错误即诊断-修复-重提</td>
+        <td>不等编排器下一周期才发现。<strong>与看门狗区分：</strong>看门狗管「会话/进程活着」，轮询环管「异步作业在跑且在产」</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="src-link">— 反馈环 ①–⑥ 源自 SKILL.md §5/§6/§7/§9；⑦ 源自 §8 Pattern C，对抗验证（完备性）补全为独立环 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+
+  <h3>多样性机制（7 条）</h3>
+  <div class="card b-green">
+    <ol style="margin:0">
+      <li><strong>显式已尝试集合</strong>：维护 <code>directions_tried.json</code>（或等价「已尝试解空间分区」列表），作为强制差异化的依据。</li>
+      <li><strong>硬约束差异化</strong>：新尝试必须与全部历史元素相异——不是「尽量不同」而是「必须不同」。</li>
+      <li><strong>停滞后扰动注入</strong>：stall 后主动注入结构化扰动（反假设、跨域类比、对立视角）。</li>
+      <li><strong>结构转向而非深挖</strong>：stale≥2 改结构约束，不继续深挖——换吸引盆地而非原地梯度下降。</li>
+      <li><strong>多候选偏好多样性</strong>：多候选并存且当前最优收益递减时，优先扩宽搜索面而非加深当前最优（探索优于利用）。</li>
+      <li><strong>上下文周期性清空</strong>：fresh session over resume，防上下文累积导致在熟悉区域反复采样（认知层面的多样性维持）。</li>
+      <li><strong>并行扇出异构视角</strong>：一条消息内扇出调研/反驳/跨域类比多个异构 agent，从结构上保证探索的异构性。</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ===== S5 ITERATION FLOW ===== -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">05</span><h2>一次迭代的 6 步状态机</h2></div>
+  <p class="lead">这套契约化步骤序列可直接迁移到任何需要可重复、可审计迭代的系统。每步有明确的输入契约和输出契约。</p>
+
+  <div class="flow"><b>① 读</b>  编排层读 progress.json 取 stale_count + 读 directions_tried.json
+<b>② 决策</b>  stale≥阈值(§6:≥2 / §5:≥3，需统一)→生成新方向(必须异于全部历史)；否则沿用
+<b>③ 委派</b>  启动工作子代理，prompt 含 [背景·可验证交付物·工作目录·上限·完成标准]（P12 契约）
+<b>④ 执行+验证</b>  worker 产出可验证交付物；<em>本轮内</em>跑 test/compile 验证（迭代间验证门）
+<b>⑤ 写回</b>  append findings.jsonl · 更新 progress.json · 追加 iteration_log.jsonl · logs/work.jsonl 写 level=decision
+<b>⑥ 判定</b>  编排层下轮重新读 progress.json：0 新产物/指标下降→stale_count+1（停滞计数负反馈）</div>
+
+  <div class="callout green"><span class="ct" style="color:var(--green)">实践补充 · 日志契约</span>统一行格式 <code>{"ts","source","level":"info|warn|error|decision","event","detail"}</code>。<code>level=decision</code> 是<strong>零交互的对价</strong>——既然要求 agent 自决歧义不问人，作为交换每次自决必须留审计痕（见 §7 决策审计痕）。按写者分三流（work/orchestrator/heartbeat），「debugging never needs cross-file correlation」。</div>
+  <div class="src-link">— SKILL.md §4 / §5 / §8 · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+</section>
+
+<!-- ===== S6 TRANSFER ===== -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-num">06</span><h2>迁移到非研究任务</h2></div>
+
+  <div class="card b-green">
+    <span class="tag t-practice">实践补充</span> <strong>极易迁移（架构模式，零领域依赖）</strong>
+    <ul style="margin:6px 0 0">
+      <li>状态外化 + 进程无状态化（文件即层间契约）</li>
+      <li>执行/评价分离（工作者不自评，编排层基于量化指标判停）</li>
+      <li>分层冗余看门狗（N≥2 层依赖正交）</li>
+      <li>分级负反馈 + 阶梯式升级阈值（控制论分层调度律）</li>
+      <li>结构性转向优于战术调参（通用搜索空间升级，<strong>仅限多盆地任务</strong>）</li>
+      <li>强制多样性（已尝试集合 + 新尝试必须全异 + 扰动注入）</li>
+      <li>零交互 / ready 即执行 / 回调即报活（事件驱动系统的活性纪律）</li>
+      <li>最小权限监督者 + 封闭动作集</li>
+      <li>工作单元硬上限 + 迭代间强制验证</li>
+      <li>绝不静默失败 + 外部依赖升级</li>
+      <li>按写者分离的独立日志流 + append-only 产物流</li>
+    </ul>
+  </div>
+
+  <div class="card b-amber">
+    <span class="tag t-optional">看场景可省 · 必须按领域定制</span> <strong>机制通用，但参数/语义必须重标</strong>
+    <ul style="margin:6px 0 0">
+      <li><strong>停滞指标</strong>：research 用「新发现数」。开发→「合入 PR 数/通过的测试数」；运维→「处理的告警数/MTTR」；内容→「产出成品数/互动指标」。<strong>维持型任务</strong>（健康服务本就没有「新发现」）需改为「健康持续时长/SLO 达成/队列积压」——见 §7 反例。</li>
+      <li><strong>核验对象与频率</strong>：「每 20 条引用」的 20 是经验值、引用是学术对象。开发→「每 N 次 commit 跑测试」；运维→「每 N 次变更审计」；内容→「每 N 条事实核查」。频率应 &gt; 错误累积速率。</li>
+      <li><strong>「方向」语义</strong>：研究=假设/切入角度；开发=技术方案/架构选型；运维=根因假设；内容=选题角度。「已尝试的解空间分区」抽象可迁移，schema 要重设。</li>
+      <li><strong>验收标准</strong>：研究用论文体裁（页数/引用/自评）；运维→SLO/MTTR；开发→feature complete 清单/覆盖率。</li>
+      <li><strong>子代理调度模式角色</strong>：B（调研/反驳/跨域类比）与 D（审计证据链）是研究拆分。开发对应「实现/测试/文档」三路并行，验证换「code review/安全扫描」。模式（扇出+独立验证）通用，角色需重填。</li>
+      <li><strong>结构性转向的具体手段</strong>：研究是「对立假设/跨域案例」；开发是「换框架/换依赖/重构」；运维是「换根因假设层级」。</li>
+      <li><strong>所有时间阈值</strong>（15 轮/30 分钟、2h/4h、每小时巡检）：研究任务节奏调优。迁移到秒级交易、分钟级部署、小时级研究时都要按 SLA 重标。<strong>72h 是已验证最长运行记录，非可调阈值</strong>（✏️修正）。</li>
+      <li><strong>产物累积日志</strong>：findings.jsonl 的 append-only 模式通用，但「产物单元」语义需定制（研究=发现；开发=commit/PR；运维=incident；内容=draft 版本树）。</li>
+    </ul>
+  </div>
+
+  <h3>三个迁移示例</h3>
+  <div class="card b-cyan">
+    <h4>① 持续开发 agent（多盆地探索 + 可逆）</h4>
+    <p class="why" style="margin:0">每迭代把 backlog/已合 PR/回归失败写 <code>repo-state.json</code>（P1）；编排层基于「新增通过测试数」判停滞（P2）；flaky 测试连 2 次调参无效→换运行器/拆服务（P3）；测试通过即自动部署 staging，回滚是执行-回滚的一部分（P6 reversible）；每 commit 跑测试 = 迭代间验证（P9）。</p>
+  </div>
+  <div class="card b-cyan">
+    <h4>② 运维自愈 agent（维持型 + 部分 irreversible）</h4>
+    <p class="why" style="margin:0">停滞指标改为「SLO 达成时长/队列积压」而非「新产物」（§7）；执行层重启/扩容，独立 SLO 层判恢复（P2）；<strong>删库/改 schema 归 irreversible，保留人类授权门</strong>（P6 三级分类）；外部依赖失败→死信队列+oncall（P10）；监控对业务只能 health/restart/nudge（P8）。</p>
+  </div>
+  <div class="card b-cyan">
+    <h4>③ 数据 ETL（确定性收敛 + 异步作业）</h4>
+    <p class="why" style="margin:0"><strong>不套用 P3 结构转向</strong>（根因唯一，改为根因深挖，§7）；作业提交即启动分钟级轮询、错误自诊断重提（反馈环⑦，完备性补全）；上游 API 失败重试 N 次后写死信队列+轮询（P10）；job 内回调首行写心跳（P11）；Airflow scheduler 作 L1、独立常驻进程作 L0（P4 N≥2）。</p>
+  </div>
+</section>
+
+<!-- ===== S7 BOUNDARIES ===== -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-num">07</span><h2>⚠️ 通用性边界与反例（对抗验证产出）</h2></div>
+  <p class="lead">这是本方法论<strong>最有价值的一节</strong>——由「通用性对抗验证」把方法论套到运维/ETL/内容生产上找出的<strong>过度泛化点</strong>。套用前逐条确认。</p>
+
+  <div class="card b-red">
+    <span class="tag t-bound">⚠️ 边界 · high</span> <strong>B1｜默认即执行 ≠ 对所有动作都不问</strong>
+    <p class="why" style="margin:6px 0 0">把「可逆常规操作从请求-授权改成执行-回滚」写成通用律，在生产运维里<strong>危险</strong>：删数据、发用户通知、停付费实例、改 schema、对外公告都不可回滚。<strong>判据=爆炸半径/可回滚性</strong>，分三级（reversible→执行-回滚 / compensable→执行-通知 / irreversible→请求-授权）。见 P6。</p>
+  </div>
+
+  <div class="card b-red">
+    <span class="tag t-bound">⚠️ 边界 · high</span> <strong>B2｜结构转向只适用于多盆地搜索任务</strong>
+    <p class="why" style="margin:6px 0 0">生产 bug 修复、ETL 多是<strong>确定性收敛</strong>任务——根因唯一、正确解唯一，没有「多盆地」。强行「换框架/换架构」是浪费甚至制造故障。<strong>诊断原语：</strong>任务是否有「唯一正确解」。收敛式任务改为「根因深挖优先（5-why/二分定位），穷尽根因空间后才升级结构层」。见 P3。</p>
+  </div>
+
+  <div class="card b-red">
+    <span class="tag t-bound">⚠️ 边界 · high</span> <strong>B3｜名义约束 ≠ 实际约束</strong>
+    <p class="why" style="margin:6px 0 0">方法论声称「协议约束而非模型自律」是结构性的，但<strong>协议约束本身仍由同一个模型执行</strong>——在无独立运行时强制的环境（如纯 Claude Code 会话内），约束可被模型自己绕过，「结构保证」是名义的而非实际的。<strong>区分：</strong>「名义约束」（写在 prompt/skill 里，靠模型遵守）vs「实际约束」（由独立运行时强制：OS 权限、CI 门禁、外部 linter）。<strong>只有实际约束才提供可靠性保证</strong>。迁移指南要求：每个关键约束都映射到一个独立运行时强制点，否则降级为「软约束」并降低可靠性声称。</p>
+  </div>
+
+  <div class="card b-amber">
+    <span class="tag t-bound">⚠️ 边界 · medium</span> <strong>B4｜停滞信号在维持型任务上系统性误报</strong>
+    <p class="why" style="margin:6px 0 0">「0 新发现→停滞」把「产物产出」当唯一信号，在维持型任务（运维、ETL）上误报：健康状态下本就没有「新发现」。<strong>泛化判定公式：</strong>stall ⟺ (无正向推进信号) <strong>AND</strong> (无系统健康信号)。两个条件同时满足才算停滞。产物型任务看增量产物；维持型任务看健康持续/SLO 达成/队列积压。</p>
+  </div>
+
+  <div class="card b-amber">
+    <span class="tag t-bound">⚠️ 边界 · medium</span> <strong>B5｜所有时间窗都是示例标定，需按 SLA 重标</strong>
+    <p class="why" style="margin:6px 0 0">15 轮/30 分钟、2h/4h 是研究任务迭代粒度的偶然标定，套到秒级运维太慢、套到天级内容生产太频繁。<strong>重标方法：</strong>时间窗 ≈ k × 单次工作单元典型耗时（k≈3–5），且 &lt; 业务 SLA。实时任务：硬截止=SLA 的 50%；大计算任务：改用「检查点间隔」。见 P9。</p>
+  </div>
+
+  <div class="card b-amber">
+    <span class="tag t-bound">⚠️ 边界 · medium</span> <strong>B6｜分层看门狗预设了特定运行环境</strong>
+    <p class="why" style="margin:6px 0 0">L0/L1/L2 预设有 resident shell guard、headless agent、durable cron——托管 SaaS（Vercel/Lambda/Cloud Run）无法直接落地。<strong>抽象为：</strong>「至少两个失效模式不重叠的监督层（N≥2）」。Serverless：外部独立监控作 L0、平台 cron 作 L1、函数回调作 L2。见 P4。</p>
+  </div>
+
+  <div class="callout purple"><span class="ct" style="color:var(--purple)">实践补充 · 根本不对称</span>生产运维的「错误」有真实业务损失（SLO 违约、数据损坏、用户可见故障），而研究的「错误」（捏造引用）主要是质量瑕疵。因此「reboot 而非 resume」「默认即执行」这类<strong>把可用性置于正确性之上</strong>的取舍，在研究语境合理、在生产语境常常是错的——这是判断每条边界时的心智模型。</div>
+</section>
+
+<!-- ===== S8 LIMITS ===== -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-num">08</span><h2>诚实边界（Limits）</h2></div>
+  <p class="lead">原 skill 作者自陈的四条局限。对通用方法论设计者尤其重要的是 Limit 1 与 Limit 4。</p>
+
+  <div class="card b-amber">
+    <span class="tag t-official">官方逐字</span> <strong>Limit 1｜自评分只是协议内纵向可比</strong>
+    <p class="why" style="margin:6px 0 0">论文 8.0–8.6 分来自框架内 multi-persona 模拟评审，<strong>只在该协议内纵向可比，不是外部质量声明</strong>。评估框架本身必须用框架外基准。</p>
+    <div class="en">"Scores come from in-framework multi-persona simulated review; comparable only longitudinally within the same protocol, not an external quality claim."</div>
+  </div>
+
+  <div class="card b-amber">
+    <span class="tag t-official">官方逐字</span> <strong>Limit 2｜最长运行 72h（观测记录，非阈值）</strong>
+    <p class="why" style="margin:6px 0 0">72 小时是<strong>已验证最长连续运行记录</strong>（含 6 次方向性人类输入、零运维介入）——是参考上限，<strong>非可调阈值</strong>（✏️修正：勿与 15 轮/30 分钟/2h/4h 等真正可调阈值并列）。</p>
+    <div class="en">"The longest continuous run on record was 72 hours, with 6 directional human inputs during it — zero operational intervention, directional intervention retained."</div>
+  </div>
+
+  <div class="card b-amber">
+    <span class="tag t-official">官方逐字</span> <strong>Limit 3｜框架不降低错误率本身</strong>
+    <p class="why" style="margin:6px 0 0">捏造引用/数据造假<strong>源自 LLM 本身</strong>，框架只是把外部核对变成流程里的机械步骤，<strong>并未移除错误源</strong>。系统降低的是停机/停滞概率，不是错误率。误以为「用了框架产物就自动正确」是危险的。</p>
+    <div class="en">"Fabricated citations and data artifacts originate from the LLM itself; the framework makes external checking a mechanical step in the process, it does not remove the error source."</div>
+  </div>
+
+  <div class="card b-amber">
+    <span class="tag t-official">官方逐字</span> <strong>Limit 4｜职责分离依赖协议约束，撤约束即失效</strong>
+    <p class="why" style="margin:6px 0 0">分离职责靠<strong>协议约束而非模型自律</strong>，去掉约束越权行为立刻回来。这正是 §7-B3「名义约束 vs 实际约束」的根源。</p>
+    <div class="en">"Separation of duties relies on protocol constraints, not model self-discipline; removing the constraints brings overstepping behavior back."</div>
+  </div>
+  <div class="src-link">— SKILL.md §10 Limits · <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">source</a></div>
+</section>
+
+<!-- ===== S9 PITFALLS ===== -->
+<section id="s9">
+  <div class="sec-head"><span class="sec-num">09</span><h2>常见陷阱速查</h2></div>
+  <div class="tbl-wrap">
+  <table>
+    <thead><tr><th>陷阱</th><th>对策</th></tr></thead>
+    <tbody>
+      <tr><td><strong>战术调参成瘾</strong>：同框架内反复失败只会更努力调参，不切结构空间（认知循环的伪装）</td><td>stale≥2 切「状态空间」而非调参；对每个候选框架仍设硬上限（stale≥4）强制升级</td></tr>
+      <tr><td><strong>隐蔽停滞</strong>：会话外部看着活着（polling 在跑、心跳在写），工作已停——比崩溃常见</td><td>双层活性判定（时间戳&gt;2h + 内容启发式=最后输出是问句）；独立看门狗外部巡检</td></tr>
+      <tr><td><strong>静默死亡无察觉</strong>：compaction 或关会话悄悄带走循环与寄生定时器</td><td>三层相互监督（依赖正交）+ 回调首动作报活 + 状态外化使重启廉价</td></tr>
+      <tr><td><strong>准备就绪后等确认</strong>：「要不要提交？」是最常见隐性违规，本质是停滞伪装</td><td>人类降为异常处理器（stale≥4 才上报）；禁止问句结尾；歧义自决并记 level=decision</td></tr>
+      <tr><td><strong>依赖模型自律而非协议约束</strong>：撤掉约束越权立即复现</td><td>用结构约束保证正确行为是唯一可行路径（fresh session/最小权限/文件注入）；把约束映射到独立运行时强制点</td></tr>
+      <tr><td><strong>误以为框架降低错误率</strong>：捏造/错误源自模型，框架只把核对变机械步骤</td><td>明确声明降的是停机/停滞概率不是错误率；易腐产物内建机械核验，频率&gt;错误累积速率</td></tr>
+      <tr><td><strong>监督者越权污染</strong>：巡检插手其它任务，造成上下文污染、上报漂移、并发写</td><td>看门狗最小权限（封闭动作集）；独立量化评测交编排层；引入第三方验证子代理</td></tr>
+      <tr><td><strong>日志跨文件关联困难 + 并发写冲突</strong></td><td>按写者分日志流（work/orchestrator/heartbeat 各一）；状态外化到单一可信文件；层间零共享内存</td></tr>
+      <tr><td><strong>方向探索早熟收敛</strong>：多次迭代试相似方向、收益递减却无法逃出</td><td>保留「已完成分区」集合 + 强制新尝试全异；停滞后注入结构性扰动</td></tr>
+      <tr><td><strong>易腐产物积压核验</strong>：攒到最后批量核验，错误已扩散，修正成本指数级</td><td>校验分摊（每 N 个产物即核验，禁积压）+ 迭代间强制验证</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- ===== S10 CHEATSHEET ===== -->
+<section id="s10">
+  <div class="sec-head"><span class="sec-num">10</span><h2>一页纸速查表</h2></div>
+  <div class="card b-blue" style="border-left-color:var(--cyan)">
+    <p style="margin:0 0 12px"><strong>设计任何长程自主 agent 框架时，问自己这 10 个问题：</strong></p>
+    <ol style="margin:0">
+      <li><strong>状态在哪？</strong>→ 必须落盘成可注入的最小集合，对话只是缓存（P1）。禁用 resume。</li>
+      <li><strong>谁判停滞？</strong>→ 不能是干活的人。独立编排层基于量化指标（P2）。</li>
+      <li><strong>连续失败怎么办？</strong>→ ≥2 换结构非调参（仅多盆地任务，P3+B2）；≥4 才升级人类。</li>
+      <li><strong>谁看着循环别静默死？</strong>→ N≥2 层依赖正交的看门狗（P4）；进程内回调首动作报活（P11）。</li>
+      <li><strong>怎么防止反复试同方向？</strong>→ 已尝试集合 + 新尝试必须全异 + 扰动注入（P5）。</li>
+      <li><strong>哪些动作能不问人就做？</strong>→ 仅 reversible。irreversible 保留人类门（P6+B1 三级分类）。</li>
+      <li><strong>纠偏有几档？</strong>→ 就地纠 / 换结构 / 升级人类，阈值梯度化（P7）。</li>
+      <li><strong>监督者能干什么？</strong>→ 只能 liveness-check/restart/nudge，封闭动作集（P8）。</li>
+      <li><strong>工作单元有上限吗？</strong>→ 资源+时长硬上限，按目标 SLA 重标；迭代间强制验证（P9+B5）。</li>
+      <li><strong>外部失败能静默吞吗？</strong>→ 永不。报告+通知+轮询（P10）。异步作业提交即轮询（反馈环⑦）。</li>
+    </ol>
+    <p style="margin:14px 0 0; color:var(--txt2)"><strong>每条约束映射到一个独立运行时强制点</strong>（OS 权限/CI/外部 linter），否则只是名义约束、可靠性声称要降级（B3）。</p>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- ===== APPENDIX ===== -->
+<section id="appendix">
+  <div class="sec-head"><span class="sec-num">附</span><h2>这套方法论是如何产出的</h2></div>
+  <div class="card">
+    <p style="margin:0">由一个 <strong>dynamic workflow</strong>（8 个 subagent，约 22 万 token，~11.5 分钟）产出，分三阶段：</p>
+    <ul style="margin:8px 0 0">
+      <li><strong>阶段 1 · 分析（4 维并行）</strong>：失败→机制映射 / 架构与执行流程解构 / 约束背后的工程原理 / 控制论系统论视角。每个维度独立深挖原 SKILL.md，输出「机制→抽象原理→是否可迁移」。</li>
+      <li><strong>阶段 2 · 综合</strong>：把 4 份分析合成通用方法论骨架（设计原则/架构层/反馈环/可靠性/多样性/陷阱/迁移性）。</li>
+      <li><strong>阶段 3 · 对抗验证（3 视角并行）</strong>：① <strong>忠实性</strong>——核对每条抽象能否追溯到 SKILL.md 原文（揪出 5 处自行加档/误述）；② <strong>通用性</strong>——套到运维/ETL/内容生产找反例（揪出 7 处过度泛化）；③ <strong>完备性</strong>——查原 skill 哪些机制没被吸收（揪出 7 处缺口）。</li>
+    </ul>
+    <p style="margin:10px 0 0; color:var(--txt2)">本文档是<strong>应用全部验证修正后的版本</strong>：P3/P4/P6/P7/P9 加了边界标注，P11/P12 与反馈环⑦是补全，§7 整节来自通用性验证，阈值修正来自忠实性验证。三视角的 verdict 均为 <code>needsRevision</code>——本版即修正结果。</p>
+  </div>
+  <div class="foot">
+    权威来源：<code>D:\2026ai\study\.claude\skills\deli-auto-research\SKILL.md</code> &amp; <a href="https://victorchen96.github.io/auto_research/framework.html" target="_blank">https://victorchen96.github.io/auto_research/framework.html</a><br>
+    标签体系：<span class="tag t-official">官方逐字</span>= SKILL.md 原文（附英文+§） ｜ <span class="tag t-practice">实践补充</span>= 分析/抽象/迁移示例 ｜ <span class="tag t-optional">看场景可省</span>= research 专用或需重标 ｜ <span class="tag t-bound">⚠️边界</span>= 对抗验证发现的过度泛化 ｜ <span class="tag t-add">补全</span>= 完备性验证补缺<br>
+    生成于 2026-06-22 · dynamic workflow (4维分析 → 综合 → 3视角对抗验证) · 8 agents · ~222k tokens
+  </div>
+</section>
+
+</div>
+</body>
+</html>

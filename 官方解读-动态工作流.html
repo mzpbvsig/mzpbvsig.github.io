@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>官方解读 · 动态工作流 Dynamic Workflows</title>
+<style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 6px}
+h3{font-size:15.5px;margin:16px 0 4px;color:#cdd5e0}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-opt{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.good{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.s1{border-left:4px solid var(--purple)}
+.card.s2{border-left:4px solid var(--blue)}
+.card.s3{border-left:4px solid var(--amber)}
+.card.s4{border-left:4px solid var(--accent)}
+.tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;overflow-x:auto;border-radius:8px;padding:14px 16px;margin:8px 0}
+.tree.p{background:#170f22;border:1px solid #33214a;color:#e3cdf5}
+.tree .hl{color:#ff8f6b;font-weight:700}.tree .c{color:#7f93ab}
+.quote{border-left:3px solid var(--accent);background:#0c1712;padding:8px 12px;margin:8px 0;color:#bfe9cf;font-size:13px;font-style:italic}
+.quote .en{color:#8fe3b0}.quote .c{color:#7f93ab;font-style:normal}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+.x{color:#ff8f6b;font-weight:700}.ok{color:#7af0b0;font-weight:700}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+b.k{color:#fff}
+.meta{font-size:12.5px;color:var(--mut);margin:2px 0 10px}
+.big{font-size:16px;text-align:center;background:#12181f;border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0;line-height:1.8}
+.big b{color:#ffce94}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>官方解读 · 动态工作流 Dynamic Workflows</h1>
+  <p class="meta">原文：<a href="https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code" target="_blank">A harness for every task: dynamic workflows in Claude Code</a> · 2026-06-02 · Claude 官方博客</p>
+  <p class="lead">这篇是我们刚聊的 <b>fork / subagent</b> 的"放大版"：Claude Code 现在能<b>自己写一个多 agent 编排</b>（dynamic workflow），针对具体任务定制，去啃复杂、长时、需要对抗校验的活。本文逐节拆它<b>是什么、怎么跑、解决什么、什么时候别用</b>。</p>
+
+  <div class="big">动态工作流 = <b>Claude 临时写一段 JavaScript</b>，<br>在后台<b>编排几十~上百个 subagent</b>（各自独立上下文）去协作完成一个大任务</div>
+
+  <!-- 是什么 -->
+  <h2>核心定义</h2>
+  <div class="card s1">
+    <table>
+      <tr><th>词</th><th>含义</th></tr>
+      <tr><td><b>Agentic harness</b><br>(执行骨架)</td><td>协调 agent 行为的底层执行框架</td></tr>
+      <tr><td><b>Dynamic workflow</b><br>(动态工作流)</td><td>一段 <b>JavaScript 编排文件</b>，负责 spawn 和管理一群 subagent（各自隔离上下文）</td></tr>
+      <tr><td><b>Subagent</b></td><td>workflow 里被生出来的单个 Claude 实例，各自有聚焦目标</td></tr>
+    </table>
+    <p style="margin:6px 0 0"><b class="k">技术能力：</b>workflow 跑的是 JS（含 spawn subagent 的特殊函数 + JSON/Math/Array 等标准库），可指定<b>模型、worktree 隔离、被打断后可续跑</b>(resumable)。</p>
+    <div class="disc"><b>和默认模式的区别：</b>平时 Claude Code 是"单一骨架"一条道跑；动态工作流是<b>让它按任务自己造一个多 agent 骨架</b>——从"一个 Claude"变成"一个被编排的 Claude 舰队"。</div>
+  </div>
+
+  <!-- 解决什么 -->
+  <h2>为什么需要它：治三种"失败模式"</h2>
+  <div class="card s2">
+    <ul>
+      <li><b class="k">① Agentic laziness（偷懒早收工）：</b>没真做完就宣告完成 → 用 loop-until-done 等模式逼它干到底。</li>
+      <li><b class="k">② Self-preferential bias（自我偏袒）：</b>不愿质疑自己的产出 → 用<b>对抗校验</b>，让另一个 agent 专门挑错（呼应官方"写代码的不能自己验自己"）。</li>
+      <li><b class="k">③ Goal drift（目标漂移）：</b>跨多个上下文窗口后目标走样 → 用结构化编排把目标钉住。</li>
+    </ul>
+    <div class="disc good"><b>串起前面学的：</b>这三个正是<b>单会话/单 agent 的固有弱点</b>。动态工作流用"多 agent + 对抗 + 结构"来系统性地补——是"收口/验证关"思想的工程化放大。</div>
+  </div>
+
+  <!-- 模式 -->
+  <h2>6 个常用编排模式</h2>
+  <div class="card s3">
+    <div class="tree p">classify-and-act      <span class="c"># 先分类，再按类处理</span>
+fan-out-and-synthesize <span class="c"># 散开并行 → 汇总综合</span>
+adversarial verification <span class="c"># 对抗校验：专门派 agent 挑错</span>
+generate-and-filter   <span class="c"># 大量生成 → 过滤留好的</span>
+tournament selection  <span class="c"># 锦标赛：多方案两两比，选最优</span>
+loop-until-done       <span class="c"># 循环到真完成为止（治偷懒）</span></div>
+    <p style="margin:4px 0 0;color:var(--mut);font-size:12.5px">→ 这些是可组合的积木，按任务拼出合适的"骨架"。</p>
+  </div>
+
+  <!-- 案例 -->
+  <h2>标杆案例：Bun 从 Zig 移植到 Rust</h2>
+  <div class="card s4">
+    <div class="quote"><span class="tag t-verb">原文</span> <span class="en">"Bun was rewritten from Zig to Rust using workflows," breaking tasks into discrete fix operations across subagents with adversarial review stages.</span><br><span class="c">把大任务拆成一个个离散修复操作，分给众多 subagent，并加<b>对抗评审</b>环节。</span></div>
+    <p style="margin:4px 0 0">规模：<b>75 万行</b>代码，<b>11 天</b>合并完成——传统专职团队估计要 <b>6–12 个月</b>。</p>
+  </div>
+
+  <!-- 何时别用 -->
+  <h2>什么时候别用（官方明确划线）</h2>
+  <div class="card s3">
+    <div class="quote"><span class="tag t-verb">原文</span> <span class="en">Workflows "often use more tokens and are best suited for complex, high value tasks."</span><br><span class="c">工作流<b>更费 token</b>，只适合<b>复杂、高价值</b>的任务。</span></div>
+    <div class="disc warn"><b>别用的情况：</b>普通编码任务<b>不需要</b>这套开销——杀鸡别用牛刀。这跟我们聊 <b>fork/subagent</b> 时的结论一致：能用简单手段达到的，就别上重型编排。</div>
+  </div>
+
+  <!-- tips -->
+  <h2>实用建议</h2>
+  <div class="card s2">
+    <div class="quote"><span class="tag t-verb">原文</span> <span class="en">"Pair triage workflows with /loop to have Claude do this continuously."</span><br><span class="c">把"分诊类"工作流配上 <code>/loop</code>，让 Claude <b>持续</b>处理积压（backlog 自动消化）。</span></div>
+  </div>
+
+  <!-- 关系 -->
+  <h2>它在你已学的版图里的位置</h2>
+  <div class="card s1">
+    <table>
+      <tr><th>层级</th><th>是什么</th><th>何时</th></tr>
+      <tr><td>单 prompt</td><td>口语随手说</td><td>小修改</td></tr>
+      <tr><td>subagent</td><td>一个隔离上下文的助手</td><td>调查/评审，不需你的历史</td></tr>
+      <tr><td>fork / branch</td><td>带你上下文的后台/副本会话</td><td>上下文重、想异步或自己开</td></tr>
+      <tr><td><b>dynamic workflow</b></td><td><b>自造多 agent 编排（JS）</b></td><td><b>复杂·长时·高价值·要对抗校验</b></td></tr>
+    </table>
+    <div class="disc"><b>一句话定位：</b>它是这条"由轻到重"光谱的<b>最重端</b>——只在任务大到单 agent 扛不住、且值得多花 token 时才出手。</div>
+  </div>
+
+  <div class="note">
+    <b>结论：</b>动态工作流 = Claude 按任务<b>自己写 JS 编排几十上百个 subagent</b>，用对抗校验/循环到底/锦标赛等模式，治"偷懒、自我偏袒、目标漂移"三大单 agent 弱点；标杆是 Bun 11 天移植 75 万行。<b>代价是更费 token，只对复杂高价值任务划算</b>，普通编码别上。
+    <hr style="border-color:var(--line)">
+    <div class="srcs"><b>来源：</b>
+      <a href="https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code" target="_blank">claude.com/blog — A harness for every task: dynamic workflows in Claude Code（2026-06-02）</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
