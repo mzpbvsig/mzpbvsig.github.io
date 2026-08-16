@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="解释 DeepSeek Harness 中 Agent Note、Task、PR 与 Sprint 的职责差异、生命周期和组合关系。">
+  <meta name="theme-color" content="#090b10">
+  <link rel="icon" href="data:,">
+  <title>Agent Note 不是 Task：与 Sprint、PR 的关系</title>
+  <style>
+    :root{color-scheme:dark;--bg:#090b10;--panel:#121620;--panel2:#171c28;--text:#f3f6fb;--muted:#9da7b8;--line:rgba(255,255,255,.1);--blue:#7aa2ff;--green:#66d9a7;--amber:#f3bd65;--rose:#ff8e9e;--purple:#bd9cff;--max:1040px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 82% -8%,rgba(189,156,255,.16),transparent 34rem),radial-gradient(circle at 0 48%,rgba(102,217,167,.08),transparent 30rem),var(--bg);color:var(--text);font:15px/1.75 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(calc(100% - 36px),var(--max));margin:auto}.top{display:flex;align-items:center;justify-content:space-between;min-height:66px;border-bottom:1px solid var(--line);font-size:12px}.brand{display:flex;align-items:center;gap:9px;color:var(--text);font-weight:800;letter-spacing:.12em}.mark{width:8px;height:22px;border-radius:9px;background:linear-gradient(var(--purple),var(--green))}.back{color:var(--muted)}
+    header{padding:72px 0 40px}.eyebrow{margin:0 0 14px;color:var(--purple);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}h1{max-width:900px;margin:0;font-size:clamp(34px,6vw,62px);line-height:1.08;letter-spacing:-.045em}.dek{max-width:820px;margin:22px 0 0;color:var(--muted);font-size:clamp(16px,2vw,19px)}.meta{margin-top:20px;color:#737e91;font-size:12px}
+    section{margin:44px 0}h2{margin:0 0 16px;font-size:25px;letter-spacing:-.025em}h3{margin:0 0 7px;font-size:17px}.lead{max-width:820px;margin:-7px 0 18px;color:var(--muted)}.verdict,.card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,rgba(23,28,40,.96),rgba(15,19,28,.92))}.verdict{padding:24px;border-left:4px solid var(--green);font-size:17px}.verdict p{margin:7px 0;color:var(--muted)}.card{padding:20px 22px;margin:12px 0}.card::before{position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent,var(--blue));content:""}.card p{margin:7px 0}.card ul{margin:8px 0;padding-left:21px}.card li{margin:5px 0}
+    .tag{display:inline-block;margin:0 6px 4px 0;padding:3px 8px;border:1px solid;border-radius:999px;font-size:11px;font-weight:750;vertical-align:1px}.official{border-color:rgba(122,162,255,.35);background:rgba(122,162,255,.1);color:#b8c9ff}.practice{border-color:rgba(102,217,167,.32);background:rgba(102,217,167,.09);color:#9ce9c5}.optional{border-color:rgba(243,189,101,.33);background:rgba(243,189,101,.09);color:#f6d392}.missing{border-color:rgba(255,142,158,.35);background:rgba(255,142,158,.09);color:#ffb5bf}
+    .quote{margin:13px 0 4px;padding:12px 14px;border-left:3px solid var(--blue);border-radius:0 9px 9px 0;background:#0c1320}.quote .en{display:block;color:#c8d5ff;font-style:italic}.quote .zh{display:block;margin-top:4px;color:#dfe5ef}.source{display:block;margin-top:5px;color:#7e899b;font-size:11px}
+    .map{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.node{min-height:166px;padding:16px;border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:13px;background:var(--panel)}.node strong{display:block;margin-bottom:6px;font-size:17px}.node small{color:var(--muted)}
+    table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}th,td{padding:11px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#1b2130;color:#bac3d2}td{background:rgba(18,22,32,.65)}code{padding:2px 5px;border:1px solid rgba(102,217,167,.2);border-radius:5px;background:#0c1913;color:#9ce9c5;font-size:.9em}.callout{padding:16px 18px;border:1px dashed rgba(243,189,101,.45);border-radius:12px;background:rgba(243,189,101,.06);color:#ead7b3}.callout strong{color:#ffe0a6}.relation{display:flex;align-items:stretch;gap:10px}.relation .box{flex:1;padding:16px;border:1px solid var(--line);border-radius:13px;background:var(--panel)}.arrow{display:flex;align-items:center;color:var(--muted);font-size:22px}.sources{padding-left:20px;color:var(--muted);font-size:13px}.sources li{margin:8px 0}.closing{margin:54px 0 70px;padding:24px;border:1px solid rgba(102,217,167,.25);border-radius:16px;background:rgba(102,217,167,.06);font-size:17px}.closing b{color:#a6ebca}
+    @media(max-width:780px){header{padding-top:54px}.map{grid-template-columns:1fr 1fr}.relation{flex-direction:column}.arrow{justify-content:center;transform:rotate(90deg)}.table-wrap{overflow-x:auto}table{min-width:700px}.top{min-height:58px}}
+    @media(max-width:500px){.wrap{width:min(calc(100% - 26px),var(--max))}.map{grid-template-columns:1fr}.node{min-height:auto}h1{font-size:36px}.meta{line-height:1.6}.card{padding:18px}}
+  </style>
+</head>
+<body>
+  <nav class="top wrap" aria-label="导航">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true"></span>STUDY ARCHIVE</a>
+    <a class="back" href="index.html">返回资料库 →</a>
+  </nav>
+
+  <main class="wrap">
+    <header>
+      <p class="eyebrow">Concept Map · DeepSeek Harness</p>
+      <h1>Agent Note 和 Task / Sprint 很像吗？</h1>
+      <p class="dek">外形有一点像，职责完全不同。<b>Task 管执行，Sprint 管排期，Agent Note 管决策。</b>在 DeepSeek Harness 的公开流程中，Task 和 Agent Note 都是正式对象；Sprint 并不是公开流程里的一等对象。</p>
+      <p class="meta">核验日期：2026-08-14 · 依据：Agent Notes 规范、文档分类规则、Issue/Task 模板、PR 模板和 Issue 生命周期实现。</p>
+    </header>
+
+    <div class="verdict">
+      <span class="tag practice">最短答案</span>
+      <b>Agent Note 更像 ADR / Design Decision Record，不像任务清单。</b>
+      <p>它在实施前可能包含 Proposal、Acceptance criteria 和 Risks，所以乍看像 Task；但实施完成后必须删除计划与验收清单，改写为“已经交付的决定、替代方案、后果和验证依据”。</p>
+    </div>
+
+    <section>
+      <h2>四个对象分别回答什么问题？</h2>
+      <div class="map">
+        <div class="node" style="--accent:var(--green)"><strong>Task / Issue</strong><small><b>做什么？</b><br>谁负责、优先级、交付物、验收条件、测试证据、当前进度。</small></div>
+        <div class="node" style="--accent:var(--amber)"><strong>Sprint</strong><small><b>这段时间做哪些任务？</b><br>一个时间盒或批次容器。DeepSeek Harness 的公开流程没有把它建模为正式对象。</small></div>
+        <div class="node" style="--accent:var(--purple)"><strong>Agent Note</strong><small><b>为什么这样设计？</b><br>问题、选中的方案、落选方案、代价、收益、验证和重新讨论的边界。</small></div>
+        <div class="node" style="--accent:var(--blue)"><strong>Pull Request</strong><small><b>这次具体合入什么？</b><br>代码、测试、文档和 Agent Note 在同一可评审变更里汇合。</small></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>他有没有“全局记录”？有，但拆成三本账</h2>
+      <p class="lead">它没有用一份万能文档同时管理需求、进度、代码和设计理由。不同事实进入不同的长期记录。</p>
+      <div class="relation">
+        <div class="box"><span class="tag practice">工作账本</span><h3>GitHub Issue / Project</h3><p>记录任务是什么、谁负责、优先级、验收、交付物、测试证据，以及 <code>Inbox → Ready → In progress → In review → Done</code>。</p></div>
+        <div class="arrow" aria-hidden="true">+</div>
+        <div class="box"><span class="tag official">决策账本</span><h3><code>.agents/notes/</code></h3><p>记录非平凡决定的原因、替代方案、代价、收益和验证。整个 lifecycle/class 目录树就是全局 Agent Note inventory。</p></div>
+        <div class="arrow" aria-hidden="true">+</div>
+        <div class="box"><span class="tag practice">交付账本</span><h3>PR / Git history</h3><p>记录哪次变更把代码、测试、文档和 Agent Note 一起交付，以及评审、CI、冲突解决和合并结果。</p></div>
+      </div>
+      <div class="card" style="--accent:var(--amber);margin-top:16px">
+        <span class="tag optional">没有中央 Agent Note INDEX</span>
+        <h3>这是刻意设计，不是遗漏</h3>
+        <p>仓库曾明确决定不保留统一的 Agent Note 索引：每新增、移动或重命名一个 Note 都会改同一个索引文件，导致无关分支频繁冲突。目录路径已经编码 lifecycle、class 和日期，文件 H1 编码主题，所以他们选择浏览目录或全仓搜索。</p>
+        <div class="quote"><span class="tag official">官方逐字</span><span class="en">“The lifecycle/class filesystem tree is the Agent Note inventory.”</span><span class="zh">生命周期/类别目录树本身，就是 Agent Note 的全局清单。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-remove-generated-agent-note-index.md" target="_blank" rel="noreferrer">Keep Agent Notes discoverable without a generated index</a></span></div>
+      </div>
+      <div class="callout"><strong>重要边界：</strong>公开流程没有一张“Task ↔ Agent Note”中央映射表。关联由同一个 PR 承载：每个非平凡变更必须在该 PR 中新增或更新至少一个拥有该决定的 Agent Note。简单任务不写；已有 Note 能承载时只更新，不重复新建。</div>
+    </section>
+
+    <section>
+      <h2>“从 Issue、PR、Note 三处拼接”具体是什么意思？</h2>
+      <p class="lead">假设任务是“限制每个会话最多运行 4 个后台任务”。你打开其中任何一个对象，都只能看到全过程的一部分。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>打开哪里</th><th>通常能回答</th><th>单靠它回答不了</th></tr></thead>
+        <tbody>
+          <tr><td><b>Issue / Task</b><br><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/ISSUE_TEMPLATE/task.md" target="_blank" rel="noreferrer">任务模板</a></td><td>为什么提出任务、交付物是什么、怎样验收、目前是 In progress 还是 Done。</td><td>为什么最后采用“每个 session 单独计数”，而没有采用全局计数器。</td></tr>
+          <tr><td><b>Agent Note</b><br><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" target="_blank" rel="noreferrer">Note 规范</a></td><td>设计问题、选中方案、落选方案、代价、收益、验证边界，以及决定是 proposed 还是 implemented。</td><td>这个任务现在做到哪一步、对应哪个具体 PR、谁在处理 review——除非作者另外留下链接。</td></tr>
+          <tr><td><b>Pull Request</b><br><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/pull_request_template.md" target="_blank" rel="noreferrer">PR 模板</a></td><td>实际改了哪些代码和测试、CI 是否通过、review 要求改了什么、最终有没有合并。</td><td>任务的完整排期状态，以及跨多个 PR 长期有效的全部设计背景。</td></tr>
+        </tbody>
+      </table></div>
+      <div class="relation">
+        <div class="box"><span class="tag practice">1</span><h3>从 Issue 找 PR</h3><p>通过关联编号、关闭关键字、分支或评论，找到承担实现的一个或多个 PR。</p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag practice">2</span><h3>从 PR 找 Note</h3><p>检查 PR diff 中新增或修改了哪个 Agent Note；非平凡变更按规则应在同一个 PR 携带 Note。</p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag practice">3</span><h3>合并理解</h3><p>用 Issue 还原“要做什么”，用 Note 还原“为什么这样做”，用 PR 还原“实际上怎么交付”。</p></div>
+      </div>
+      <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Every non-trivial repository change must add or update at least one owning Agent Note in the same PR.”</span><span class="zh">每个非平凡仓库变更，都必须在同一个 PR 中新增或更新至少一个负责该决定的 Agent Note。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-require-agent-notes-for-non-trivial-changes.md" target="_blank" rel="noreferrer">Require an Agent Note for every non-trivial change</a></span></div>
+      <div class="callout"><strong>“拼接”的本质：</strong>不是复制文字，而是跨对象恢复关系。它甚至不一定是一对一：一个 Issue 可能拆成多个 PR，一个 PR 可能更新多个 Note，一个 implemented Note 又可能被未来多个 Task 继续复用。因此它没有你设想的那种“一条 Task 记录天然包含全部过程”。</div>
+    </section>
+
+    <section>
+      <h2>一个任务过来，记录下来到底有什么用？</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>如果只保留 Task / 代码</th><th>Agent Note 额外保存什么</th><th>后续价值</th></tr></thead>
+        <tbody>
+          <tr><td>Task 说“限制后台任务数量”</td><td>为什么限制属于每个 session，而不是全局计数器</td><td>下一次修改不会误把不同会话耦合起来</td></tr>
+          <tr><td>代码显示最后采用了方案 A</td><td>方案 B、C 为什么落选，以及放弃了什么能力</td><td>未来 Agent 不会重新提出已被验证有问题的方案</td></tr>
+          <tr><td>测试证明今天的行为能通过</td><td>哪些验证是这个决定的长期约束，哪些覆盖仍缺失</td><td>重构时知道哪些信号必须保持、哪些风险仍存在</td></tr>
+          <tr><td>PR 显示发生过若干轮修改</td><td>最终成立的设计理由，而不是会话和 review 的过程噪声</td><td>新的人或 Codex 无需读取完整历史即可恢复关键上下文</td></tr>
+          <tr><td>Task 完成后关闭</td><td>决定继续处于 implemented，并随实际代码的路径、名称和默认值更新</td><td>跨后续 Task、PR 和人员变动继续充当工程记忆</td></tr>
+        </tbody>
+      </table></div>
+      <div class="card" style="--accent:var(--green)">
+        <span class="tag practice">真正的复用场景</span>
+        <h3>几个月后，新任务要求把 session limit 改成 tenant-wide limit</h3>
+        <p>新的 Codex 不必从零猜测。它先搜索现有 Note，看见当初为何拒绝全局限制、所有权边界在哪里、哪些测试锁定当前行为；然后决定是更新现有 Note，还是新建一个 Note 正式推翻旧决定并交叉链接。记录的价值发生在<strong>下一个任务</strong>，不是当前任务里。</p>
+      </div>
+      <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Code and tests show what changed, but they cannot consistently preserve why an approach won.”</span><span class="zh">代码和测试能显示改了什么，却不能稳定保存为什么这个方案胜出。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-require-agent-notes-for-non-trivial-changes.md" target="_blank" rel="noreferrer">Require an Agent Note for every non-trivial change</a></span></div>
+    </section>
+
+    <section>
+      <h2>它真正的优点是什么？</h2>
+      <p class="lead">这些优点只有在“大仓库、并行分支、多 Agent、设计决定经常被重新讨论”的环境里才明显。</p>
+      <div class="map">
+        <div class="node" style="--accent:var(--green)"><strong>减少共享文件冲突</strong><small>每个决定是独立文件。多个 Agent 新增不同 Note 时不会共同改一个中央索引，适合大量 worktree 和并行 PR。</small></div>
+        <div class="node" style="--accent:var(--purple)"><strong>保存负面知识</strong><small>不只记录采用了什么，还强制记录替代方案为何落选。下一轮 Agent 不必重新踩一遍已经分析过的坑。</small></div>
+        <div class="node" style="--accent:var(--blue)"><strong>与代码一起评审</strong><small>非平凡变更要求 Note 与实现处于同一个 PR；设计理由、代码、测试和文档在同一 diff 中接受审查。</small></div>
+        <div class="node" style="--accent:var(--amber)"><strong>不为简单任务制造文档</strong><small>机械和局部编辑豁免；已有 Note 能承载时只更新，不强制“一任务一文档”。</small></div>
+      </div>
+      <div class="card" style="--accent:var(--green);margin-top:16px">
+        <span class="tag practice">最核心收益</span>
+        <h3>它让 Agent 获得“经过压缩的架构记忆”</h3>
+        <p>下一次 Codex 不需要加载旧会话、完整 PR discussion 和几百个 commit 才理解设计。它读当前代码、当前 Note 和锁定行为的测试，就能恢复高价值上下文。</p>
+      </div>
+      <p class="meta">证据锚点：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-remove-generated-agent-note-index.md" target="_blank" rel="noreferrer">不提交中央索引以避免 merge hotspot</a>；<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-require-agent-notes-for-non-trivial-changes.md" target="_blank" rel="noreferrer">非平凡变更随同一 PR 记录决定，机械/局部修改豁免</a>。上面的“压缩架构记忆”是根据这两条规则作出的实践性归纳，不是仓库逐字表述。</p>
+    </section>
+
+    <section>
+      <h2>为什么它可能不符合你的思路？</h2>
+      <p class="lead">因为它把“任务协调”和“决策记忆”彻底分开，而你关注的可能是任务作为第一等实体的完整生命周期。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>你的可能诉求</th><th>DeepSeek 当前做法</th><th>产生的落差</th></tr></thead>
+        <tbody>
+          <tr><td>一个任务有唯一入口和完整记录</td><td>Issue 记录任务；Note 记录决定；PR 记录交付，分散在三个系统</td><td>需要跨对象拼接全过程</td></tr>
+          <tr><td>随时看到做到哪一步</td><td>Agent Note 只有决策生命周期，不记录执行进度</td><td>Note 无法回答当前 blocker、下一步和完成百分比</td></tr>
+          <tr><td>任务、子任务、计划与决策一一可追踪</td><td>公开流程没有强制的 Task ↔ Agent Note 中央映射</td><td>依赖 PR、链接和搜索恢复关系</td></tr>
+          <tr><td>从一个页面进入全部上下文</td><td>刻意拒绝 committed INDEX，要求浏览目录或搜索</td><td>减少 Git 冲突，却增加人的发现成本</td></tr>
+          <tr><td>让 Agent 自动接续未完成工作</td><td>Task 状态存在，但 Agent Note 不保存 checkpoint、下一动作和运行上下文</td><td>不能只靠 Note 恢复执行现场</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout"><strong>所以你的不适感很合理：</strong>Agent Note 是优秀的“决策记忆层”，但不是完整的“任务操作系统”。如果把它当成 Task/Sprint 的替代品，体验一定会割裂。</div>
+    </section>
+
+    <section>
+      <h2>更符合你思路的混合方案</h2>
+      <p class="lead">不要删除 Agent Note，而是把它降为 Task 下挂的“决策对象”；Task 才是用户和 Agent 的主入口。</p>
+      <div class="relation">
+        <div class="box"><span class="tag practice">全局主对象</span><h3>Task Record</h3><p><code>ID / goal / owner / status / priority / definition of done / current checkpoint / next action / blockers</code></p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag optional">执行结构</span><h3>Plan / Phase / Subtask</h3><p>记录如何拆解、依赖顺序、当前做到哪一步；这是 Agent 恢复工作时首先读取的状态。</p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag official">按需附加</span><h3>Agent Note</h3><p>只有出现跨任务仍有价值的设计决定时创建，写 <code>Related-Task: T-042</code>，Task 反向链接 Note。</p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag practice">交付证据</span><h3>PR / Tests / Docs</h3><p>Task 记录关联 PR、检查结果、产物和最终总结；合并后状态进入 Done。</p></div>
+      </div>
+      <div class="card" style="--accent:var(--blue);margin-top:16px">
+        <h3>全局视图不必写成一个容易冲突的 committed INDEX</h3>
+        <p>可以从 GitHub Issues、数据库或每个 Task 文件的 frontmatter <b>动态生成</b> dashboard。这样既有全局入口，也不会让所有并行 Agent 修改同一索引文件。</p>
+      </div>
+      <div class="card" style="--accent:var(--purple)">
+        <span class="tag practice">推荐规则</span>
+        <ul>
+          <li>每个任务必有 Task Record；Agent Note 不必有。</li>
+          <li>Task 保存执行状态；Note 只保存跨任务有价值的决定。</li>
+          <li>Task 与 Note 必须双向链接，避免依赖搜索猜关系。</li>
+          <li>Agent 每轮结束更新 checkpoint、next action 和验证结果。</li>
+          <li>Task 完成时写一段最终摘要；Note 继续跨任务存活。</li>
+        </ul>
+      </div>
+      <div class="callout"><strong>一句话：</strong>DeepSeek 是“分布式决策记录优先”；更符合你描述的方案是“全局 Task 优先，Agent Note 按需挂载”。</div>
+    </section>
+
+    <section>
+      <h2>最关键的区别</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>维度</th><th>Task / Issue</th><th>Sprint</th><th>Agent Note</th></tr></thead>
+        <tbody>
+          <tr><td><b>核心用途</b></td><td>安排并追踪一件工作</td><td>在时间盒内组织一组工作</td><td>保存一个值得长期记住的工程决定</td></tr>
+          <tr><td><b>主要问题</b></td><td>What / Who / Done?</td><td>When / Capacity?</td><td>Why this / Why not that?</td></tr>
+          <tr><td><b>典型内容</b></td><td>验收、交付物、测试证据、owner、priority</td><td>目标、时间、容量、任务集合</td><td>Problem、Decision/Proposal、Alternatives、Consequences、Verification</td></tr>
+          <tr><td><b>生命周期</b></td><td><code>Inbox → Backlog → Ready → In progress → In review → Done</code></td><td>计划 → 进行 → 结束</td><td><code>proposed → implemented</code> 或 <code>rejected</code>；低未来价值的 implemented 可归档</td></tr>
+          <tr><td><b>完成后</b></td><td>关闭，主要价值是交付记录</td><td>结束，进入回顾或下一周期</td><td>仍是当前设计依据；代码移动或名字变化时继续同步事实</td></tr>
+          <tr><td><b>是否应有 checklist</b></td><td>可以，而且常常需要</td><td>通常会有任务列表</td><td>仅 proposed 阶段可有验收/计划；implemented 阶段明确禁止任务式计划残留</td></tr>
+          <tr><td><b>DeepSeek 仓库地位</b></td><td><span class="tag official">正式对象</span></td><td><span class="tag missing">公开流程未建模</span></td><td><span class="tag official">正式对象</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>Agent Note 确实记录状态，但记录的是“决策状态”</h2>
+      <p class="lead">目录名和文件头同时表达生命周期，二者必须一致，CI 会机械检查。它不是看板进度，也没有百分比。</p>
+      <div class="relation">
+        <div class="box"><span class="tag optional">Status: proposed</span><h3>决定正在提议</h3><p>尚未实现，或者只实现了一部分。允许保留计划、迁移步骤、开放问题、验收条件和风险。</p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag practice">Status: implemented</span><h3>决定已经交付</h3><p>不是“正在写代码”，而是该决定已经进入实际产品。正文必须按现在时描述已交付现实，并持续同步路径、名称、默认值和机制。</p></div>
+        <div class="arrow" aria-hidden="true">或</div>
+        <div class="box"><span class="tag missing">Status: rejected — 原因</span><h3>决定被否决</h3><p>提案经过考虑后没有采用；状态行保留一行否决原因，正文冻结为提案时的样子。</p></div>
+      </div>
+      <div class="card" style="--accent:var(--blue);margin-top:16px">
+        <span class="tag official">特殊情况 · archived</span>
+        <h3>归档不是第四种 Status</h3>
+        <p>只有已经 implemented、且未来指导价值较低的 Note 才能进入 <code>archived/</code>。它仍写 <code>Status: implemented</code>，另加 <code>Archived: YYYY-MM-DD</code>，随后永久冻结；归档文件不再被视为当前行为的权威依据。</p>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Agent Note 会记录</th><th>Agent Note 不会记录</th></tr></thead>
+        <tbody>
+          <tr><td>设计尚在提议、已经交付、或被否决</td><td>任务完成 30% / 60% / 90%</td></tr>
+          <tr><td>提案何时首次出现（文件名日期）</td><td>当前谁在编码、预计哪天完成</td></tr>
+          <tr><td>为什么选这个方案、否决了什么</td><td>待办清单、当前 blocker、reviewer 排队情况</td></tr>
+          <tr><td>什么验证长期锁定该决定</td><td><code>In progress</code>、<code>In review</code> 等执行状态——这些属于 Issue/Task</td></tr>
+        </tbody>
+      </table></div>
+      <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Lifecycle … is the Agent Note's status.”</span><span class="zh">生命周期就是 Agent Note 的状态，并随目录迁移而改变。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" target="_blank" rel="noreferrer">Agent Notes README</a></span></div>
+      <div class="callout"><strong>最简单的区分：</strong><code>In progress</code> 表示“人/Agent 还在做这个 Task”；<code>Status: proposed</code> 表示“这个设计决定尚未交付”。两者可能同时出现，但不是同一状态机。</div>
+    </section>
+
+    <section>
+      <h2>为什么 proposed Agent Note 看起来很像 Task？</h2>
+      <div class="card" style="--accent:var(--amber)">
+        <span class="tag official">proposed 阶段</span>
+        <h3>它确实包含未来工作信息</h3>
+        <p>规范要求 proposed Note 写 <code>Problem</code>、<code>Proposal</code>、<code>Alternatives considered</code>、<code>Acceptance criteria</code> 和 <code>Risks</code>。实现者可以据此开工，所以它同时承担“设计提案”和“实现边界”的作用。</p>
+      </div>
+      <div class="card" style="--accent:var(--green)">
+        <span class="tag official">implemented 阶段</span>
+        <h3>一旦交付，它必须停止像 Task</h3>
+        <p>Note 移入 <code>implemented/</code> 时，要把 Proposal 改写成现在时的 Decision，把验收和风险折入 Consequences 或 Verification，并删除迁移计划、未来时规格和 acceptance-task checklist。</p>
+        <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Active decision records: the why, what-was-given-up, and required verification.”</span><span class="zh">Agent Note 是活跃的决策记录：保留为什么、放弃了什么，以及必需的验证。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/AGENTS.md" target="_blank" rel="noreferrer">DeepSeek Harness documentation rules</a></span></div>
+      </div>
+      <div class="callout"><strong>判断窍门：</strong>如果一段内容在任务完成后就失去价值，它更可能属于 Task；如果五个月后有人准备推翻设计时仍需要它，它更可能属于 Agent Note。</div>
+    </section>
+
+    <section>
+      <h2>它们在一次真实任务里怎么组合？</h2>
+      <div class="relation">
+        <div class="box"><span class="tag practice">1 · Task</span><h3>提出工作</h3><p>“限制每个会话的后台任务数；超限要拒绝；补测试。”</p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag practice">2 · Agent Note</span><h3>决定机制</h3><p>为什么限制由 session owner 负责、默认值如何配置、为何不采用全局计数器、验证哪些生命周期。</p></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="box"><span class="tag practice">3 · PR</span><h3>交付实现</h3><p>代码、单测、快照、README 和 Agent Note 一起进入 review。</p></div>
+      </div>
+      <div class="card" style="--accent:var(--purple);margin-top:16px">
+        <ul>
+          <li><b>简单 Task 可以没有 Agent Note：</b>例如纯机械、更正局部文字且不改变行为或约定。</li>
+          <li><b>非平凡 Task 至少触及一个 Agent Note：</b>新建，或更新已经拥有这个决定的 Note。</li>
+          <li><b>一个 Task 可能涉及多个 Agent Note：</b>例如同时改变架构、测试策略和发布流程。</li>
+          <li><b>一个 Agent Note 也可能跨多个 Task/PR 演进：</b>proposed 可以部分实现，后续变更继续更新，直到决定真正交付并改写为 implemented。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Sprint 在这个仓库里处于什么位置？</h2>
+      <div class="card" style="--accent:var(--rose)">
+        <span class="tag missing">证据边界</span>
+        <h3>公开流程没有 Sprint 一等对象</h3>
+        <p>在 <code>AGENTS.md</code>、<code>.agents/</code>、<code>docs/</code> 与 <code>.github/</code> 的流程文档中检索不到 <code>sprint</code>。公开的项目控制面是 Issue Type、Priority、Owner、Status、PR 和 stack。因此，不能声称 DeepSeek 团队内部完全不用 Sprint；只能确认公开仓库没有靠 Sprint 驱动这套 AI Coding 流程。</p>
+      </div>
+      <div class="card" style="--accent:var(--blue)">
+        <span class="tag practice">如果你自己的团队使用 Sprint</span>
+        <p>可以把 Sprint 放在最外层：<b>Sprint 包含多个 Task；Task 通过 PR 交付；遇到非平凡设计决定时，PR 同时创建或更新 Agent Note。</b>Agent Note 不属于某个 Sprint 的临时资产，它应跨 Sprint 存活。</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>别把 Agent Note 写成这三种东西</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>错误写法</th><th>为什么错</th><th>应该放哪</th></tr></thead>
+        <tbody>
+          <tr><td>“Task 1 改接口，Task 2 补测试，Task 3 更新文档”</td><td>这是执行清单，完成后会过期。</td><td>Task、Issue、PR checklist 或实施计划</td></tr>
+          <tr><td>“本 Sprint 要完成 A/B/C”</td><td>这是时间盒与容量管理，不是设计理由。</td><td>Sprint board</td></tr>
+          <tr><td>“我们先试了五次，reviewer 在第三轮要求……”</td><td>这是会话/评审过程叙事，不是当前可验证事实。</td><td>PR thread、commit history；只把仍有效的理由提炼进 Note</td></tr>
+          <tr><td>“采用 per-session limit，因为所有权属于 session；否决 global limit，因为不同会话会相互干扰”</td><td>这是长期有效的决定与替代方案。</td><td><b>Agent Note</b></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>这些结论在源码哪里？</h2>
+      <p class="lead">分成“规范来源”和“可执行门禁”两层看。前者定义为什么这样做，后者让目录、状态和格式错误直接导致检查失败。</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>你要找的事实</th><th>源码位置</th><th>关键内容</th></tr></thead>
+        <tbody>
+          <tr><td>Agent Note 的全局目录、生命周期和状态</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md#L9-L19" target="_blank" rel="noreferrer"><code>.agents/notes/README.md</code> L9–19</a></td><td>路径格式是 <code>{lifecycle}/{class}/date-topic.md</code>；<code>proposed / implemented / rejected</code> 目录就是状态。</td></tr>
+          <tr><td>什么任务必须写 Agent Note</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md#L46-L54" target="_blank" rel="noreferrer"><code>.agents/notes/README.md</code> L46–54</a></td><td>每个非平凡变更必须在同一个 PR 中新增或更新 Note；机械/局部编辑豁免。</td></tr>
+          <tr><td>为什么没有中央 INDEX</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-remove-generated-agent-note-index.md#L7-L31" target="_blank" rel="noreferrer"><code>remove-generated-agent-note-index.md</code> L7–31</a></td><td>集中索引重复路径中的事实，并让无关分支共同修改同一文件、产生合并热点；目录树和搜索承担发现。</td></tr>
+          <tr><td>为何任务要保留设计理由</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-require-agent-notes-for-non-trivial-changes.md#L7-L30" target="_blank" rel="noreferrer"><code>require-agent-notes…md</code> L7–30</a></td><td>代码和测试无法稳定保存方案为何胜出、哪些替代方案落选、团队接受了什么代价。</td></tr>
+          <tr><td>生命周期和类别的封闭集合</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/scripts/agent-note-tree.ts#L9-L24" target="_blank" rel="noreferrer"><code>scripts/agent-note-tree.ts</code> L9–24</a></td><td>代码只接受三种 active lifecycle 和六种 class。</td></tr>
+          <tr><td>禁止中央 <code>INDEX.md</code></td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/scripts/agent-note-tree.ts#L41-L79" target="_blank" rel="noreferrer"><code>scripts/agent-note-tree.ts</code> L41–79</a></td><td>walker 遇到根 <code>INDEX.md</code>、未知 lifecycle/class、错误目录深度或文件名时产生 fatal error。</td></tr>
+          <tr><td>状态行和正文格式如何被强制</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/scripts/verify-agent-note-format.ts#L21-L36" target="_blank" rel="noreferrer"><code>scripts/verify-agent-note-format.ts</code> L21–36</a></td><td>状态正则、每种 lifecycle 的必需章节，以及 implemented 禁止的计划型标题都写成代码。</td></tr>
+          <tr><td>目录状态必须匹配文件头</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/scripts/verify-agent-note-format.ts#L54-L75" target="_blank" rel="noreferrer"><code>scripts/verify-agent-note-format.ts</code> L54–75</a></td><td>第 3 行必须匹配所在 lifecycle；缺章节或 implemented 仍有 Proposal/Plan/Acceptance criteria 会失败。</td></tr>
+          <tr><td>Task 的全局状态集合</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/issue-management/config.json#L9-L16" target="_blank" rel="noreferrer"><code>.github/issue-management/config.json</code> L9–16</a></td><td><code>Inbox / Backlog / Ready / In progress / In review / Done / No action</code>。</td></tr>
+          <tr><td>PR 和 review 如何驱动 Task 状态</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/issue-management/policy.mjs#L174-L215" target="_blank" rel="noreferrer"><code>policy.mjs</code> L174–215</a></td><td>普通实现事件进入 <code>In progress</code>，请求评审进入 <code>In review</code>，changes requested 可退回 <code>In progress</code>。</td></tr>
+          <tr><td>Issue 打开/关闭如何进入 Inbox/Done</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/issue-management/policy.mjs#L665-L686" target="_blank" rel="noreferrer"><code>policy.mjs</code> L665–686</a></td><td>opened → Inbox；completed close → Done；not planned → No action；reopened → Inbox。</td></tr>
+          <tr><td>门禁是否真的进入 CI 调度</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/scripts/run-gates.ts#L599-L604" target="_blank" rel="noreferrer"><code>scripts/run-gates.ts</code> L599–604</a></td><td><code>agent-note-classification</code> 和 <code>agent-note-format</code> 是正式 gate。</td></tr>
+        </tbody>
+      </table></div>
+      <div class="callout"><strong>阅读顺序：</strong>先看 <code>.agents/notes/README.md</code> 理解规则，再看两个 <code>scripts/verify-agent-note-*.ts</code> 理解怎样被强制；Task 状态则直接从 <code>.github/issue-management/config.json</code> 和 <code>policy.mjs</code> 开始。</div>
+    </section>
+
+    <section>
+      <h2>主要来源</h2>
+      <ol class="sources">
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" target="_blank" rel="noreferrer">Agent Notes README</a>：生命周期、适用范围、proposed/implemented/rejected 格式。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/AGENTS.md" target="_blank" rel="noreferrer">Documentation rules</a>：Agent Note 保存理由、取舍与验证，不保存 implemented 阶段的任务计划。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/ISSUE_TEMPLATE/task.md" target="_blank" rel="noreferrer">Task issue template</a>：验收条件、交付物与测试证据。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/issue-management/config.json" target="_blank" rel="noreferrer">Issue lifecycle config</a>：Task/Issue 的公开状态集合。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/pull_request_template.md" target="_blank" rel="noreferrer">Pull request template</a>：Issue 关联、变更与验证。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-19-require-agent-notes-for-non-trivial-changes.md" target="_blank" rel="noreferrer">Require an Agent Note for every non-trivial change</a>：Task/PR 与 Agent Note 的强制关系。</li>
+      </ol>
+    </section>
+
+    <div class="closing"><b>最终判断：</b>Agent Note 与 Task 的交集，只存在于“实施前需要把边界写清楚”。Task 结束后被关闭；Sprint 结束后被翻篇；Agent Note 在实现后反而进入最重要的阶段——成为未来维护者和下一轮 Codex 可以依赖的设计记忆。</div>
+  </main>
+</body>
+</html>

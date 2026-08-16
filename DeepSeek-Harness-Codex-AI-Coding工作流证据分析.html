@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从 deepseek-ai/deepseek-harness 的 AGENTS.md、Agent Notes、skills 与 Git 历史，还原其 Codex AI Coding 工作流，并说明公开材料缺少什么。">
+  <meta name="theme-color" content="#090b10">
+  <link rel="icon" href="data:,">
+  <title>DeepSeek Harness 暴露了怎样的 Codex AI Coding 工作流？</title>
+  <style>
+    :root{color-scheme:dark;--bg:#090b10;--panel:#121620;--panel2:#171c28;--text:#f3f6fb;--muted:#9da7b8;--line:rgba(255,255,255,.1);--blue:#7aa2ff;--green:#66d9a7;--amber:#f3bd65;--rose:#ff8e9e;--purple:#bd9cff;--max:1080px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 84% -8%,rgba(122,162,255,.16),transparent 34rem),radial-gradient(circle at 0 48%,rgba(189,156,255,.08),transparent 30rem),var(--bg);color:var(--text);font:15px/1.75 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+    a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(calc(100% - 36px),var(--max));margin:auto}.top{display:flex;align-items:center;justify-content:space-between;min-height:66px;border-bottom:1px solid var(--line);font-size:12px}.brand{display:flex;align-items:center;gap:9px;color:var(--text);font-weight:800;letter-spacing:.12em}.mark{width:8px;height:22px;border-radius:9px;background:linear-gradient(var(--blue),var(--purple))}.back{color:var(--muted)}
+    header{padding:72px 0 38px}.eyebrow{margin:0 0 14px;color:var(--purple);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}h1{max-width:920px;margin:0;font-size:clamp(34px,6vw,64px);line-height:1.08;letter-spacing:-.045em}.dek{max-width:850px;margin:22px 0 0;color:var(--muted);font-size:clamp(16px,2vw,19px)}.meta{margin-top:20px;color:#737e91;font-size:12px}
+    .verdict{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin:14px 0 42px}.hero,.card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,rgba(23,28,40,.96),rgba(15,19,28,.92))}.hero{padding:24px;border-left:4px solid var(--green)}.hero.no{border-left-color:var(--rose)}.hero b{display:block;margin:7px 0 8px;font-size:19px}.hero p{margin:0;color:var(--muted)}
+    section{margin:44px 0}h2{margin:0 0 16px;font-size:25px;letter-spacing:-.025em}h3{margin:0 0 7px;font-size:17px}.lead{max-width:850px;margin:-7px 0 18px;color:var(--muted)}.card{padding:20px 22px;margin:12px 0}.card::before{position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent,var(--blue));content:""}.card p{margin:7px 0}.card ul,.card ol{margin:8px 0;padding-left:21px}.card li{margin:5px 0}
+    .tag{display:inline-block;margin:0 6px 4px 0;padding:3px 8px;border:1px solid;border-radius:999px;font-size:11px;font-weight:750;vertical-align:1px}.official{border-color:rgba(122,162,255,.35);background:rgba(122,162,255,.1);color:#b8c9ff}.practice{border-color:rgba(102,217,167,.32);background:rgba(102,217,167,.09);color:#9ce9c5}.optional{border-color:rgba(243,189,101,.33);background:rgba(243,189,101,.09);color:#f6d392}.missing{border-color:rgba(255,142,158,.35);background:rgba(255,142,158,.09);color:#ffb5bf}
+    .quote{margin:13px 0 4px;padding:12px 14px;border-left:3px solid var(--blue);border-radius:0 9px 9px 0;background:#0c1320}.quote .en{display:block;color:#c8d5ff;font-style:italic}.quote .zh{display:block;margin-top:4px;color:#dfe5ef}.source{display:block;margin-top:5px;color:#7e899b;font-size:11px}
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.node{min-height:166px;padding:16px;border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:13px;background:var(--panel)}.node strong{display:block;margin-bottom:6px}.node small{color:var(--muted)}
+    .timeline{position:relative;margin-left:8px;padding-left:28px;border-left:1px solid rgba(122,162,255,.32)}.event{position:relative;padding:0 0 27px}.event::before{position:absolute;top:7px;left:-34px;width:11px;height:11px;border:3px solid var(--bg);border-radius:50%;background:var(--event,var(--blue));box-shadow:0 0 0 1px var(--event,var(--blue));content:""}.event time{color:var(--event,var(--blue));font-size:12px;font-weight:800}.event p{margin:6px 0;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}th,td{padding:11px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#1b2130;color:#bac3d2}td{background:rgba(18,22,32,.65)}code{padding:2px 5px;border:1px solid rgba(102,217,167,.2);border-radius:5px;background:#0c1913;color:#9ce9c5;font-size:.9em}.callout{padding:16px 18px;border:1px dashed rgba(243,189,101,.45);border-radius:12px;background:rgba(243,189,101,.06);color:#ead7b3}.callout strong{color:#ffe0a6}.prompt{margin:12px 0;padding:16px 18px;white-space:pre-wrap;border:1px solid rgba(189,156,255,.26);border-radius:12px;background:#0e0c18;color:#ded5ff;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}.sources{padding-left:20px;color:var(--muted);font-size:13px}.sources li{margin:8px 0}.closing{margin:54px 0 70px;padding:24px;border:1px solid rgba(102,217,167,.25);border-radius:16px;background:rgba(102,217,167,.06);font-size:17px}.closing b{color:#a6ebca}
+    @media(max-width:780px){header{padding-top:54px}.verdict{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}.table-wrap{overflow-x:auto}table{min-width:720px}.card{padding:18px}.top{min-height:58px}}
+    @media(max-width:500px){.wrap{width:min(calc(100% - 26px),var(--max))}.flow{grid-template-columns:1fr}.node{min-height:auto}h1{font-size:36px}.meta{line-height:1.6}}
+  </style>
+</head>
+<body>
+  <nav class="top wrap" aria-label="导航">
+    <a class="brand" href="index.html"><span class="mark" aria-hidden="true"></span>STUDY ARCHIVE</a>
+    <a class="back" href="index.html">返回资料库 →</a>
+  </nav>
+
+  <main class="wrap">
+    <header>
+      <p class="eyebrow">Evidence Review · Codex AI Coding</p>
+      <h1>DeepSeek Harness 讲了完整的 Codex 编码工作流吗？</h1>
+      <p class="dek">短答案：<b>讲出了完整工作流的工程骨架，但没有公开完整的 Codex 会话。</b>它最值得研究的不是 Harness 产品源码，而是团队如何把 Agent 放进“理解约束 → 记录决策 → 实现 → 定向验证 → PR 评审 → 合并”的生产闭环。</p>
+      <p class="meta">核验日期：2026-08-15 · 范围：OpenAI 官方 Codex 文档，以及公开仓库的文档、Agent Notes、skills、Git 历史与公开 GitHub 页面。文中“官方逐字”只指链接来源原文；由多份材料拼出的流程标为“实践补充”。</p>
+    </header>
+
+    <div class="verdict">
+      <article class="hero">
+        <span class="tag practice">实践补充 · 可以确认</span>
+        <b>这是一个相当完整的 AI Coding 操作系统。</b>
+        <p>任务隔离、代码库探索、设计记录、实现纪律、分层测试、评审、PR stack、CI 与合并规则都能找到明确材料，Git 历史还能看到大量 <code>codex/*</code> 分支的真实迭代痕迹。</p>
+      </article>
+      <article class="hero no">
+        <span class="tag missing">关键缺失 · 不能确认</span>
+        <b>它不是逐轮会话档案。</b>
+        <p>没有首轮任务提示、Codex 的逐步计划与工具调用、人在何处纠偏、评审讨论原文、模型与推理配置。因此不能把提交历史倒推成“一次无人干预完成”。</p>
+      </article>
+    </div>
+
+    <section>
+      <h2>先回答你的原问题</h2>
+      <div class="card" style="--accent:var(--green)">
+        <span class="tag practice">结论</span>
+        <h3>如果你问“能不能从中学到一套利用 Codex 写代码的方法”：能，而且信息量很大。</h3>
+        <p>仓库把团队认可的做法写进了 <code>AGENTS.md</code>、<code>.agents/notes/</code>、<code>.agents/skills/</code>、Git hooks、测试门禁与 PR 历史。它比一篇泛泛的“如何提示 Codex”文章更接近真实生产。</p>
+      </div>
+      <div class="card" style="--accent:var(--rose)">
+        <span class="tag missing">限定</span>
+        <h3>如果你问“有没有一条完整的 Codex 原始会话，可逐轮看到怎么做”：没有。</h3>
+        <p>公开仓库保留的是可维护的长期事实与代码产物，不是作者会话。甚至有专门 skill 清除“只有原始会话、PR 讨论或未提交草稿才能理解”的文字。</p>
+        <div class="quote"><span class="tag official">官方逐字</span><span class="en">“could a reader at HEAD, with no access to any session transcript, PR thread, or uncommitted draft…”</span><span class="zh">判断标准正是：一个只看到当前仓库、看不到会话记录和 PR 讨论的人，能不能验证这些话。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-trim-cot-leakage/SKILL.md" target="_blank" rel="noreferrer">dsh-trim-cot-leakage</a></span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>网页版的“本地能力”不是很有限吗？</h2>
+      <p class="lead">是的——如果“本地能力”指直接访问开发者电脑。但 Codex 网页版做仓库任务时，浏览器主要是控制面板，真正执行代码的是隔离的 Codex Cloud 容器，不是网页 JavaScript，也不是你的本机。</p>
+      <div class="flow">
+        <article class="node" style="--accent:var(--purple)"><strong>1 · 浏览器控制面</strong><small>选择 GitHub 仓库和环境，提交任务，查看日志与 diff，继续追问或决定是否开 PR。浏览器本身不需要读取你的本地磁盘。</small></article>
+        <article class="node" style="--accent:var(--blue)"><strong>2 · 云端执行面</strong><small>每个任务启动隔离容器，checkout 指定 branch/commit，执行 setup，运行 shell，编辑代码并执行 lint、测试和构建。</small></article>
+        <article class="node" style="--accent:var(--green)"><strong>3 · Git 交付面</strong><small>结果以 summary、diff、分支或 PR 返回；开发者评审后合并，或者把分支拉回本机继续处理。</small></article>
+        <article class="node" style="--accent:var(--amber)"><strong>4 · 本机补充面</strong><small>只有依赖本机文件、localhost、内网、硬件、原生 GUI 或个人浏览器状态的任务，才必须转到 CLI、IDE 或桌面环境。</small></article>
+      </div>
+      <div class="quote"><span class="tag official">OpenAI 官方逐字</span><span class="en">“Codex creates a container and checks out your repo at the selected branch or commit SHA.”</span><span class="zh">Codex 会创建一个容器，并把仓库检出到选定的分支或 commit SHA。</span><span class="source">— <a href="https://developers.openai.com/codex/cloud/environments/" target="_blank" rel="noreferrer">OpenAI Docs · Cloud environments</a></span></div>
+      <div class="card" style="--accent:var(--blue)">
+        <span class="tag official">官方能力边界</span>
+        <h3>云端容器可以有完整终端，但不能天然拥有你的本机现场</h3>
+        <p>官方文档说明：仓库可以为云环境配置依赖、工具、环境变量和 setup script；Agent 会循环执行终端命令、修改文件并验证结果。Agent 阶段的互联网默认关闭，可显式配置；环境也不是永久开发机，缓存只是用来加速后续任务。</p>
+        <p>因此它很适合“仓库里能复现”的工作，不适合直接操作你电脑中尚未提交的文件、正在运行的本地服务、VPN/局域网资源、USB 设备、系统原生窗口或私人浏览器登录态。来源：<a href="https://developers.openai.com/codex/cloud/" target="_blank" rel="noreferrer">Codex cloud</a>、<a href="https://developers.openai.com/codex/cloud/environments/" target="_blank" rel="noreferrer">Cloud environments</a>。</p>
+      </div>
+      <div class="card" style="--accent:var(--amber)">
+        <span class="tag practice">对 DeepSeek Harness 的谨慎判断</span>
+        <h3><code>codex/*</code> 分支证明了 Codex 风格的交付痕迹，但不能证明使用的是网页版</h3>
+        <p>公开 Git 历史能看到大量 <code>codex/*</code> 分支和 PR，仓库也把构建、测试与验证写成可脚本化命令和 CI，这些都与云端容器相容。可是分支名不会记录任务究竟从 Codex Web、CLI、IDE 还是其他自动化入口发起；公开材料也没有完整会话元数据，所以不能断言 DeepSeek 团队只用网页版。</p>
+        <p>仓库证据：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/package.json" target="_blank" rel="noreferrer">package.json 的脚本入口</a>、<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/workflows/ci.yml" target="_blank" rel="noreferrer">GitHub CI</a>、<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/record-browser-gif/SKILL.md" target="_blank" rel="noreferrer">真实 Web 流程验证 skill</a>。</p>
+      </div>
+      <div class="callout"><strong>准确说法：</strong>网页版的<strong>直接本机访问</strong>有限，但云端编码能力并不只等于“浏览器能力”。它把仓库复制到可配置的云端开发容器里工作。DeepSeek Harness 这种大部分行为可由代码、终端命令和 CI 验证的项目，许多任务适合这种模式；机器相关的最后一公里仍要本地执行。</div>
+    </section>
+
+    <section>
+      <h2>这张 Trajectory 截图具体说明了什么？</h2>
+      <p class="lead">它展示的是 DeepSeek Harness 自己的 Web Client 连接到一个本地 Windows Host 后的完整执行轨迹。浏览器负责显示和交互；Host 负责文件系统、PowerShell、权限与工具执行。</p>
+      <div class="timeline">
+        <article class="event" style="--event:var(--purple)">
+          <time>1 · SYSTEM / CONTEXT</time>
+          <h3>运行环境和权限会作为上下文动态注入模型</h3>
+          <p>截图先显示工作目录为 <code>Z:\Users\ZK\Desktop\wvp</code>、文件策略为 <code>workspace-write</code>；随后又出现 approval 从 <code>ask</code> 改为 <code>never</code>，以及新的 <code>danger-full-access</code> runtime context。说明权限不是浏览器自己的权限，而是 Host 为当前 Agent 会话提供、并可在运行中更新的策略。</p>
+        </article>
+        <article class="event" style="--event:var(--rose)">
+          <time>2 · TOOL pwsh → UNKNOWN_TOOL</time>
+          <h3>模型第一次用了错误的调用协议</h3>
+          <p>当前处于 <code>Code mode</code>。模型直接向协议层调用 <code>pwsh</code>，注册表返回 <code>UNKNOWN_TOOL</code>。这不代表本机没有 PowerShell，而是该模式没有把 <code>pwsh</code> 作为顶层 wire tool 暴露给模型。</p>
+        </article>
+        <article class="event" style="--event:var(--blue)">
+          <time>3 · TOOL run_code</time>
+          <h3>模型识别错误并切换到 Code Mode 的正确入口</h3>
+          <p>它明确写出 “I need to call pwsh from inside run_code”，然后调用外层 <code>run_code</code>。说明这个失败是可恢复的结构化工具错误，当前 turn 没有因此终止。</p>
+        </article>
+        <article class="event" style="--event:var(--green)">
+          <time>4 · SUBTOOL pwsh</time>
+          <h3><code>run_code</code> 内部通过 Host binding 调用了本地 PowerShell</h3>
+          <p>Trajectory 同时显示外层 <code>run_code</code> 和橙色的 <code>SUBTOOL pwsh</code>；PowerShell 返回目录内容，最终 Assistant 再整理成人类可读答案。这正是“外层程序编排多个宿主工具”的结构。</p>
+        </article>
+      </div>
+      <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Under code it is the registry's only wire contribution; the other visible capabilities are declared in a generated SDK section.”</span><span class="zh">在 code 模式下，注册表在协议层只暴露 run_code；其他能力通过生成的 SDK 声明，并由程序经 binding 调用。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/tool-catalog.md" target="_blank" rel="noreferrer">DeepSeek Harness Tool Catalog</a></span></div>
+      <div class="flow">
+        <article class="node" style="--accent:var(--green)"><strong>它能证明</strong><small>这个会话连接了能访问 <code>Z:\</code> 路径的 Windows Host；Host 提供 PowerShell；Code Mode 通过 <code>run_code → tools.pwsh</code> 执行；Trajectory 会记录权限上下文、失败、外层调用和子调用。</small></article>
+        <article class="node" style="--accent:var(--rose)"><strong>它不能证明</strong><small>不能证明浏览器 JavaScript 直接读取磁盘；不能证明这是 Codex Cloud；不能证明 DeepSeek 团队用同一种入口开发仓库；也不能把可见 Assistant 文本等同于模型完整的隐藏思维链。</small></article>
+        <article class="node" style="--accent:var(--amber)"><strong>安全含义</strong><small><code>danger-full-access</code> 表示文件操作绕过隔离；<code>approval: never</code> 则表示需要审批的请求直接被拒绝，并非自动批准。普通操作因已处于全访问模式通常无需升级；真正边界落在 Host、工具注册和策略组合上。</small></article>
+        <article class="node" style="--accent:var(--blue)"><strong>产品含义</strong><small>Trajectory 是调试与审计账本：不仅给最终答案，还能看见模型收到什么上下文、调用为何失败、怎样自我修正，以及哪个宿主工具真正产生结果。</small></article>
+      </div>
+      <div class="callout"><strong>一句话：</strong>这张图说明 DeepSeek Harness 的网页可以<strong>间接拥有很强的本地能力</strong>，条件是本机运行了 Host 并把文件系统、Shell 等能力作为受策略控制的工具提供给 Agent；能力来自 Host，不来自浏览器。</div>
+      <p class="meta">源码对应：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/code-runtime/README.md" target="_blank" rel="noreferrer">Code Runtime 使用 host-provided async bindings</a>；<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/tool-catalog.zh.md" target="_blank" rel="noreferrer">pwsh 是 Windows 组合的 PowerShell 工具</a>；<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md" target="_blank" rel="noreferrer">Host/base 与 Web app 的分层</a>；<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/approval.zh.md" target="_blank" rel="noreferrer">never 会拒绝审批请求</a>；<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/subsystems/sandbox.zh.md" target="_blank" rel="noreferrer">danger-full-access 绕过文件隔离</a>。</p>
+    </section>
+
+    <section>
+      <h2>具体到一次任务：人下达以后会发生什么？</h2>
+      <p class="lead">假设人给出一个任务：“限制每个会话可同时运行的后台任务数；超限时明确拒绝；补齐测试和文档。”下面按仓库现有规则，还原这个任务从输入到合并的实际时序。</p>
+      <div class="timeline">
+        <article class="event" style="--event:var(--purple)">
+          <time>0 · 人定义任务</time>
+          <h3>输入不是只有一句需求，至少还要有验收边界</h3>
+          <p>仓库的 Task 模板要求“一句话说明工作”，并在折叠区填写<strong>验收条件、交付物、测试证据</strong>。所以理想输入不是“优化后台任务”，而是明确要观察到什么结果。来源：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/ISSUE_TEMPLATE/task.md" target="_blank" rel="noreferrer">Task issue template</a>。</p>
+        </article>
+        <article class="event" style="--event:var(--blue)">
+          <time>1 · 为任务隔离工作区</time>
+          <h3>任务进入自己的 worktree 与分支</h3>
+          <p>公开历史中此类任务通常出现在 <code>codex/&lt;task-name&gt;</code> 分支；正式规则明确要求“一条 PR 分支一个 worktree”，并禁止并行修复共用 checkout。这里可以确认隔离纪律；无法确认是人还是自动化创建了 worktree。来源：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/responding-to-pr-review-on-a-stack.md" target="_blank" rel="noreferrer">stacked PR review guide</a>。</p>
+        </article>
+        <article class="event" style="--event:var(--green)">
+          <time>2 · Codex 先定位，不立即写代码</time>
+          <h3>读取指令树、架构、目标包和现有测试</h3>
+          <p>根 <code>AGENTS.md</code> 要求修改 <code>packages/</code> 前先读架构文档；目录中的下级 <code>AGENTS.md</code> 再补充局部规则。Codex 会搜索相关服务、调用者、测试、README 与已有 Agent Note，确定行为应该落在哪个插件或接口上。</p>
+        </article>
+        <article class="event" style="--event:var(--amber)">
+          <time>3 · 判断任务是不是“非平凡变更”</time>
+          <h3>非平凡任务先建立或更新决策记录</h3>
+          <p>如果会改变行为、架构、跨文件约定、测试策略、配置或协议，就要在同一个 PR 里新增或更新 Agent Note。实施前的 Note 包含 Problem、Proposal、Alternatives considered、Acceptance criteria 与 Risks；纯机械、小范围编辑可以跳过。<b>仓库没有规定每个任务都必须进入 Plan Mode。</b></p>
+        </article>
+        <article class="event" style="--event:var(--green)">
+          <time>4 · 实现第一个可验证切片</time>
+          <h3>实现、测试和所属文档一起改</h3>
+          <p>Codex 修改最小的责任边界，同时补 owning test；如果变化会被用户、模型、CLI 或编辑器看到，还要更新 keyless snapshot 或真实示例。如果公共行为改变，README/JSDoc 与 Agent Note 同一批更新，而不是等最后补文档。</p>
+        </article>
+        <article class="event" style="--event:var(--rose)">
+          <time>5 · 在本地形成短反馈循环</time>
+          <h3>失败 → 读错误 → 修代码 → 重跑受影响检查</h3>
+          <p>它不会默认每轮跑全仓。包行为跑定向 Vitest；模型或 UI 输出跑对应 snapshot；构建与导出变化跑 build/hygiene；真实 provider 行为在有凭证时跑 e2e。每项检查必须能对目标回归真正失败。</p>
+        </article>
+        <article class="event" style="--event:var(--blue)">
+          <time>6 · 自审、提交与推送</time>
+          <h3>先核对真实 base 和完整 diff，再发布分支</h3>
+          <p>Codex/作者检查 branch、worktree 状态和 PR base，用 <code>change-scope --base</code> 看 committed、staged、unstaged、untracked 四层变更。pre-commit 处理暂存 lint、空白与元数据；pre-push 只跑增量 typecheck。更广的矩阵留给 CI。</p>
+        </article>
+        <article class="event" style="--event:var(--purple)">
+          <time>7 · 创建或更新 PR</time>
+          <h3>PR 必须告诉评审者“改了什么、怎么验证”</h3>
+          <p>PR 模板要求关联 Issue，并填写“变更”和“验证”；解决型 PR 使用 <code>Fixes #NN</code>。普通 PR 活动会把关联 Issue 推进到 <code>In progress</code>，请求评审时进入 <code>In review</code>。来源：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/pull_request_template.md" target="_blank" rel="noreferrer">PR template</a>与<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/issue-management/policy.mjs" target="_blank" rel="noreferrer">issue lifecycle policy</a>。</p>
+        </article>
+        <article class="event" style="--event:var(--rose)">
+          <time>8 · 评审不是终点，而是另一个循环</time>
+          <h3>Changes requested → 回到实现 → 定向验证 → 再请求评审</h3>
+          <p>每条意见先按技术事实核验，不是无条件同意。接受的修复落在最初引入问题的 PR，保留为独立 commit，再传播到上层 PR；改写分支历史后要重新检查未解决讨论、批准、mergeability 与 CI。自动化会把 Issue 从 <code>In review</code>退回 <code>In progress</code>。</p>
+        </article>
+        <article class="event" style="--event:var(--green)">
+          <time>9 · CI 通过并合并</time>
+          <h3>本地证据与完整 CI 都成立后，任务才算完成</h3>
+          <p>独立 PR 直接走正常合并；依赖 PR 先组成官方 stack，再自底向上合并。PR 关闭关联 Issue 后，生命周期自动进入 <code>Done</code>。最终保留的是代码、测试、Agent Note、文档和提交记录，不是整段 Codex 对话。</p>
+        </article>
+      </div>
+      <div class="callout"><strong>一句话时序：</strong>任务 + 验收 → 独立 worktree → 读规则与代码 → 必要时写 Agent Note → 小步实现 → 定向测试循环 → 自审并推送 → PR 评审循环 → CI / stack → 合并与 Done。</div>
+    </section>
+
+    <section>
+      <h2>哪些步骤不是每次都发生？</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>常见想象</th><th>现有证据给出的答案</th></tr></thead>
+        <tbody>
+          <tr><td>每次先写完整 Plan</td><td><span class="tag missing">不是硬规则</span> 仓库有 Plan 能力，但开发规则只强制非平凡变更维护 Agent Note；简单机械改动可直接做。</td></tr>
+          <tr><td>每次自动调用多个子 Agent</td><td><span class="tag missing">无法确认</span> 仓库支持 subagent，review guide 也提到 delegated fix，但没有证据表明所有任务都并行委派。</td></tr>
+          <tr><td>每次本地跑完整测试套件</td><td><span class="tag official">明确不是</span> 规则要求选择最窄有效检查，CI 负责全量覆盖率和平台矩阵。</td></tr>
+          <tr><td>Codex 自己决定需求、开 PR 并合并</td><td><span class="tag missing">无法确认</span> 仓库能证明这些控制面存在，不能证明每一步由 Codex 自动执行。</td></tr>
+          <tr><td>一次提示后连续工作到完成</td><td><span class="tag practice">更像多轮循环</span> 真实分支包含实现、补测试、重构、修配置、文档调整、同步主线与评审修复。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>仓库实际公开了哪几层 AI Coding 证据？</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>层</th><th>公开材料</th><th>能证明什么</th><th>不能证明什么</th></tr></thead>
+        <tbody>
+          <tr><td><b>操作约束</b></td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/AGENTS.md" target="_blank" rel="noreferrer"><code>AGENTS.md</code></a></td><td>Agent 开工前读什么、改动放哪、哪些检查必须做、哪些行为禁止。</td><td>某次任务是否严格遵守了每条规则。</td></tr>
+          <tr><td><b>架构导航</b></td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md" target="_blank" rel="noreferrer"><code>docs/architecture.md</code></a></td><td>官方直接建议用 Agent 探索大型代码库，并提供修改入口地图。</td><td>Agent 当时查了哪些文件、走过哪些弯路。</td></tr>
+          <tr><td><b>决策资产</b></td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" target="_blank" rel="noreferrer">Agent Notes</a></td><td>问题、方案、替代方案、验收与风险如何在实现前后留痕。</td><td>设计讨论的全部参与者和原始对话。</td></tr>
+          <tr><td><b>可执行流程</b></td><td><a href="https://github.com/deepseek-ai/deepseek-harness/tree/master/.agents/skills" target="_blank" rel="noreferrer"><code>.agents/skills/</code></a></td><td>推送前检查、代码评审、PR stack、文档与 GUI 证据等标准动作。</td><td>每次究竟调用了哪个 skill、调用顺序与提示词。</td></tr>
+          <tr><td><b>产物轨迹</b></td><td><a href="https://github.com/deepseek-ai/deepseek-harness/commits/master/" target="_blank" rel="noreferrer">Git commits</a></td><td>实现、测试、重构、修复、文档、同步主线与合并的先后顺序。</td><td>每个提交由人还是模型起草、人与 Codex 的贡献比例。</td></tr>
+          <tr><td><b>评审控制面</b></td><td>PR 编号、merge commits、review 状态规则</td><td>团队确实把 review、changes requested、CI 与合并纳入流程。</td><td>原内部 PR 讨论目前没有随公开仓库一起暴露。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>从证据拼出的 Codex 生产工作流</h2>
+      <p class="lead">下面不是仓库某一页逐字写出的“八步法”，而是多份官方材料和 Git 轨迹共同支持的重建。</p>
+      <div class="flow">
+        <div class="node" style="--accent:var(--purple)"><strong>1. 隔离任务</strong><small>为任务建立独立 branch/worktree；Git 历史中可见大量 <code>codex/*</code>、<code>agent/*</code> 与 <code>worktree/*</code> 分支合并记录。</small></div>
+        <div class="node" style="--accent:var(--blue)"><strong>2. 先装载规则</strong><small>让 Agent 读根 <code>AGENTS.md</code>、架构图和目标子树规则，先判断行为应该落在哪个扩展点。</small></div>
+        <div class="node" style="--accent:var(--amber)"><strong>3. 明确变更范围</strong><small>核对真实 PR base，再用 <code>change-scope --base</code> 汇总 committed、staged、unstaged、untracked 四层差异。</small></div>
+        <div class="node" style="--accent:var(--green)"><strong>4. 把决定写下来</strong><small>非平凡改动同一 PR 必须新增或更新 Agent Note；提案写问题、方案、替代方案、验收与风险。</small></div>
+        <div class="node" style="--accent:var(--green)"><strong>5. 代码、文档、证据同行</strong><small>实现不单独漂移；公共行为、JSDoc、README、双语材料、快照或真实入口测试按受影响表面一起改。</small></div>
+        <div class="node" style="--accent:var(--amber)"><strong>6. 运行最窄有效验证</strong><small>不是机械跑全仓：包行为跑定向测试，模型/UI 输出跑 snapshot，发布面跑 build/hygiene，真实 provider 跑 e2e。</small></div>
+        <div class="node" style="--accent:var(--blue)"><strong>7. PR 评审与修订</strong><small>评审追踪接口两侧、生命周期、并发、取消、模型所见文本、真实入口、负例和 Agent Note 是否与实现一致。</small></div>
+        <div class="node" style="--accent:var(--purple)"><strong>8. CI / stack / 合并</strong><small>本地 hooks 保持轻量，CI 负责完整矩阵；依赖 PR 使用官方 stack，变基后重新核验检查与评审状态。</small></div>
+      </div>
+      <div class="quote"><span class="tag official">官方逐字</span><span class="en">“We recommend using an agent to explore the codebase and understand its architecture.”</span><span class="zh">官方明确建议用 Agent 探索代码库、理解架构。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md" target="_blank" rel="noreferrer">DeepSeek Harness Architecture</a></span></div>
+      <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Non-trivial changes MUST include an Agent Note in the same PR.”</span><span class="zh">非平凡改动必须在同一个 PR 内包含 Agent Note。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/AGENTS.md" target="_blank" rel="noreferrer">AGENTS.md</a></span></div>
+      <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Every behavior change needs the narrowest available test or purpose-built check that would fail for its regression.”</span><span class="zh">每项行为变更，都要选择能对该回归真正失败的最窄测试或专用检查。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-pre-push-checks/SKILL.md" target="_blank" rel="noreferrer">dsh-pre-push-checks</a></span></div>
+    </section>
+
+    <section>
+      <h2>一个真实 <code>codex/*</code> 分支透露出的迭代节奏</h2>
+      <p class="lead"><code>codex/bounded-background-tasks-v2</code> 最终通过 merge commit <a href="https://github.com/deepseek-ai/deepseek-harness/commit/e9dfb30cdfb0a58706bf85b4e42116ed49b13619" target="_blank" rel="noreferrer">e9dfb30</a> 合入。它不是“一次生成即完成”，而是一个跨两天、不断吸收反馈和主线变化的循环。</p>
+      <div class="timeline">
+        <article class="event" style="--event:var(--green)"><time>2026-08-11 16:23</time><h3>先交付核心修复</h3><p><a href="https://github.com/deepseek-ai/deepseek-harness/commit/f32a51b2847eb0703b770c80c462d745afde5363" target="_blank" rel="noreferrer"><code>f32a51b</code></a>：<em>fix(tasks): bound per-session background work</em>。</p></article>
+        <article class="event" style="--event:var(--rose)"><time>16:44</time><h3>同步主线并真实处理冲突</h3><p>合并提交明确列出 Agent Notes、配置目录、示例和测试等冲突文件，说明长任务会持续吸收主线，而不是在静态快照里孤立完成。</p></article>
+        <article class="event" style="--event:var(--blue)"><time>16:57 → 17:54</time><h3>补测试、再简化、再修工程配置</h3><p>依次出现 <code>test(tasks): cover direct admission default</code>、<code>refactor(tasks): simplify admission configuration</code>、<code>fix(tasks): reference Schemastery compiler project</code>。</p></article>
+        <article class="event" style="--event:var(--amber)"><time>23:13 → 23:25</time><h3>最后收紧文档与不变量解释</h3><p>出现两次独立文档提交：澄清 admission lifecycle，再缩窄 invariant rationale；这符合“实现、决策记录与文档同 PR 演进”的规则。</p></article>
+        <article class="event" style="--event:var(--purple)"><time>2026-08-12</time><h3>再次追上主线后合并</h3><p>分支在合并前又两次同步 <code>origin/master</code>。最终 PR 统计为 48 个文件、735 行新增、77 行删除，包含实现、单测、快照、示例和文档。</p></article>
+      </div>
+      <div class="callout"><strong>能据此确认：</strong>编码是“实现 → 冲突解决 → 补证据 → 简化 → 修配置 → 收紧文档 → 再同步 → 合并”的迭代。<br><strong>不能据此确认：</strong>这些步骤由 Codex 独立决定，或中间没有人类评审、额外提示和失败重试。</div>
+    </section>
+
+    <section>
+      <h2>最重要的设计：把“思考”变成长期资产</h2>
+      <div class="card" style="--accent:var(--purple)">
+        <span class="tag official">官方规则</span><h3>Agent Note 不是聊天总结，而是可维护的决策对象</h3>
+        <p>它按生命周期进入 <code>proposed/</code>、<code>implemented/</code> 或 <code>rejected/</code>。提案必须写 Problem、Proposal、Alternatives considered、Acceptance criteria 与 Risks；实现后要改写为当前事实和 Consequences。来源：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" target="_blank" rel="noreferrer">Agent Notes README</a>。</p>
+      </div>
+      <div class="card" style="--accent:var(--green)">
+        <span class="tag practice">工作流含义</span><h3>人不必保存每句 prompt，但必须保存决策为何成立</h3>
+        <p>会话可以丢；可复用的约束、被否决的方案、验收条件、风险和验证方式必须进入仓库。下一次 Codex 读取的不是上一轮聊天，而是已经压缩过的工程记忆。</p>
+      </div>
+      <div class="card" style="--accent:var(--blue)">
+        <span class="tag official">官方规则</span><h3>测试选择也不是固定流水线，而是按 diff 做语义判断</h3>
+        <p><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-pre-push-checks/SKILL.md" target="_blank" rel="noreferrer">pre-push skill</a> 要求先确认 base 和完整变更范围，再选最窄但有效的证据；本地 hooks 只做廉价高置信检查，完整覆盖与平台矩阵交给 CI。</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>公开材料缺少的五个关键镜头</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>缺少内容</th><th>为什么重要</th><th>现在最多能做到什么</th></tr></thead>
+        <tbody>
+          <tr><td>原始需求 / issue brief</td><td>决定 Codex 得到的是模糊目标还是已验证的设计。</td><td>从 commit 与 Agent Note 反推目标，不能还原首轮输入。</td></tr>
+          <tr><td>逐轮 Codex transcript</td><td>能看见探索、计划、失败、工具调用和上下文管理。</td><td>只能看到最终文件与 Git 提交边界。</td></tr>
+          <tr><td>人类干预点</td><td>决定这套流程究竟是自治 coding，还是高频人工 steering。</td><td>从多轮修订推断存在反馈，不能归因给谁。</td></tr>
+          <tr><td>原 PR review threads</td><td>能解释为什么出现补测试、重构、文档收紧与冲突处理。</td><td>公开仓库保留了 merge commit 和 PR 编号，但对应讨论页目前不可访问。</td></tr>
+          <tr><td>模型 / 配置 / 成本</td><td>影响可复现性、成功率、速度与投入。</td><td>分支名能提示 Codex 参与语境，不能证明具体模型或 token 成本。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>你可以直接复用的 Codex 工作法</h2>
+      <p class="lead">这是根据该仓库提炼的轻量版本，保留最关键的控制点，不要求照搬它的双语文档和复杂 CI。</p>
+      <div class="card" style="--accent:var(--green)">
+        <ol>
+          <li><b>一个任务一个 worktree / branch。</b>分支名表达任务，不让两个 Agent 共写一个脏工作区。</li>
+          <li><b>先写仓库级 <code>AGENTS.md</code>。</b>只放长期约束：结构、测试命令、禁止事项、交付定义。</li>
+          <li><b>让 Codex 先探索再改。</b>要求它读规则、架构、目标模块和现有测试，先报告修改面与风险。</li>
+          <li><b>非平凡任务先产出短设计记录。</b>至少含问题、方案、替代方案、验收标准和风险；确认后实现。</li>
+          <li><b>每轮只推进一个可验证增量。</b>代码、对应测试和必要文档一起完成，失败证据直接进入下一轮。</li>
+          <li><b>让另一轮/另一 Agent review。</b>重点查接口两侧、并发/清理、错误路径、模型可见文本与测试是否真会失败。</li>
+          <li><b>合并前压缩上下文。</b>把长期有效信息留进文档与测试；删掉“上一轮我们如何争论”的会话残留。</li>
+        </ol>
+      </div>
+      <div class="prompt">先不要修改代码。请依次：
+1. 阅读 AGENTS.md、架构文档、目标模块 README 与相邻测试；
+2. 确认当前分支、真实 base、脏文件和完整变更范围；
+3. 用“问题 / 方案 / 替代方案 / 验收 / 风险”写一份短计划；
+4. 指出最小可验证实现切片，以及会运行的定向检查；
+5. 等计划自洽后再实现。实现完成后，自审 diff，并报告证据与仍未验证的部分。</div>
+      <div class="callout"><strong>这套方法的核心不是“写一个更长 prompt”。</strong>它是把 Codex 放进一个有仓库规则、隔离工作区、持久决策、真实反馈和独立评审的循环。</div>
+    </section>
+
+    <section>
+      <h2>证据强度与最终判断</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>判断</th><th>评级</th><th>依据</th></tr></thead>
+        <tbody>
+          <tr><td>该团队把 Agent/Codex 用于真实仓库开发</td><td><span class="tag practice">强间接证据</span></td><td>完整历史中可识别 203 个合入主线的 <code>codex/*</code> PR merge subject，另有 <code>agent/*</code> 与 <code>worktree/*</code>；但分支名本身不等于作者身份。</td></tr>
+          <tr><td>仓库公开了成熟的 AI Coding 工程制度</td><td><span class="tag official">强直接证据</span></td><td>AGENTS、Agent Notes、skills、hooks、测试与 review 规则均在公开树中。</td></tr>
+          <tr><td>能还原从任务到合并的工作流骨架</td><td><span class="tag practice">可以</span></td><td>规则文件定义阶段，Git 历史展示真实迭代顺序。</td></tr>
+          <tr><td>能还原某次 Codex 的完整逐轮工作过程</td><td><span class="tag missing">不可以</span></td><td>缺少 transcript、PR threads、模型配置与人类干预记录。</td></tr>
+          <tr><td>这些分支都是 Codex 无人完成</td><td><span class="tag missing">证据不足</span></td><td>提交作者多为人类账号；公开证据不能可靠拆分人机贡献。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>主要来源</h2>
+      <ol class="sources">
+        <li>DeepSeek AI：<a href="https://github.com/deepseek-ai/deepseek-harness" target="_blank" rel="noreferrer">deepseek-harness 仓库</a>与<a href="https://github.com/deepseek-ai/deepseek-harness/commits/master/" target="_blank" rel="noreferrer">完整提交历史</a>。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/AGENTS.md" target="_blank" rel="noreferrer">AGENTS.md</a>：仓库布局、实现约束、相关检查与 PR 历史规则。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/architecture.md" target="_blank" rel="noreferrer">DeepSeek Harness Architecture</a>：Agent 辅助探索建议与扩展点地图。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" target="_blank" rel="noreferrer">Agent Notes README</a>：决策记录的生命周期、格式和强制适用范围。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-pre-push-checks/SKILL.md" target="_blank" rel="noreferrer">DSH Pre-Push Checks</a>与<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-code-review/SKILL.md" target="_blank" rel="noreferrer">DSH Code Review</a>。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-trim-cot-leakage/SKILL.md" target="_blank" rel="noreferrer">Trimming Chain-of-Thought Leakage</a>：解释为何仓库刻意不保留会话视角文字。</li>
+        <li><a href="https://github.com/deepseek-ai/deepseek-harness/commit/e9dfb30cdfb0a58706bf85b4e42116ed49b13619" target="_blank" rel="noreferrer">codex/bounded-background-tasks-v2 合并记录</a>：代表性的多轮实现—测试—重构—文档—同步轨迹。</li>
+      </ol>
+    </section>
+
+    <div class="closing"><b>最终结论：</b>这个仓库没有把“完整 Codex 会话”公开给你，但它公开了更耐用的东西——一套把 Codex 变成工程团队成员的制度化闭环。学习时应把它当成 <b>AI Coding playbook + 真实 Git 痕迹</b>，不要把它误读成可逐轮复盘的无人开发录像。</div>
+  </main>
+</body>
+</html>
