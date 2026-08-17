@@ -1,4 +1,4 @@
-name: Deploy study website
+name: Deploy hikcc website
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: hikcc-pages
   cancel-in-progress: true
 
 jobs:
@@ -28,8 +28,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir _site
-          find . -maxdepth 1 -type f -name '*.html' -exec cp '{}' _site/ \;
-          touch _site/.nojekyll
+          find . -maxdepth 1 -type f \( -name '*.html' -o -name 'robots.txt' -o -name 'sitemap.xml' -o -name '.nojekyll' \) -exec cp '{}' _site/ \;
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
