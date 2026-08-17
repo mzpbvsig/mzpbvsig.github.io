@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://mzpbvsig.github.io/2026-08-17/dsh-code-review.html"><title>DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review · hikcc</title><style>
+    :root{color-scheme:dark;--bg:#090b10;--panel:#121720;--panel2:#171d28;--text:#f2f5fa;--muted:#9da8b9;--line:rgba(255,255,255,.1);--blue:#79a6ff;--green:#64d8a5;--amber:#f0ba62;--rose:#ff8a9c;--purple:#bd9cff;--max:1080px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 88% -10%,rgba(121,166,255,.16),transparent 34rem),radial-gradient(circle at -6% 45%,rgba(100,216,165,.08),transparent 30rem),var(--bg);color:var(--text);font:15px/1.75 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(calc(100% - 36px),var(--max));margin:auto}.top{display:flex;align-items:center;justify-content:space-between;min-height:66px;border-bottom:1px solid var(--line);font-size:12px}.brand{display:flex;align-items:center;gap:9px;color:var(--text);font-weight:800;letter-spacing:.12em}.mark{width:8px;height:22px;border-radius:9px;background:linear-gradient(var(--green),var(--blue))}.back{color:var(--muted)}
+    header{padding:72px 0 38px}.eyebrow{margin:0 0 14px;color:var(--green);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}h1{max-width:940px;margin:0;font-size:clamp(34px,6vw,62px);line-height:1.08;letter-spacing:-.045em}.dek{max-width:870px;margin:22px 0 0;color:var(--muted);font-size:clamp(16px,2vw,19px)}.meta{margin-top:20px;color:#788395;font-size:12px}
+    .verdict{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin:14px 0 42px}.hero,.card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,rgba(23,29,40,.96),rgba(15,19,28,.92))}.hero{padding:24px;border-left:4px solid var(--green)}.hero.warn{border-left-color:var(--amber)}.hero b{display:block;margin:7px 0 8px;font-size:19px}.hero p{margin:0;color:var(--muted)}
+    section{margin:46px 0}h2{margin:0 0 16px;font-size:25px;letter-spacing:-.025em}h3{margin:0 0 7px;font-size:17px}.lead{max-width:880px;margin:-7px 0 18px;color:var(--muted)}.card{padding:20px 22px;margin:12px 0}.card::before{position:absolute;inset:0 auto 0 0;width:3px;background:var(--accent,var(--blue));content:""}.card p{margin:7px 0}.card ul,.card ol{margin:8px 0;padding-left:21px}.card li{margin:5px 0}
+    .tag{display:inline-block;margin:0 6px 4px 0;padding:3px 8px;border:1px solid;border-radius:999px;font-size:11px;font-weight:750;vertical-align:1px}.official{border-color:rgba(121,166,255,.35);background:rgba(121,166,255,.1);color:#b9ccff}.practice{border-color:rgba(100,216,165,.32);background:rgba(100,216,165,.09);color:#9ce8c4}.optional{border-color:rgba(240,186,98,.33);background:rgba(240,186,98,.09);color:#f5d193}.missing{border-color:rgba(255,138,156,.35);background:rgba(255,138,156,.09);color:#ffb5bf}
+    .quote{margin:13px 0 4px;padding:12px 14px;border-left:3px solid var(--blue);border-radius:0 9px 9px 0;background:#0c1320}.quote .en{display:block;color:#cad7ff;font-style:italic}.quote .zh{display:block;margin-top:4px;color:#dfe5ef}.source{display:block;margin-top:5px;color:#7f899a;font-size:11px}
+    .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.node{min-height:150px;padding:16px;border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:13px;background:var(--panel)}.node strong{display:block;margin-bottom:6px}.node small{color:var(--muted)}
+    .timeline{position:relative;margin-left:8px;padding-left:28px;border-left:1px solid rgba(121,166,255,.32)}.event{position:relative;padding:0 0 27px}.event::before{position:absolute;top:7px;left:-34px;width:11px;height:11px;border:3px solid var(--bg);border-radius:50%;background:var(--event,var(--blue));box-shadow:0 0 0 1px var(--event,var(--blue));content:""}.event time{color:var(--event,var(--blue));font-size:12px;font-weight:800}.event p{margin:6px 0;color:var(--muted)}
+    .table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}th,td{padding:11px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#1b2230;color:#bac4d3}td{background:rgba(18,23,32,.65)}code{padding:2px 5px;border:1px solid rgba(100,216,165,.2);border-radius:5px;background:#0c1913;color:#9ce8c4;font-size:.9em}.callout{padding:16px 18px;border:1px dashed rgba(240,186,98,.45);border-radius:12px;background:rgba(240,186,98,.06);color:#ead7b2}.callout strong{color:#ffdfa5}.example{margin:12px 0;padding:16px 18px;white-space:pre-wrap;border:1px solid rgba(189,156,255,.26);border-radius:12px;background:#0e0c18;color:#ded5ff;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}.sources{padding-left:20px;color:var(--muted);font-size:13px}.sources li{margin:8px 0}.closing{margin:54px 0 70px;padding:24px;border:1px solid rgba(100,216,165,.25);border-radius:16px;background:rgba(100,216,165,.06);font-size:17px}.closing b{color:#a5ebca}
+    @media(max-width:780px){header{padding-top:54px}.verdict{grid-template-columns:1fr}.flow{grid-template-columns:1fr 1fr}table{min-width:720px}.card{padding:18px}.top{min-height:58px}}
+    @media(max-width:500px){.wrap{width:min(calc(100% - 26px),var(--max))}.flow{grid-template-columns:1fr}.node{min-height:auto}h1{font-size:35px}.meta{line-height:1.6}}</style><link rel="stylesheet" href="/assets/site.css"></head>
+<body class="article-page"><header class="site-nav"><div class="nav-inner">
+<a class="brand" href="/">hikcc</a>
+<nav class="nav-links" aria-label="主导航"><a href="/#library">研究资料库</a><a href="/#topics">主题方向</a><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a></nav>
+<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+</div></header>
+<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Agent 与 Eval</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-08-17">2026-08-17</time></div><div class="article-content wrap"><header>
+<p class="eyebrow">DeepSeek Harness Skills · 01</p>
+<h1><code>dsh-code-review</code><br/>不是查格式，而是查“绿色 CI 仍可能漏掉什么”</h1>
+<p class="dek">这是 DeepSeek Harness 的 PR 语义审查入口。它先固定真实 base/head 与变更范围，再把评审者引向生命周期、接口两端、能力归属、执行点强制、状态发布、真实入口、测试强度、文档和 Agent Note，而不是把 review 退化成 lint 与覆盖率复述。</p>
+<p class="meta">核验日期：2026-08-17 · 仓库 master：<code>47f943859bef60e4160492346772ded9b24f765a</code> · 直接来源：当前 SKILL.md、关联 AGENTS、测试策略、防御性模式、prose skill、Agent Notes 与 change-scope 决策。</p>
+</header>
+<div class="verdict">
+<article class="hero">
+<span class="tag practice">最短结论</span>
+<b>它是“评审判断标准加载器”，不是自动代码扫描器。</b>
+<p>真正执行评审的仍是 Agent：读 PR、读上下文、追调用链、检查状态与测试，再按证据报告缺陷。skill 的价值是把仓库积累的高价值失败模式装进这次 review。</p>
+</article>
+<article class="hero warn">
+<span class="tag optional">重要边界</span>
+<b>它不会自动替作者跑完所有检查，也不会自动批准或合并 PR。</b>
+<p><code>change-scope</code> 只报告路径与 Git 层；CI 负责机械门禁；语义正确性、证据是否充分以及是否阻塞仍由评审者判断。</p>
+</article>
+</div>
+<section>
+<h2>1 · 它什么时候触发？</h2>
+<p class="lead">metadata 的触发描述非常窄：审查 deepseek-harness 仓库中的 Pull Request。它不是通用 review skill，也不是作者写完代码后的 pre-push 流程。</p>
+<div class="flow">
+<article class="node" style="--accent:var(--green)"><strong>需要</strong><small>可读取的 PR 或准确 base/head、仓库 checkout、PR 意图与关联 Agent Note。没有真实比较范围，就不能开始可靠审查。</small></article>
+<article class="node" style="--accent:var(--amber)"><strong>适合</strong><small>行为、插件、生命周期、并发、权限、模型可见文本、文档、测试或跨包约定发生变化的 PR。</small></article>
+<article class="node" style="--accent:var(--rose)"><strong>不等于</strong><small>格式检查、全量测试脚本、自动修复器、合并机器人、翻译工作流，或“一条规则命中就否决设计”的政策引擎。</small></article>
+</div>
+<div class="quote"><span class="tag official">官方逐字</span><span class="en">“This skill is guidance, not a complete checklist.”</span><span class="zh">这项 skill 提供指导，而不是一份完整检查清单。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-code-review/SKILL.md" rel="noreferrer" target="_blank">dsh-code-review</a></span></div>
+</section>
+<section>
+<h2>2 · 一次 review 实际怎样开始？</h2>
+<div class="timeline">
+<article class="event" style="--event:var(--purple)"><time>0 · 核实远端事实</time><h3>获取 PR 当前 base 与精确 head</h3><p>不能信旧报告，也不能用“当前分支的 upstream”猜 base；stacked PR 可能指向另一个 feature branch，PR retarget 或合并 base 后比较范围还会变化。来源：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-27-explicit-change-scope-report.md" rel="noreferrer" target="_blank">change-scope Agent Note</a>。</p></article>
+<article class="event" style="--event:var(--blue)"><time>1 · 生成事实范围</time><h3>运行 <code>change-scope</code></h3><p><code>pnpm --silent run change-scope --base &lt;verified-base-ref&gt; --head &lt;verified-head-ref&gt;</code> 输出版本化 JSON：解析后的 base/head/merge-base，以及 committed、staged、unstaged、untracked 四组路径。</p></article>
+<article class="event" style="--event:var(--green)"><time>2 · 读取规则和设计</time><h3>加载适用的 AGENTS、上下文代码与 Agent Note</h3><p>评审者不只看 diff；还要读接口另一端、所有当前消费者、所属插件/服务、相关 README、测试和决定来源。Agent Note 是设计讨论的证据，不是不可质疑的否决票。</p></article>
+<article class="event" style="--event:var(--rose)"><time>3 · 先过硬阻塞项</time><h3>确认同一个 PR 没缺必要伴随物</h3><p>新 prose、代码对应文档、核心类型参考、注册清理、语义 invariant 与必要验证证据，是 skill 明列的 6 类 blocking requirements。</p></article>
+<article class="event" style="--event:var(--amber)"><time>4 · 做人工语义检查</time><h3>追行为，而不是数文件</h3><p>检查生命周期竞争、取消与 dispose、执行点是否真正强制、派生状态是否从真源更新、上限是否覆盖完整结果、测试是否走真实入口并真的能在回归时失败。</p></article>
+<article class="event" style="--event:var(--purple)"><time>5 · 输出最小而有证据的 findings</time><h3>缺陷、位置、影响、证据四件套</h3><p>局部问题贴最小 diff 行；跨切面设计问题放 PR 级评论；blocker 与 suggestion 分开；绿色门禁已经强制的问题不重复制造噪声。</p></article>
+</div>
+</section>
+<section>
+<h2>3 · <code>change-scope</code> 到底解决什么？</h2>
+<p class="lead">它解决的是“我正在审什么”的事实问题，不解决“这些改动对不对”的判断问题。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>它提供</th><th>为什么重要</th><th>它刻意不做</th></tr></thead>
+<tbody>
+<tr><td>输入 base/head 与解析 SHA</td><td>让错误 base 可见，避免 silently 审错范围</td><td>不猜 base、不 fetch、不查询 GitHub</td></tr>
+<tr><td>唯一 merge base</td><td>stacked branch 与普通分支使用同一事实模型</td><td>不决定 stack 策略</td></tr>
+<tr><td>committed paths</td><td>显示 merge-base 到 head 的提交改动</td><td>不解释路径背后的行为影响</td></tr>
+<tr><td>staged / unstaged / untracked</td><td>避免本地脏层漏出审查视野</td><td>即使 <code>--head</code> 指向其他 commit，也不把脏层伪装成该 commit</td></tr>
+<tr><td>严格 UTF-8、NUL 分隔路径</td><td>避免路径被错误合并或损失</td><td>遇到无效路径字节直接失败，不返回有损报告</td></tr>
+</tbody>
+</table></div>
+<div class="callout"><strong>关键限制：</strong>改了一个配置文件，可能影响动态 Loader、子进程、provider 和快照；路径列表无法推导这些语义关系。因此官方决定明确拒绝“根据 changed paths 自动选择所有必要测试”。</div>
+</section>
+<section>
+<h2>4 · 六条硬阻塞要求</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>#</th><th>阻塞条件</th><th>评审者必须证明</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><b>新增 prose 经过语义 review</b></td><td>Markdown、JSDoc、注释、prompt、description、diagnostic、UI 字符串内容正确、位置正确、覆盖完整；自动门禁不能证明语义质量。</td></tr>
+<tr><td>2</td><td><b>文档与代码一致</b></td><td>配置、默认值、错误、wire 字段、事件和公共行为，同 diff 更新所属 README 与 JSDoc；删除实现旁白、测试复述和重复 rationale。</td></tr>
+<tr><td>3</td><td><b>核心类型文档一致</b></td><td>主干或能力 seam 词汇变化同步更新所属 subsystem 页面与已有 <code>type-equiv</code>；内部类型无需强造 catalog 项。</td></tr>
+<tr><td>4</td><td><b>注册贡献能清理</b></td><td>每个新 registry contribution 都有 dispose/HMR 测试，销毁 fiber 后贡献确实消失。</td></tr>
+<tr><td>5</td><td><b>invariant 真正在查运行关系</b></td><td><code>./invariant</code> 应检查包能观察到的事件流或可变数据关系；不能拿服务存在、插件 metadata 或固定纯例子冒充 runtime invariant。没有合理关系时，带具体理由的空 installer 可以接受。</td></tr>
+<tr><td>6</td><td><b>必要证据存在</b></td><td>作者运行了与 diff 对应的窄本地检查，CI 覆盖穷举矩阵；review 继续查两者都无法发现的语义缺口。</td></tr>
+</tbody>
+</table></div>
+<p class="meta">逐条原文：<a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-code-review/SKILL.md#blocking-requirements" rel="noreferrer" target="_blank">Blocking requirements</a>。</p>
+</section>
+<section>
+<h2>5 · 十五类人工检查，可以压缩成六个问题</h2>
+<div class="flow">
+<article class="node" style="--accent:var(--blue)"><strong>接口真的闭合吗？</strong><small>追接口两端、错误、取消、所有权、dispose；确认通用 service 没被单一 consumer 污染，也没有为一个内部调用者扩张公共 API。</small></article>
+<article class="node" style="--accent:var(--rose)"><strong>生命周期会不会撒谎？</strong><small>异步 setup、回调、进程和 teardown 要查 publication 前 race、await 中取消、回调隔离、完全 detach 与 quiescent disposal。</small></article>
+<article class="node" style="--accent:var(--amber)"><strong>限制真的执行了吗？</strong><small>schema 隐藏、prompt 指示和 wrapper 都不是安全强制；必须追到实际执行操作，并测试可绕过的直接或替代调用路径。</small></article>
+<article class="node" style="--accent:var(--green)"><strong>状态来源唯一吗？</strong><small>分清 borrowed/owned 值；通知、cache、prompt、UI、replay 和 query view 必须从同一个成功提交点与权威来源派生。</small></article>
+<article class="node" style="--accent:var(--purple)"><strong>测试证明现实吗？</strong><small>走发布后的 Loader、bin、worker、ACP 或 subprocess；对外重读文件/事件/状态；加入能通过真实 runner 失败的 negative control。</small></article>
+<article class="node" style="--accent:var(--blue)"><strong>对模型和读者诚实吗？</strong><small>检查实际 prompt、tool schema、result、diagnostic 与 snapshot；implemented Note 写当前事实；双语内容人工核对意义与术语。</small></article>
+</div>
+<div class="quote"><span class="tag official">官方逐字</span><span class="en">“Coverage is necessary but not evidence that the scenario is correct.”</span><span class="zh">覆盖率是必要条件，但不能证明测试场景本身正确。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-code-review/SKILL.md#manual-checks" rel="noreferrer" target="_blank">dsh-code-review · Test strength</a></span></div>
+</section>
+<section>
+<h2>6 · 一个合成 PR 示例：新增 <code>maxOutputBytes</code></h2>
+<p class="lead"><span class="tag practice">实践补充</span>下面不是仓库真实 PR，而是用该 skill 的规则演示 review Agent 会怎样思考。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>只看 diff 可能得到</th><th><code>dsh-code-review</code> 会继续追问</th><th>可能形成的 blocker</th></tr></thead>
+<tbody>
+<tr><td>新增配置字段并在函数入口判断长度</td><td>完整返回值是否还会被 wrapper、metadata 或编码扩大？字节还是字符？</td><td>限制位置看不到最终 emitted result；多字节文本可绕过预算。</td></tr>
+<tr><td>tool schema 不再暴露超限操作</td><td>直接调用 executor 是否仍能执行？其他 caller 能否绕过 schema？</td><td>规则只在展示层，不在做决定的执行点强制。</td></tr>
+<tr><td>单元测试达到 100% coverage</td><td>测试是否验证 tiny/exact/oversized/multibyte？是否走真实 Loader/worker？</td><td>断言只是复述实现，回归经过发布入口时仍不会失败。</td></tr>
+<tr><td>新增 callback 在结束时通知</td><td>异常是否隔离？dispose 是否等待子进程完全停止？晚到通知是否泄漏？</td><td>teardown 只发送 kill 没 await done，留下遗留进程或晚到状态。</td></tr>
+<tr><td>README 写了新默认值</td><td>JSDoc、config catalog、diagnostic、Agent Note 和双语对侧是否一致？</td><td>代码、对外约定与长期决策记录互相矛盾。</td></tr>
+</tbody>
+</table></div>
+<div class="example">[blocker] Limit is enforced before the final wrapper is added
+
+Location: packages/.../src/result.ts:88
+Defect: maxOutputBytes measures payload only; the public result adds metadata afterward.
+Impact: callers can receive a value larger than the documented hard limit, and multibyte text is under-counted.
+Evidence: the executor's final serialization occurs at ...:126; existing tests cover ASCII below the limit only.</div>
+</section>
+<section>
+<h2>7 · 自动化与人工判断怎样分工？</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>层</th><th>负责什么</th><th>不负责什么</th></tr></thead>
+<tbody>
+<tr><td><span class="tag official">change-scope</span></td><td>确定 Git 拓扑、SHA 与四层路径集合</td><td>不选测试、不理解行为、不判断风险</td></tr>
+<tr><td><span class="tag official">hooks / CI</span></td><td>类型、lint、覆盖率、重复、包结构、文档链接与格式等机械承诺</td><td>不证明 prose 准确、设计归属合理、测试场景正确</td></tr>
+<tr><td><span class="tag practice">review Agent</span></td><td>读上下文、追接口和生命周期、验证 denial 与状态来源、判断证据强度</td><td>不应重复绿色门禁已经给出的低价值噪声</td></tr>
+<tr><td><span class="tag practice">人类维护者</span></td><td>裁决设计争议、产品取舍和风险接受</td><td>不需要手工复做每个可机械执行的门禁</td></tr>
+</tbody>
+</table></div>
+<div class="quote"><span class="tag official">官方逐字</span><span class="en">“Agents follow enforced gates far more reliably than prose conventions.”</span><span class="zh">Agent 遵守可执行门禁，比遵守纯文字约定可靠得多。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-06-11-quality-gates.md" rel="noreferrer" target="_blank">Mechanical quality gates over prose guidelines</a></span></div>
+</section>
+<section>
+<h2>8 · 它与其他 skills 的关系</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>对象</th><th>关系</th><th>是否由 review 自动完整执行</th></tr></thead>
+<tbody>
+<tr><td><code>dsh-prose-standard</code></td><td>所有新增或修改 prose 的语义审查标准</td><td><b>需要使用</b>，但 scope 限于本 PR prose</td></tr>
+<tr><td><code>dsh-pre-push-checks</code></td><td>作者侧选择并运行提交前证据；review 验证证据是否与 diff 匹配</td><td>不会把作者流程整套重跑</td></tr>
+<tr><td><code>dsh-doc-standards</code></td><td>文档位置、预算、结构、门禁与 slop audit</td><td>作为文档真源被引用，按 diff 需要使用</td></tr>
+<tr><td><code>dsh-translate-docs</code></td><td>扩展翻译工作流</td><td><b>不会</b>；只有用户明确调用才运行</td></tr>
+<tr><td>Agent Notes</td><td>提供 why、放弃方案与验证要求</td><td>读取相关记录；不同意见进入设计讨论，不自动 veto</td></tr>
+<tr><td>CI</td><td>穷举机械门禁和平台矩阵</td><td>review 使用结果，但继续检查 CI 无法检测的语义</td></tr>
+</tbody>
+</table></div>
+</section>
+<section>
+<h2>9 · 这套 review 的真正优点</h2>
+<div class="flow">
+<article class="node" style="--accent:var(--green)"><strong>把历史事故变成审查记忆</strong><small>并发、dispose、Loader 入口、callback 隔离、状态发布等不是抽象最佳实践，而是仓库沉淀的真实缺陷类别。</small></article>
+<article class="node" style="--accent:var(--blue)"><strong>减少“CI 绿所以没问题”</strong><small>它明确把覆盖率、配对 hash 和门禁定位为必要但不充分的证据，强迫评审者验证场景和外部现实。</small></article>
+<article class="node" style="--accent:var(--purple)"><strong>约束公共 API 膨胀</strong><small>同时检查 consumer 行为泄漏到 service，以及只有一个内部调用者却扩张通用 service 的反向问题。</small></article>
+<article class="node" style="--accent:var(--amber)"><strong>提高 findings 信噪比</strong><small>优先 correctness、lifecycle、security 和必需行为；允许只报告一个证据充分的 blocker，而不是堆积风格 nit。</small></article>
+<article class="node" style="--accent:var(--green)"><strong>让 review 可随仓库演化</strong><small>skill 是导航层，具体规则留在 AGENTS、测试文档、Agent Note 和 prose standard；真源更新后 review 会跟随。</small></article>
+<article class="node" style="--accent:var(--blue)"><strong>适合 Agent reviewer</strong><small>机械范围报告缩小搜索空间，明确的 defect/location/impact/evidence 输出约定降低模型生成泛泛意见的概率。</small></article>
+</div>
+<div class="quote"><span class="tag official">官方逐字</span><span class="en">“A short review with one substantiated blocker is better than a list of nits.”</span><span class="zh">一份只有一个证据充分 blocker 的短 review，也胜过一串琐碎意见。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-code-review/SKILL.md" rel="noreferrer" target="_blank">dsh-code-review</a></span></div>
+</section>
+<section>
+<h2>10 · 局限与成本</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>局限</th><th>实际影响</th><th>可怎样缓解</th></tr></thead>
+<tbody>
+<tr><td>认知负荷高</td><td>49 行 skill 会路由到多份长文档；陌生 reviewer 首次成本明显</td><td>按 change-scope 和触碰领域只读相关真源，不做全仓漫游</td></tr>
+<tr><td>依赖模型判断</td><td>它明确不是完整 checklist，不同 reviewer 深度可能不同</td><td>保持 blocker 清单机械明确，用真实 failure examples 持续校准</td></tr>
+<tr><td>没有自动停止条件</td><td>复杂 PR 可能无限追调用链</td><td>以 PR 意图、当前消费者和可观察行为为边界；额外重构另开任务</td></tr>
+<tr><td>base 必须人工核实</td><td>输入错仍可能审错范围，只是 SHA 会让错误可见</td><td>从 live PR metadata 获取 base/head，retarget/merge 后重跑</td></tr>
+<tr><td>高度仓库特化</td><td>seam、Cordis、Agent Note、snapshot tier 等规则不能原样搬到普通项目</td><td>复用结构而非术语：范围事实 → 硬阻塞 → 领域 bug 类 → 证据报告</td></tr>
+<tr><td>不会替代产品判断</td><td>Agent Note 与代码一致也可能是错误产品决定</td><td>把与 Note 的分歧升级为设计讨论，而非自动接受或自动否决</td></tr>
+</tbody>
+</table></div>
+</section>
+<section>
+<h2>11 · 如果搬到你自己的 AI Coding 工作流</h2>
+<p class="lead">最值得复制的不是 15 条 DeepSeek 专有检查，而是三层分工。</p>
+<div class="flow">
+<article class="node" style="--accent:var(--blue)"><strong>事实层</strong><small>固定 task/PR、base/head、变更文件、脏工作区和关联决定；不让 Agent 猜评审范围。</small></article>
+<article class="node" style="--accent:var(--green)"><strong>机械层</strong><small>能写成脚本的承诺全部门禁化；review 不重复 lint、类型和格式输出。</small></article>
+<article class="node" style="--accent:var(--purple)"><strong>语义层</strong><small>为你的项目维护 5–10 个真实 bug class：权限执行点、事务提交点、并发取消、真实入口、世界状态验证等。</small></article>
+</div>
+<div class="example">请审查 PR #123：
+1. 从 live PR metadata 核实 base/head，不使用缓存结论。
+2. 生成 committed/staged/unstaged/untracked 范围报告。
+3. 读取本 PR 涉及目录的 AGENTS、设计记录和公共契约。
+4. 先查必须伴随的 docs/tests/migrations，再追接口两端、生命周期、权限执行点和状态真源。
+5. 只报告可证实的问题；每条包含 defect、location、impact、evidence。
+6. 将 blocker 与 suggestion 分开，不复述绿色 CI 已强制的项目。</div>
+<div class="callout"><strong>与前文 Task-first 思路的衔接：</strong>Task Record 管“为什么要做、当前做到哪”；<code>dsh-code-review</code> 管“这次交付是否真的满足约定”。它应挂在 Task 的 Review 阶段，而不是代替 Task 状态记录。</div>
+</section>
+<section>
+<h2>12 · 证据强度与版本说明</h2>
+<div class="card" style="--accent:var(--green)">
+<span class="tag official">可直接确认</span>
+<p>当前 skill 有 7 组真源、6 条 blocking requirements、15 类 manual checks；首段要求核实 live base/head 并运行 <code>change-scope</code>；报告格式要求 defect、location、impact、evidence。</p>
+</div>
+<div class="card" style="--accent:var(--blue)">
+<span class="tag practice">历史归纳</span>
+<p>本地完整 Git 历史显示该文件自 2026-06-13 创建后约有 40 次相关提交，持续吸收 prose、invariant、change-scope、Agent Note 和 subsystem 规则。提交次数是 Git 历史统计，不是仓库文档的自我声明。查看：<a href="https://github.com/deepseek-ai/deepseek-harness/commits/master/.agents/skills/dsh-code-review/SKILL.md" rel="noreferrer" target="_blank">文件提交历史</a>。</p>
+</div>
+<div class="card" style="--accent:var(--rose)">
+<span class="tag missing">不能确认</span>
+<p>公开仓库没有每一次内部 review 的完整会话，因此无法统计该 skill 实际抓住多少缺陷、由哪个模型执行、是否每次都被自动加载，或人类如何裁决每一条建议。</p>
+</div>
+</section>
+<section>
+<h2>主要来源</h2>
+<ul class="sources">
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-code-review/SKILL.md" rel="noreferrer" target="_blank">dsh-code-review / SKILL.md</a>：触发、真源、硬阻塞、15 类人工检查与 findings 规则。</li>
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-07-27-explicit-change-scope-report.md" rel="noreferrer" target="_blank">Explicit change-scope report</a>：为何必须显式 base/head，以及报告做与不做什么。</li>
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/AGENTS.md" rel="noreferrer" target="_blank">Root AGENTS.md</a> 与 <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/AGENTS.md" rel="noreferrer" target="_blank">packages/AGENTS.md</a>：仓库和包级约定。</li>
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/defensive-patterns.md" rel="noreferrer" target="_blank">Defensive patterns</a>：并发、回调、子进程与 dispose 缺陷类别。</li>
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/testing.md" rel="noreferrer" target="_blank">Testing policy</a>：测试层级、真实入口、世界状态验证与 snapshot 要求。</li>
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/skills/dsh-prose-standard/SKILL.md" rel="noreferrer" target="_blank">dsh-prose-standard</a>：prose 覆盖与语义判断。</li>
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" rel="noreferrer" target="_blank">Agent Notes</a>：决定记录与生命周期。</li>
+<li><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/implemented/process/2026-06-11-quality-gates.md" rel="noreferrer" target="_blank">Mechanical quality gates</a>：自动门禁与人工 review 的分工依据。</li>
+</ul>
+</section>
+<div class="closing"><b>最终判断：</b><code>dsh-code-review</code> 的价值不在“多列一些检查项”，而在把 review 从 diff 表面带到真实执行语义：先固定范围，再让机器挡住机械错误，最后让 Agent 只报告对 correctness、lifecycle、security 和必需行为真正有影响的缺陷。</div></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-08-17/dsh-find-simplifications.html"><small>上一篇</small>DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications</a><a href="/2026-08-15/deepseek-harness-codex-workflow.html"><small>下一篇</small>DeepSeek Harness · Codex AI Coding 工作流证据分析</a></nav></main>
+<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js" defer></script></body></html>

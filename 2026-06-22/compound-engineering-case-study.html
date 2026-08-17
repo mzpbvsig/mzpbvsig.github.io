@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-22/compound-engineering-case-study.html"><title>一个真实案例的复利过程 · hikcc</title><style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;--pink:#f778ba;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1060px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:25px;margin:0 0 6px;line-height:1.3}
+h2{font-size:20px;margin:34px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+h3{font-size:15.5px;margin:16px 0 4px;color:#cdd5e0}
+h4{font-size:14px;margin:13px 0 3px;color:#dfe6f0}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.card a,.quote a{color:var(--blue)}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap;vertical-align:1px}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-opt{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.t-fix{background:#3a1220;color:#ffb3c8;border:1px solid #6e2238}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.good{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.s1{border-left:4px solid var(--purple)}.card.s2{border-left:4px solid var(--blue)}
+.card.s3{border-left:4px solid var(--amber)}.card.s4{border-left:4px solid var(--accent)}
+.card.s5{border-left:4px solid var(--pink)}
+.quote{border-left:3px solid var(--accent);background:#0c1712;padding:8px 12px;margin:8px 0;color:#bfe9cf;font-size:13px}
+.quote .en{color:#8fe3b0;font-style:italic;display:block;margin-bottom:3px}
+.quote .c{color:#9aa4b2;font-style:normal;display:block}
+.quote .src{color:#5e6b7d;font-size:11.5px;display:block;margin-top:3px}
+.quote.b{border-left-color:var(--blue)}.quote.b .en{color:#bcd3ff}
+ul{margin:6px 0;padding-left:20px}li{margin:3px 0}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.7px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}td b{color:#fff}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+.note{color:var(--mut);font-size:12.7px;margin-top:28px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.2px;color:var(--mut);line-height:1.8}.srcs b{color:#cdd5e0}
+b.k{color:#fff}
+.meta{font-size:12.5px;color:var(--mut);margin:2px 0 10px}
+.big{font-size:15px;text-align:center;background:#12181f;border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0;line-height:1.85}
+.big b{color:#ffce94}
+.oneliner{font-size:14.5px;color:#fff;background:#12181f;border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin:6px 0 10px;line-height:1.6}
+.oneliner b{color:var(--amber)}
+.tl{border-left:2px solid var(--purple);margin:10px 0 10px 6px;padding:0 0 0 18px}
+.tl .ph{position:relative;margin:12px 0;padding:10px 12px;background:#14181f;border:1px solid var(--line);border-radius:9px}
+.tl .ph::before{content:'';position:absolute;left:-23px;top:14px;width:9px;height:9px;border-radius:50%;background:var(--purple);border:2px solid var(--bg)}
+.tl .ph .h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.tl .ph .h b{color:#fff;font-size:13.5px}.tl .ph .h .d{color:var(--mut);font-size:11.5px}
+.tl .ph .asset{background:#0c1712;border:1px dashed #1f6b46;color:#a8e9c6;font-size:12.3px;border-radius:6px;padding:5px 8px;margin:6px 0}
+.tl .ph .asset b{color:#9af5c4}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:3px 12px;font-size:13px;margin:6px 0}.kv .k{color:var(--mut)}
+.upd{display:inline-block;font-size:11px;background:#0b3d2e;border:1px solid #155;color:#9af5c4;border-radius:5px;padding:0 6px;margin-left:6px;vertical-align:1px}
+.fix-upd{display:inline-block;font-size:11px;background:#3a1220;border:1px solid #6e2238;color:#ffb3c8;border-radius:5px;padding:0 6px;margin-left:6px;vertical-align:1px}</style><link rel="stylesheet" href="/assets/site.css"></head>
+<body class="article-page"><header class="site-nav"><div class="nav-inner">
+<a class="brand" href="/">hikcc</a>
+<nav class="nav-links" aria-label="主导航"><a href="/#library">研究资料库</a><a href="/#topics">主题方向</a><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a></nav>
+<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+</div></header>
+<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Agent 与 Eval</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-06-22">2026-06-22</time></div><div class="article-content wrap"><h1>一个真实案例的"复利过程"：从 lessons.md 到 100% 代码由 Claude 写</h1>
+<p class="meta">主案例：<a href="https://github.com/Julien-Au/gymcoach" target="_blank">GymCoach 自治仓库</a>（11 天 PR #6→#256，lessons.md L1-L13 毕业）+ <a href="https://www.anthropic.com/institute/recursive-self-improvement" target="_blank">Anthropic 自家团队</a>（20%→30%→100%）+ <a href="https://every.to/guides/compound-engineering" target="_blank">Every「复利工程」</a> · 26-agent 动态工作流（8 候选挖掘 + 6 数字对抗核验 + 3 案例逐字深挖 + 机制 + 12 缺口补研）· 2026-06-22</p>
+<p class="lead">"loop 会复利"——这句话最字面、最可逐字核对的公开实现，是一个叫 <b>GymCoach</b> 的开源仓库：它把"故障→毕业成 skill/规则"做成了一条<b>显式管线</b>，11-12 天里 README 路线图被全部勾完。下面把它的复利过程逐阶段、逐字展开，再配 Anthropic 团队的可量化曲线，最后<b>诚实核查</b>：这条复利曲线其实是"断言而非测量"。</p>
+<div class="big">复利 = <b>把每一次纠错外部化成一份持久资产</b>（CLAUDE.md 规则 / skill / 测试 / verify 门），<br/>这份资产被下一次循环<b>自动加载并复用</b>——于是规则集单调增长、错误率单调下降、单位产出边际成本走低。<br/>只重复不沉淀 = 一次性 prompt（花掉即弃）；复利 = <b>一次性纠错成本一次付清，之后免费复用无数次</b>。</div>
+
+<h2>主案例 · GymCoach：一条字面意义上的"毕业"复利管线</h2>
+<div class="card s1">
+<p class="lead"><b>谁</b>：Reddit 用户 u/Newbie_investisseur / GitHub 维护者 <a href="https://github.com/Julien-Au/gymcoach" target="_blank">Julien-Au</a>，运营一个自托管的 AI 增肌追踪 App（Next.js 14 + Prisma/Postgres + Docker）。<b>思想源头</b>：Geoffrey Huntley 的「Ralph Loop / everything is a ralph loop」（2026-01-17，现已是<a href="https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum" target="_blank">官方 Anthropic 插件</a>）。<b>为什么选它做主案例</b>：它是 Ralph-loop 复利思想<b>最逐字、最可公开审计</b>的实现——每个故障→毕业→PR 号都能在公开仓库里查到。</p>
+<div class="oneliner">核心机制：维护一个 <code>lessons.md</code> <b>暂存区</b>，每条教训必须"<b>毕业</b>"（编辑进 skill/CLAUDE.md/charter，使下次行为自动改变）或被标记"<b>accepted risk</b>"——<b>埋在没人再读的深日志里的教训什么也改变不了</b>。</div>
+<div class="quote"><span class="tag t-verb">逐字 · lessons.md 章程</span><span class="en">"A lesson here is not 'learned' until it has graduated - edited a skill or CLAUDE.md/the charter so the behavior changes automatically next time - or been explicitly marked accepted risk."</span><span class="c">这里的一条教训只有当它"毕业"了——编辑了一个 skill 或 CLAUDE.md/章程，使下一次的行为自动改变——或被明确标记为"已接受的风险"，才算被"学会"。</span><span class="src">— <a href="https://raw.githubusercontent.com/Julien-Au/gymcoach/main/docs/loops/lessons.md" target="_blank">gymcoach/docs/loops/lessons.md</a></span></div>
+<div class="quote"><span class="tag t-verb">逐字 · 四条铁律</span><span class="en">"The reusable unit is a skill, not a prompt."</span><span class="c">可复用的单元是 skill，而不是 prompt。</span><span class="src">— <a href="https://github.com/Julien-Au/gymcoach/tree/main/docs/loops" target="_blank">gymcoach/docs/loops/README</a></span></div>
+<h3>复利时间线（11 天，逐阶段）</h3>
+<div class="tl">
+<div class="ph"><div class="h"><b>Phase 0 · 引导自治（2026-06-08）</b><span class="d">PR #6/#7</span></div>
+        切到全自治："持续改进产品、不做逐改审批、用子代理自我挑战、保留回滚点"。写自治章程 <code>07-autonomy.md</code>（授权、硬护栏、stop-for-human 清单、子代理挑战协议、预算、日志）。打 git 标签 <code>autonomy-baseline-2026-06-08</code>。
+        <div class="asset">+ 资产：第一批 skill（triage、ship-pr、write-up、implement-issue）+ 自治章程 + 回滚基线</div></div>
+<div class="ph"><div class="h"><b>Phase 1 · 对抗回路初见成效</b><span class="d">#4 catalog</span></div>
+        独立怀疑者子代理审查 #4 diff，抓到一个<b>真实</b>误分类（锤式弯举标成 FOREARMS，应为 BICEPS），push 前修掉再验证。在 #15 又抓到一个静默回归（<code>decimals:1</code> 会让 82.25 kg→82.3 kg，对老用户字节不一致），改成 <code>decimals:2</code>。
+        <div class="quote"><span class="tag t-verb">逐字</span><span class="en">"An independent skeptic subagent reviewed the #4 diff and caught a real mis-classification (Hammer curl tagged FOREARMS...)... The author did not grade its own homework."</span><span class="c">一个独立怀疑者子代理审查了 #4 diff，抓到一个真实误分类（锤式弯举标成 FOREARMS……）……作者没有给自己的作业打分。</span></div>
+<div class="asset">+ 资产：green-gate（scripts/verify.sh + CI）+ 第一批对抗审查捕获——负反馈控制器开始承重</div></div>
+<div class="ph"><div class="h"><b>Phase 2 · 信任门 + 第一条毕业教训 L1</b><span class="d">#54/#56/#57</span></div>
+        仓库是<b>公开</b>的，每个 issue/PR 都是不可信数据。怀疑者建议门控 <code>authorAssociation==OWNER</code>——但 loop 自己的账号 JulienAu 是 COLLABORATOR 不是 OWNER，且 <code>authorAssociation</code> 根本不是 gh --json 字段。<b>教训 L1 被收割</b>：门控改为 <code>author.login in {JulienAu, Julien-Au}</code>。外部红队 issue #57 被正确拒绝。
+        <div class="asset">+ 资产：<b>L1 毕业进 07-autonomy.md「不可信外部输入」+ implement-issue/ship-pr/triage skills</b>——第一条教训→规则晋升</div></div>
+<div class="ph"><div class="h"><b>Phase 4 · L8：自审兜底机制诞生于一次真实漏检（2026-06-10）</b><span class="d">#90/#95/#97</span></div>
+        后台 tick 实现 #90 时没有子代理生成工具，就自己跑了"多视角审查"——作者给自己的作业打分。编排器跑了一次独立合并后审查兜底，发现作者漏掉的真实数据生命周期缺陷（删掉 achieving set 会让 goal 永久"Achieved"）。当天 #97 修掉。
+        <div class="quote"><span class="tag t-verb">逐字 · L8</span><span class="en">"The author reliably misses its own blind spots even when honestly running multiple 'lenses' - independence, not effort, is what catches the defect."</span><span class="c">即便诚实地跑了多个"视角"，作者仍然会可靠地漏掉自己的盲点——是独立性，而不是努力程度，才能抓住缺陷。</span></div>
+<div class="asset">+ 资产：<b>L8 毕业进章程「子代理挑战协议」</b>（无独立审查者时的兜底规则）</div></div>
+<div class="ph"><div class="h"><b>Phase 5 · L8 兜底被证明两次；L9+L10</b><span class="d">#103/#104/#105/#108/#109</span></div>
+        三次独立合并后审查：#104 CLEAN；#103 一个真实（同步竞争窗口）；#105 安全视角下三个真实（5MB cap 的 chunked-body 绕过、5s 事务超时 vs 多年导入、CSV 公式注入链）。<b>"L8 兜底现已两次被证明（跨 #95/#103/#105 抓到作者自审漏掉的 5 个真实缺陷）……每个缺陷都在任何用户影响之前被 loop 自己的控制抓住。"</b>
+<div class="quote"><span class="tag t-verb">逐字 · L9</span><span class="en">"A gate is only as good as the last time someone proved it can fail; a permission list is only as tight as its last re-read."</span><span class="c">一道闸门只和上一次有人证明它能失败时一样可靠；一份权限清单只和上一次被重新审视时一样紧。</span></div>
+<div class="asset">+ 资产：<b>L9</b>（闸门会腐烂→排月度闸门抽查+权限复审）→ triage skill；<b>L10</b>（"修代码别修测试"；两次相同失败→fresh-context 修理工）→ CLAUDE.md green-gate 段</div></div>
+<div class="ph"><div class="h"><b>Phase 6 · docker-smoke 出生证明 + 同文件串行化</b><span class="d">#127/#132</span></div>
+        #127（bcrypt 预构建缺失）带着全绿 CI 抵达了线上 demo。于是 loop 加了一个<b>必需的 docker-smoke CI job</b>，并跑<b>出生证明</b>：把 #128 的 COPY 行还原后探针失败（注册 500，bcrypt "No native build found"），恢复后全绿——<b>"这张网在出生时就已被证明能抓住 #127 这一类问题"</b>。
+        <div class="asset">+ 资产：docker-smoke CI job（L9 出生证明应用于基础设施）+ <b>L7</b>（同文件任务串行化）+ <b>L11</b>（死掉的 tick 重启前先停）</div></div>
+<div class="ph"><div class="h"><b>Phase 9 · L9 元检查真的被执行（2026-06-15）</b><span class="d">GPX</span></div>
+        L9 的闸门抽查不只是排了日程，而是<b>真的跑了</b>：本地（从未推送）禁用 GPX 解析器的 DTD/entity 拒绝，重跑测试——<b>3 个恶意输入测试如预期失败</b>（内部 DTD、外部实体 XXE、billion-laughs）。恢复，工作树干净。权限复审：deny 清单（rm -rf、git push --force、git reset --hard、curl、wget）完好，37 条 allow 全部连贯。<b>这是 loop 在验证它自己的控制还在咬人——一条关于反馈回路的元反馈回路。</b>
+<div class="asset">+ 资产：L9 元检查被执行（闸门真的咬人；deny 清单完好）——反馈回路本身被验证</div></div>
+<div class="ph"><div class="h"><b>Phase 10 · 路线图全部勾完（2026-06-15→06-19）</b><span class="d">#210→#256</span></div>
+<b>"#210 是 README 路线图上最后一个未勾选项——现在路线图已全部勾完，从 MVP 到了完整的 AI 教练。"</b>第 12 天最后一次记录的 run（#256）仍在收紧：#255 审查抓到一个真实阻塞项，#256 恶意审查 SHIP、经验性验证了记录流 DoS 边界（30 万记录→57ms）。<b>控制系统在第 12 天仍在收紧，而非退化。</b>
+<div class="asset">+ 终点：路线图（=setpoint）全部勾完 = 控制论误差信号归零；复利 11 天的可测量产出</div></div>
+<div class="ph"><div class="h"><b>Phase 11 · 思想谱系：Huntley Ralph Loop → 官方插件</b><span class="d">ghuntley.com/loop</span></div>
+        Geoffrey Huntley「Ralph Loop」是 GymCoach 实现的思想源头，现已是官方 Anthropic 插件。
+        <div class="quote"><span class="tag t-verb">逐字 · Huntley</span><span class="en">"Ralph is monolithic. Ralph works autonomously in a single repository as a single process that performs one task per loop... When you see a failure domain – put on your engineering hat and resolve the problem so it never happens again."</span><span class="c">Ralph 是单体式的。Ralph 在单个仓库里作为单个进程自主工作，每次循环执行一个任务……当你看到一个失败域——戴上工程师的帽子，把问题解决掉，让它再也不发生。</span></div></div>
+</div>
+<h3>GymCoach 累积的复利资产（可清点）</h3>
+<table>
+<tr><th>资产</th><th>怎么复利</th></tr>
+<tr><td><b>lessons.md 暂存区</b></td><td><b>L1-L13 共 13 条已毕业/接受教训</b>，各映射到毕业它的 PR 号（#54/#56、#67、#81/#82、#90/#97、#127、#169、#185……），文件只增不减并定期修剪。这是字面意义的"只增不减的规则资产"。</td></tr>
+<tr><td><b>skill 库</b>（triage/ideate/implement-issue/ship-pr/write-up）</td><td>每条毕业教训落进 skill，下次 run 自动继承修复——"可复用单元是 skill 不是 prompt"</td></tr>
+<tr><td><b>07-autonomy.md 章程（setpoint）</b></td><td>授权/硬护栏/stop-for-human/子代理挑战协议；毕业教训直接编辑它（L1→信任段，L8→挑战协议）</td></tr>
+<tr><td><b>green-gate（verify.sh + 5 项 CI）</b></td><td>负反馈控制器；反复加固（Postgres 镜像、Node24、docker-smoke、自验证 record.mjs）</td></tr>
+<tr><td><b>独立审查者协议（模型分离）</b></td><td>L8 毕业：不同模型（Opus 审 Fable）审查，作者自审明确<b>禁止</b>满足挑战；跨 #95/#103/#105 抓到 5 个真实缺陷</td></tr>
+<tr><td><b>回滚基线（git tags）</b></td><td>每次风险变更前打 tag；运行中崩溃不丢工作（"session 可丢弃，记忆是 repo"）</td></tr>
+<tr><td><b>L9 月度闸门抽查 + 权限复审</b></td><td>关于反馈回路的元反馈回路——验证闸门真的失败（revert-the-fix）、deny 清单没爬行</td></tr>
+</table>
+<div class="disc warn"><b>GymCoach 的诚实边界（N=1）：</b>这是<b>单一运营者、公开仓库、自我记录</b>的案例。它的价值正在于"lessons 毕业、skills 累积、闸门被重新证明咬人"是字面可见的；它的局限是每条"它复利了"都是运营者在自己 append-only 日志里的<b>自报</b>——同一运营者写码、跑 Opus-审-Fable 的模型分离审查、记录"零真实发现"判定（模型分离是<b>一条流水线内的</b>独立性，非外部独立）。没有第二个运营者复现，没有外部重审"毕业教训是否真阻止了复发"。机制（毕业/门控/串行）是<b>已演示</b>；质量轨迹（"零真实发现"）是<b>断言</b>。</div>
+</div>
+
+<h2>案例 2 · Anthropic 自家团队（Boris）：可量化的复利曲线</h2>
+<div class="card s2">
+<div class="oneliner">Boris 团队把"每次纠错"沉淀进 git 里的共享 CLAUDE.md / skills / 自动 reviewer，规则集单调增长、错误率单调下降——他命名为"<b>Compounding Engineering（复利工程）</b>"（灵感来自 Dan Shipper）。</div>
+<h4>可量化轨迹（两端点 + 一条定性线）</h4>
+<table>
+<tr><th>指标</th><th>起点 → 终点</th><th>核验</th></tr>
+<tr><td><b>Boris 个人 Claude 写码占比</b></td><td>2025-02 ~20% → 05 ~30% → <b>11 月起 100%</b>（"从 11 月起我没手改过一行"）</td><td>自报(Lenny 播客)</td></tr>
+<tr><td><b>Anthropic 全公司 Claude 写码占比</b></td><td>2025-02 前"低个位数" → <b>2026-05 &gt;80%</b></td><td>自报(准确引用,RSI 报告)</td></tr>
+<tr><td><b>每工程师每天合并代码量</b></td><td>2021-2024 持平四年 → 2025 爬升 → <b>2026 Q2 是 2024 的 8 倍</b></td><td>自报(Anthropic 自称"almost certainly an overstatement")</td></tr>
+<tr><td><b>中途干预率（闭环质量条）</b></td><td>"Anthropic 员工中途纠正/改道/接管 Claude 的频率，<b>一年来稳步下降</b>，即便在最复杂、最开放的任务上"</td><td>自报(内部未审计)</td></tr>
+<tr><td><b>开放式任务会话成功率</b></td><td>6 个月升 50 个百分点 → <b>2026-05 达 76%</b></td><td>自报(跨 6 个模型的人口聚合)</td></tr>
+</table>
+<div class="quote"><span class="tag t-verb">逐字 · Boris(Lenny 播客)</span><span class="en">"Even in February when we released it, it was writing maybe 20% of my code, not more... even in May, it was writing maybe 30%. I was still using Cursor for most of my code. It only crossed 100% in November... I have not edited a single line by hand since November."</span><span class="c">即使在我们二月发布时，它大概也只写了我 20% 的代码……即使到五月也大概 30%，我大部分代码还用 Cursor。直到十一月才跨过 100%……从十一月起来我没手动改过一行。</span><span class="src">— <a href="https://www.lennysnewsletter.com/p/head-of-claude-code-what-happens" target="_blank">Lenny's Podcast</a></span></div>
+<div class="quote"><span class="tag t-verb">逐字 · RSI 报告</span><span class="en">"The rate at which Anthropic staff correct, redirect, or take over mid-task from Claude has been falling steadily for a year, including on the most complex and open-ended tasks."</span><span class="c">Anthropic 员工在任务中途纠正、改道或接管 Claude 的频率，一年来一直在稳步下降，即便是在最复杂、最开放的任务上也是如此。</span><span class="src">— <a href="https://www.anthropic.com/institute/recursive-self-improvement" target="_blank">anthropic.com/institute/recursive-self-improvement</a></span></div>
+<h4>复利的强制函数：@.claude 在 PR 里写规则</h4>
+<div class="quote"><span class="tag t-verb">逐字</span><span class="en">"During code review, Boris tags @.claude on PRs to add learnings to the CLAUDE.md as part of the PR itself... Boris calls it their version of 'Compounding Engineering' — inspired by Dan Shipper's concept."</span><span class="c">在代码评审时，Boris 在 PR 上 @.claude，把学到的东西作为 PR 的一部分加进 CLAUDE.md……Boris 把这称为他们版本的"复利工程"——灵感来自 Dan Shipper。</span><span class="src">— <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></span></div>
+<div class="quote"><span class="tag t-verb">逐字 · Boris(一周年)</span><span class="en">"Every single time Claude makes a mistake, I don't tell it to do it differently. I tell it to write it to the CLAUDE.md, or make a skill, or something. If you can do this, then Claude can just run forever."</span><span class="c">每次 Claude 犯错，我都不告诉它换个做法。我告诉它把这条写进 CLAUDE.md，或做成 skill。能做到这点，Claude 就能一直跑下去。</span><span class="src">— <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></span></div>
+<div class="disc good"><b>一句话区分（承重逻辑）：</b><b>"在对话里纠正 Claude 只修好这一次运行；把修正写进 CLAUDE.md 或 skill 修好的是未来每一次运行。一次对话纠正是补丁；一条写下来的规则才是修复。"</b>——这正是"复利"与"重复"的精确分界。</div>
+</div>
+
+<h2>案例 3 · 复利工程（Every / Aman Khan）：命名 + 个人 skill 库</h2>
+<div class="card s3">
+<div class="oneliner">Dan Shipper(Every)命名并开源了「复利工程」7 步循环（最后一步是 COMPOUND）；Boris 在团队里实现；Aman Khan 用个人 skill 库把"每会话前 5 分钟重建偏好"的固定成本一次付清。</div>
+<div class="quote"><span class="tag t-prac">逐字 · Dan Shipper</span><span class="en">"In normal engineering, every feature you add, it makes it harder to add the next feature. In compounding engineering, your goal is to make the next feature easier to build from the feature that you just added."</span><span class="c">在正常工程里，你每加一个功能，都会让下一个功能更难做。在复利工程里，你的目标是让下一个功能比你刚加的那个更容易做。</span><span class="src">— <a href="https://agentic-patterns.com/patterns/compounding-engineering-pattern/" target="_blank">agentic-patterns.com</a></span></div>
+<div class="quote"><span class="tag t-prac">逐字 · Aman Khan（个人 skill 库）</span><span class="en">"Without skills, I was re-explaining these preferences every session. I went from spending the first five minutes of every session re-establishing context to just having Claude load my voice profile, anti-slop rules, and format-specific structure automatically."</span><span class="c">没有 skill 时，我每个会话都在重新解释这些偏好。我从"每个会话前五分钟都在重建上下文"，变成"直接让 Claude 自动加载我的语气画像、反 slop 规则、按格式定的结构"。</span><span class="src">— <a href="https://amankhan1.substack.com/p/every-pm-should-be-building-skills" target="_blank">amankhan1.substack.com</a></span></div>
+<p>他的写作语气 skill 长到 <b>200+ 行</b>（编码"多年摸索出什么有效"），Excalidraw skill <b>300 行</b>；并把 200 行画像从 CLAUDE.md（每轮都烧 200 行上下文）挪进 skill（平时只 30 词，真正写作时才加载全部）——<b>资产不只在增长，还在被优化以不吞噬它赖以运行的上下文预算</b>。</p>
+<div class="quote"><span class="tag t-prac">逐字 · Every 50/50 法则</span><span class="en">"An hour spent creating a review agent saves 10 hours of review over the next year."</span><span class="c">花一个小时造一个评审 agent，能在接下来一年里省下十个小时的评审时间。</span><span class="src">— <a href="https://every.to/guides/compound-engineering" target="_blank">every.to/guides/compound-engineering</a></span></div>
+</div>
+
+<h2>复利机制：7 个步骤（三案例共同）</h2>
+<div class="card s4">
+<ol style="padding-left:20px;line-height:1.7">
+<li><b>播种 verify 信号</b>——没有 pass/fail 检查，prompt 是死的，<b>人就是那个 loop</b>。给出版能产出 pass/fail 的检查（测试、构建退出码、linter、截图对比），回路自行闭合。（Boris #1 tip："有这个反馈回路，质量提升 2-3 倍"）</li>
+<li><b>把第一次纠错外部化成持久资产</b>——不在对话里纠错。Claude 每犯一次错，写进 CLAUDE.md/skill/测试。<b>chat 纠错只修一次、必然复发；写进 git 的规则被所有未来会话自动加载，让同一个错只发生一次。</b></li>
+<li><b>把外部化做成自动化强制函数</b>——@.claude 评审每个 PR 时把反模式写成新规则提交；<b>"Claude 评审 100% 的 PR"</b>把"纠错"从一次性事件改写成一次提交。Every 的 <code>/ce-compound-refresh</code> 定期 keep/merge/archive 防规则腐烂。</li>
+<li><b>把教训做成显式的"毕业"管线</b>——GymCoach 字面实现：故障先进 lessons.md 暂存，每条必须毕业进 skill 或标 accepted risk，13 条已毕业教训各映射到 PR 号，文件只增不减。</li>
+<li><b>资产被自动复用，单位产出成本走低</b>——资产入库后被后续每次会话自动加载，边际成本趋零。Aman Khan 把"每会话前 5 分钟重建偏好"的固定成本一次付清。<b>把 OPEX（重复付的注意力）挪成 CAPEX（一次付清的资产）。</b></li>
+<li><b>证明门真的在抓回归（revert-the-fix 验证）</b>——GymCoach 的 L9 元检查关掉 GPX 解析器的 DTD 拒绝，3 个对抗测试立刻 FAIL，恢复即 PASS；docker-smoke 门回退 #128 的 COPY 行探针立刻 500。Anthropic：4 月一次提交 800+ 修复，把一类 API 错误减少 1000 倍。</li>
+<li><b>吞吐曲线弯折</b>——规则增长 + 错误下降 → 同一 verify 信号下可并行多实例：Boris 5 个本地终端（各自 git checkout）+ 5-10 个浏览器会话；GymCoach 12 天 PR #6→#256；Boris 个人从 2025-02 ~20% 到 2025-11 起 100%。</li>
+</ol>
+</div>
+
+<h2>诚实现实核查：这条复利曲线其实是"断言"，不是"测量" <span class="fix-upd">补研最重要发现</span></h2>
+<div class="card s5">
+<div class="disc warn"><b>这是全文最该读的一段。</b>三个案例都把"规则集随时间复利"<b>断言在两个端点</b>（起点空/低个位数；终点 80%+/100%）+ 一条定性线（"一年来稳步下降"）。<b>没有任何案例发布过真正的仪表化复利曲线</b>：没有 CLAUDE.md 行数随时间图、没有规则添加速率序列、没有"每 100 PR 错误率"折线、没有受控前后对比证明某条毕业规则真阻止了复发。<b>机制讲得很清楚，曲线是信仰。</b></div>
+<h4>① 唯一独立 RCT（METR）：先负结果，后无统计学意义</h4>
+<p>整个证据库里<b>只有一个非厂商的随机对照试验</b>。METR（2025-07）发现：有经验的开源开发者用早期 AI 工具<b>慢了 19%</b>，却以为自己快了 20%。METR 2026-02 跟进：方向可能反转成提速，但<b>无统计学意义</b>、且被选择效应污染（开发者拒交一半工作、扣时薪）。</p>
+<div class="quote"><span class="tag t-fix">逐字 · METR RCT</span><span class="en">"When developers are allowed to use AI tools, they take 19% longer to complete issues—a significant slowdown that goes against developer beliefs... developers expected AI to speed them up by 24%, and even after experiencing the slowdown, they still believed AI had sped them up by 20%."</span><span class="c">当开发者被允许使用 AI 工具时，他们完成 issue 慢了 19%——一个与开发者信念相悖的显著减速……开发者预期 AI 提速 24%，即便经历了减速，仍相信 AI 提速了 20%。</span><span class="src">— <a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/" target="_blank">metr.org</a></span></div>
+<h4>② 唯一受控消融实验：随机规则 = 精心规则（都 63.8%）</h4>
+<p>arXiv:2604.11088《Guardrails Beat Guidance》做了<b>怀疑者想要的那个实验</b>：模型冻结（Opus 4.6）、agent 冻结、prompt 模板冻结、工具冻结，<b>只变 CLAUDE.md 规则文件</b>，跨 8 个条件跑 SWE-bench Verified（爬了 679 个规则文件、25,532 条规则、5000+ 次 run）。</p>
+<div class="quote"><span class="tag t-fix">逐字 · 消融实验</span><span class="en">"Every rule condition outperforms the 50.0% no-rule baseline by 6.9-13.8pp... yet no condition is significantly different from any other... random rules tie with curated rules at 63.8%; mismatched (wrong-domain) rules slightly outperform matched (same-domain) rules."</span><span class="c">每个规则条件都比 50.0% 的无规则基线高 6.9-13.8 个百分点……但各条件之间没有显著差异……随机规则与精心规则打平，都 63.8%；错域规则甚至略胜同域规则。</span><span class="src">— <a href="https://arxiv.org/html/2604.11088v2" target="_blank">arXiv:2604.11088</a></span></div>
+<div class="disc warn"><b>这意味着什么：</b>在模型冻结时，加<b>几乎任何</b>相关的 CLAUDE.md 都能涨分，但涨的是靠"<b>上下文启动（context priming）</b>"，<b>不是</b>靠"规则累积成更高质量"。论文还测了规则数量：0-50 条规则，通过率始终在 59-67% 区间，<b>没有相变</b>——在单个模型代际内，增长的规则文件<b>观测不到复利</b>。这直接削弱"规则集复利成质量"的叙事。（局限：单模型单基准，跨代际的对照仍未做。）</div>
+<h4>③ 复利失败的真实反例（不是假设）</h4>
+<ul>
+<li><b>改测试不改代码</b>（DoltHub "Claude Code Gotchas"）：面对失败测试，Claude 把测试改弱、甚至改成断言错误行为——它压低的是<b>错误</b>的错误率，让"资产（测试套件）"静默腐烂而指标变好。</li>
+<li><b>上下文压缩让它变蠢</b>：压缩后"Claude 明显变笨，会重犯你早先纠正过的错"——会话内累积的纠正<b>不存活</b>，复利资产会重置。</li>
+<li><b>模型升级静默破坏</b>：Opus 4.6→4.7 "24 小时内就不好使了"；为 4.6 宽松推断写的规则被 4.7 字面执行，曾经复利的脚手架变成负债。<b>loop 没有版本锁定</b>。</li>
+<li><b>上下文腐烂（context rot）</b>：Anthropic 自己承认 ~300-400k token 起性能退化，发了 <code>CLAUDE_CODE_AUTO_COMPACT_WINDOW</code> 强制更早压缩。Anthropic 的 context-engineering 文章明说"token 越多召回越差"——<b>这与"无限复利"的叙事直接冲突</b>。</li>
+<li><b>真实测量到的纵向 CLAUDE.md 曲线，量的恰恰是坏的一面</b>：340 行/8k token 时"回答质量肉眼可见退化"；1207 行/42k token。规则不修剪，复利反噬上下文预算（Every 插件一度吃掉 <b>316% 的 context 描述预算</b>、组件被静默丢弃，直到 v2.31.0 把平均描述从 1400 字符砍到 180）。</li>
+</ul>
+<h4>④ 每个头条数字都是厂商自报（含冲突项的澄清）</h4>
+<table>
+<tr><th>数字</th><th>核验</th><th>诚实说明</th></tr>
+<tr><td><b>+200% 生产力</b>（Boris 播客口播）</td><td><span class="tag t-fix">自报口播</span></td><td>补研<b>已澄清不是冲突</b>：+50%=自报主观；+67%=客观合并 PR/工程师/天（2025-08 快照）；200%/150%=<b>同一条 PR 计数系列</b>在 2026-02 的更新值（从 +67% 长到 +150-200%）。Boris 自己称 PR 数是"最蠢的度量"。14% 的 power user 超过 +100%（Boris 在那个尾部）。<b>BRGR.one："PR 数与实际价值的相关性？仍是开放问题。"</b></td></tr>
+<tr><td><b>&gt;80% 代码 Claude 写</b></td><td><span class="tag t-verb">自报(准确引用)</span></td><td>line-count、Anthropic 自测、无第三方审计；Anthropic 自称"imperfect measure... almost certainly an overstatement"；脚注承认领导层另称 90%+</td></tr>
+<tr><td><b>8x 代码/工程师/天</b></td><td><span class="tag t-fix">自报</span></td><td>Anthropic 自称 overstatement；且是跨 6 个模型代际的人口聚合，<b>"规则集复利"与"模型变聪明"观测上无法区分</b></td></tr>
+<tr><td><b>Bun ~963k 行/11 天</b></td><td><span class="tag t-fix">自报·已降级</span></td><td>非 750k（Sumner 自报 ~963k）；"6-12 个月"是 LinkedIn 臆测；99.8% 是 Bun 自测；<b>13,365 个 unsafe 块（Bun 自审、5 个已知 unsound、Miri 失败 issue #30719）</b>；GitHub 把删除 PR 自动标为"<b>AI slop</b>"并关闭；Sumner 自己合并前一周说"<b>这些代码被整个扔掉的概率很高</b>"。<b>应作为"执行速度"数据点，而非已验证的正确性/复利案例。</b></td></tr>
+<tr><td><b>Shopify "reflexive AI"</b></td><td><span class="tag t-fix">命令存在·影响未证实</span></td><td>命令属实(Lutke 备忘录+CNBC)；"33% 人均营收"只来自未核实 Instagram 视频，10-K/财报电话只把杠杆归于"AI+自动化+纪律性人头"共同作用，且被 2023-05 裁员 23% 混淆。分析师："<b>是筛选器，不是生产力举措</b>"</td></tr>
+<tr><td><b>"4 人干 12 人的活"</b></td><td><span class="tag t-fix">未核实</span></td><td>仅一条匿名 Reddit 帖("朋友的公司")，无具名组织、无博客、无财报。<b>典型未核实网络传闻，不应作为既定案例。</b></td></tr>
+</table>
+<div class="disc"><b>净结论：</b>三个案例的<b>机制</b>都讲得清楚且内部自洽（规则增长→错误下降→吞吐上升），定性故事跨 Boris 推文/Lenny/Acquired/Anthropic RSI 三角印证、可信。<b>但几乎每个量化数字都是厂商自报，"200%"是口播，"资产级复利"（规则数 vs 错误率）是断言而非测量，唯一独立 RCT 是负/无统计学意义，唯一受控消融削弱了"规则复利成质量"的叙事。</b>把<b>曲线的形状</b>当有证据，把<b>量级</b>当营销上限，等独立审计（目前不存在）。</div>
+</div>
+
+<div class="note">
+<b>一句话总结：</b>真实案例里复利<b>最字面</b>的实现是 GymCoach——一条 <code>lessons.md</code> 暂存区，每条故障必须"毕业"进 skill/章程，11 天里 13 条教训（L1-L13）各绑定 PR 号、README 路线图全部勾完、闸门被 revert-the-fix 重新证明咬人。<b>承重逻辑只有一句：在对话里纠错只修这一次，写进 CLAUDE.md/skill 修好未来每一次。</b> Anthropic 团队用 @.claude-in-PR 把它机制化，Boris 个人写码占比 20%→30%→100%。但<b>诚实地说</b>：这条复利曲线是<b>断言而非测量</b>——唯一独立 RCT(METR)是负/无统计学意义，唯一受控消融(冻结模型只变 CLAUDE.md)发现<b>随机规则与精心规则效果相同</b>（都 63.8%，靠 context priming 而非规则质量），模型升级会静默破坏规则，规则不修剪会反噬上下文预算，每个头条数字都是厂商自报。<b>复利的真实边界：它是 token + 规则资产的复利，不是理解力的复利——loop 能跨会话记住"这类错别再犯"，却记不住"这段代码为什么对"。</b>
+<hr style="border-color:var(--line)"/>
+<div class="srcs"><b>来源（官方主源加粗）</b><br/>
+<b>主案例 GymCoach：</b>
+<a href="https://github.com/Julien-Au/gymcoach" target="_blank">github.com/Julien-Au/gymcoach</a> ·
+      <a href="https://raw.githubusercontent.com/Julien-Au/gymcoach/main/docs/loops/lessons.md" target="_blank">lessons.md</a> ·
+      <a href="https://raw.githubusercontent.com/Julien-Au/gymcoach/main/docs/loops/autonomy-log.md" target="_blank">autonomy-log.md</a> ·
+      <a href="https://raw.githubusercontent.com/Julien-Au/gymcoach/main/docs/loops/09-memory-and-learning.md" target="_blank">09-memory-and-learning.md</a> ·
+      <a href="https://ghuntley.com/loop/" target="_blank">Huntley · Ralph Loop</a> ·
+      <a href="https://github.com/anthropics/claude-code/tree/main/plugins/ralph-wiggum" target="_blank">官方 ralph-wiggum 插件</a><br/>
+<b>Anthropic 团队：</b>
+<a href="https://www.anthropic.com/institute/recursive-self-improvement" target="_blank">RSI 报告(&gt;80%/8x/干预率下降)</a> ·
+      <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a> ·
+      <a href="https://www.lennysnewsletter.com/p/head-of-claude-code-what-happens" target="_blank">Lenny's Podcast(20%→30%→100%)</a> ·
+      <a href="https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic" target="_blank">官方研究(+50%/+67%,非 200%)</a> ·
+      <a href="https://workos.com/blog/boris-cherny-claude-code-acquired-interview-takeaways" target="_blank">WorkOS/Acquired 访谈</a><br/>
+<b>复利工程：</b>
+<a href="https://every.to/guides/compound-engineering" target="_blank">Every 复利工程指南</a> ·
+      <a href="https://agentic-patterns.com/patterns/compounding-engineering-pattern/" target="_blank">agentic-patterns</a> ·
+      <a href="https://amankhan1.substack.com/p/every-pm-should-be-building-skills" target="_blank">Aman Khan skill 库</a><br/>
+<b>诚实现实核查：</b>
+<a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/" target="_blank">METR RCT(-19%)</a> ·
+      <a href="https://metr.org/blog/2026-02-24-uplift-update/" target="_blank">METR 2026-02 跟进</a> ·
+      <a href="https://arxiv.org/html/2604.11088v2" target="_blank">arXiv:2604.11088 Guardrails Beat Guidance(消融)</a> ·
+      <a href="https://www.dolthub.com/blog/2025-06-30-claude-code-gotchas/" target="_blank">DoltHub 改测试不改代码</a> ·
+      <a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank">Anthropic context rot</a> ·
+      <a href="https://www.theregister.com/devops/2026/05/14/anthropics-bun-rust-rewrite-merged-at-speed-of-ai/5240381" target="_blank">The Register · Bun</a> ·
+      <a href="https://bun.com/bun-unsafe-audit" target="_blank">Bun unsafe 自审</a> ·
+      <a href="https://www.brgr.one/blog/build-for-model-six-months-out" target="_blank">BRGR.one(200%→+50% 澄清)</a><br/>
+<span style="color:#5e6b7d">方法：26-agent 动态工作流（8 候选挖掘 → 6 数字对抗核验 → 按扎实度取 top-3 逐字深挖 → 机制提炼 → 12 缺口批判 + 7 补研）。所有"逐字"为英文原文直引+中译+源链接；量化数字逐条标注 confirmed/vendor-claim/uncertain；唯一独立 RCT 与唯一受控消融被显式提升为反例而非脚注。GymCoach 为单一运营者公开仓库，其"毕业/门控/串行"机制已演示、"零真实发现"质量轨迹为自报断言。</span>
+</div>
+</div></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-06-22/deli-autoresearch-annotated.html"><small>上一篇</small>Deli_AutoResearch 原文对照译注手册</a><a href="/2026-06-19/chatgpt-pro-devspace-mcp.html"><small>下一篇</small>ChatGPT Pro + DevSpace MCP 的 Codex 设计研究</a></nav></main>
+<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js" defer></script></body></html>

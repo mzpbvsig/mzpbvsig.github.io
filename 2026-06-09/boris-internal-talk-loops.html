@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从内部对话理解长程编码任务中循环、环境与验证的关系。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-09/boris-internal-talk-loops.html"><title>Boris 内部对话：不写 prompt，写 loop · hikcc</title><style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --line:#30363d;
+    --txt:#c9d1d9; --txt2:#8b949e; --hi:#e6edf3;
+    --accent:#58a6ff; --green:#3fb950; --amber:#d29922; --purple:#bc8cff; --pink:#f778ba;
+    --quote:#7ee787;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+    font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.75;font-size:16px}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 24px 96px}
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:36px}
+  h1{font-size:30px;color:var(--hi);margin:0 0 14px;line-height:1.3}
+  .sub{color:var(--txt2);font-size:15px}
+  .meta{margin-top:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-size:14px}
+  .meta a{color:var(--accent);text-decoration:none}
+  .meta a:hover{text-decoration:underline}
+  .meta b{color:var(--hi)}
+
+  section{background:var(--panel);border-radius:12px;margin:22px 0;padding:24px 26px 22px;
+    border-left:4px solid var(--accent);position:relative}
+  section.s1{border-left-color:var(--accent)}
+  section.s2{border-left-color:var(--green)}
+  section.s3{border-left-color:var(--purple)}
+  section.s4{border-left-color:var(--pink)}
+  section.s5{border-left-color:var(--amber)}
+  h2{color:var(--hi);font-size:21px;margin:0 0 4px}
+  .h2note{color:var(--txt2);font-size:13px;margin-bottom:16px}
+
+  .tag{display:inline-block;font-size:11.5px;font-weight:600;border-radius:5px;padding:2px 8px;margin-right:8px;vertical-align:2px;letter-spacing:.3px}
+  .t-quote{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4)}
+  .t-prac{background:rgba(88,166,255,.15);color:var(--accent);border:1px solid rgba(88,166,255,.4)}
+  .t-opt{background:rgba(210,153,34,.15);color:var(--amber);border:1px solid rgba(210,153,34,.4)}
+
+  .row{margin:18px 0;padding-top:4px}
+  .row .label{margin-bottom:8px}
+  p{margin:8px 0}
+  .hi{color:var(--hi)}
+
+  blockquote{margin:10px 0;background:var(--panel2);border-left:3px solid var(--quote);
+    border-radius:0 8px 8px 0;padding:12px 16px}
+  blockquote .zh{color:var(--hi);font-size:15.5px}
+  blockquote .en{color:var(--txt2);font-size:13.5px;font-style:italic;margin-top:8px;display:block}
+  blockquote cite{display:block;margin-top:8px;font-style:normal;font-size:12.5px;color:var(--txt2)}
+  blockquote cite a{color:var(--accent);text-decoration:none}
+  blockquote cite a:hover{text-decoration:underline}
+
+  code{background:#010409;border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+    font-family:"SF Mono",Consolas,Monaco,monospace;font-size:13.5px;color:var(--quote)}
+  ul{margin:8px 0;padding-left:22px}
+  li{margin:5px 0}
+
+  .timeline{display:flex;gap:0;flex-wrap:wrap;margin:14px 0;font-size:13.5px}
+  .timeline div{flex:1;min-width:150px;background:var(--panel2);border:1px solid var(--line);padding:12px;border-radius:8px;margin:4px}
+  .timeline b{color:var(--hi);display:block;margin-bottom:4px}
+
+  .verdict{background:linear-gradient(180deg,#11161d,#0d1117);border:1px solid var(--line);
+    border-radius:12px;padding:20px 22px;margin:26px 0}
+  .verdict h3{margin:0 0 10px;color:var(--hi);font-size:17px}
+
+  footer{margin-top:40px;border-top:1px solid var(--line);padding-top:20px;color:var(--txt2);font-size:13px}
+  footer a{color:var(--accent);text-decoration:none}
+  .legend{font-size:12.5px;color:var(--txt2);margin-top:10px}
+  .warn{color:var(--amber)}</style><link rel="stylesheet" href="/assets/site.css"></head>
+<body class="article-page"><header class="site-nav"><div class="nav-inner">
+<a class="brand" href="/">hikcc</a>
+<nav class="nav-links" aria-label="主导航"><a href="/#library">研究资料库</a><a href="/#topics">主题方向</a><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a></nav>
+<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+</div></header>
+<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-official">官方逐字</span><time datetime="2026-06-09">2026-06-09</time></div><div class="article-content wrap"><header>
+<h1>不跟 agent 对话,跟 loop 对话<br/>—— Boris 一周年内部复盘里到底说了什么</h1>
+<div class="sub">把网上流传的那段"信息密度极高的 20 分钟对话"还原到出处,并逐条核对四个高传播金句的原话。</div>
+<div class="meta">
+<b>视频出处:</b> 《Reflecting on a year of Claude Code》——Boris Cherny(Claude Code 负责人)与 Cat Wu(产品负责人)对谈<br/>
+<b>发布:</b> 2026-06-08 · <b>平台:</b> YouTube · <a href="https://www.youtube.com/watch?v=Hth_tLaC2j8" target="_blank">youtube.com/watch?v=Hth_tLaC2j8</a><br/>
+<span class="warn">⚠️ 它不是"泄露的内部会议",是 Claude Code 一周年(GA 满一年)的官方公开复盘对谈。本文逐字引用以视频/官方贴文为准;部分整理转引自社区站点 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a>(汇编自 Boris 公开推文 + 该视频)。</span>
+<div class="legend">标签:<span class="tag t-quote">官方逐字</span> 视频/官方原话 ·
+      <span class="tag t-prac">实践补充</span> 我补的用法/背景 ·
+      <span class="tag t-opt">看场景可省</span> 可选项,不是必须</div>
+</div>
+</header>
+
+<section class="s1">
+<h2>① 不跟 agent 对话,跟 loop 对话</h2>
+<div class="h2note">你转述的:"让 loop 替我来 prompt" —— 核对结果:✅ 属实,是 Boris 最核心的范式转变</div>
+<div class="row">
+<div class="label"><span class="tag t-quote">官方逐字</span></div>
+<blockquote>
+<span class="zh">"我已经不再给 Claude 写 prompt 了。我跑的是一堆 loop,是它们在 prompt Claude、在决定该做什么。我的工作是写 loop。"</span>
+<span class="en">"I don't prompt Claude anymore. I have loops running. They're the ones prompting Claude and figuring out what to do. My job is to write loops."</span>
+<cite>—— Boris Cherny,转引自 <a href="https://www.productmarketfit.tech/p/stop-prompting-ai-and-start-building" target="_blank">Product Market Fit</a> · 同句被 <a href="https://digg.com/ai/q0idpj2w" target="_blank">Digg</a> 报道</cite>
+</blockquote>
+</div>
+<div class="row">
+<div class="label"><span class="tag t-prac">实践补充</span> 怎么理解"写 loop 而不是 prompt"</div>
+<p>一条 prompt 给你<span class="hi">一次性的输出</span>;一个 loop 给你<span class="hi">会复利累积的操作</span>。loop 就是一个"壳":它自己去发现"有哪些活要干"→ 把一块丢给 agent → 检查 agent 交回来的东西 → 再循环。人不再是步骤之间的"连接组织",你写的是那个"替你去写 prompt 的东西"。</p>
+<p>Claude Code 里把它产品化成了三档,按"要跑多久"区分:</p>
+<ul>
+<li><code>/loop</code> —— 本地循环,最长跑 <span class="hi">3 天</span>,按间隔重复跑你的 prompt。典型:盯 PR、自动修构建、Slack 摘要、盯部署。</li>
+<li><code>/schedule</code> —— 云端任务,<span class="hi">关掉笔记本也在跑</span>,可无限期。Anthropic 内部用它自动修 CI、自动更新文档。</li>
+<li><code>/goal</code> —— 一直跑到"条件满足"为止(社区叫"内置版 Ralph loop"),例:<code>/goal all tests in test/auth pass and lint is clean</code>。</li>
+</ul>
+</div>
+<div class="row">
+<div class="label"><span class="tag t-opt">看场景可省</span> "人力不足"是故意的</div>
+<p>Boris 提到一个组织策略:给 4 人量的项目只派 2 个工程师。<span class="hi">这种刻意的人手紧缺,逼着大家去搭 loop 和自动化</span>,把预算从人力挪到 token 消耗上。这是团队管理视角的延伸,个人用不一定照搬。</p>
+</div>
+</section>
+
+<section class="s2">
+<h2>② 从 4.6 起不用 plan mode,全开 auto mode</h2>
+<div class="h2note">你转述的:"从 4.6 起就不用 plan mode 了,全开 auto mode" —— 核对结果:✅ 几乎逐字属实</div>
+<div class="row">
+<div class="label"><span class="tag t-quote">官方逐字</span> 弃用 plan mode</div>
+<blockquote>
+<span class="zh">"以前是 plan mode,我现在不用那个了,我用 auto mode……新的模型其实不需要一个单独的规划步骤。它对 Opus 4 到 4.5 非常重要,但从 4.6 开始、到 4.7 就更是如此——它根本不需要了。"</span>
+<span class="en">"What it used to be is plan mode. I don't use that anymore. I use auto mode... The newer models don't actually need a planning step. It was really important for Opus 4 through 4.5, but starting with 4.6, and definitely with 4.7, it just doesn't need it."</span>
+<cite>—— Boris Cherny,《Reflecting on a year of Claude Code》(2026-06-08),整理见 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></cite>
+</blockquote>
+</div>
+<div class="row">
+<div class="label"><span class="tag t-quote">官方逐字</span> 为什么 auto mode 反而更"安全"</div>
+<blockquote>
+<span class="zh">"auto mode 比逐条读权限提示更安全,因为它让你只盯最重要的那件事。"</span>
+<span class="en">"Auto mode is more safe than reading every single permission prompt because it means you're only paying attention to the most important thing."</span>
+<cite>—— 同上。配套那句:"当你 99% 的请求都点同意,你的眼睛就麻木了 (your eyes glaze over)。"</cite>
+</blockquote>
+<p><span class="tag t-prac">实践补充</span> auto mode 的机制:每个动作不是丢给人审,而是<span class="hi">过一个分类器</span>判断风险;Anthropic 用上千份 transcript、红队测试、prompt-injection 评测做过加固。它是介于 default(逐条手批)和 bypassPermissions(完全不查)之间的中间档。</p>
+<p><span class="tag t-prac">实践补充</span> 入口:CLI 里 <code>Shift+Tab</code> 在 plan → auto → normal 之间循环;桌面/VSCode 用下拉选。</p>
+</div>
+</section>
+
+<section class="s3">
+<h2>③ 不做 prompt engineering,也不做 context engineering</h2>
+<div class="h2note">你转述的:"给模型最精简的必要上下文和工具,让模型自己探索" —— 核对结果:✅ 属实,Boris 称之为"context minimalism(上下文极简)"</div>
+<div class="row">
+<div class="label"><span class="tag t-prac">实践补充</span> 三个时代的演进(Boris 的原话框架)</div>
+<div class="timeline">
+<div><b>Sonnet 3.5 时代</b>prompt engineering<br/><span style="color:var(--txt2)">精雕 prompt</span></div>
+<div><b>Opus 4 时代</b>context engineering<br/><span style="color:var(--txt2)">精心喂上下文</span></div>
+<div><b>现在</b>context <span style="color:var(--quote)">minimalism</span><br/><span style="color:var(--txt2)">给最少,让它自己找</span></div>
+</div>
+</div>
+<div class="row">
+<div class="label"><span class="tag t-quote">官方逐字</span></div>
+<blockquote>
+<span class="zh">"你给它尽可能精简的 system prompt、尽可能精简的工具,然后让模型自己把事情想明白。"</span>
+<span class="en">"You give it the minimal possible system prompt, the minimal possible tools, and then you let the model figure it out."</span>
+<cite>—— Boris Cherny,同视频</cite>
+</blockquote>
+<blockquote>
+<span class="zh">"只告诉模型它需要知道的,剩下让它自己搞定。你给它太多上下文,就等于在微管理它。"</span>
+<span class="en">"Tell the model only what it needs to know and let it figure it out. When you give the model too much context, it's like you're micromanaging it."</span>
+<cite>—— Cat Wu,同视频</cite>
+</blockquote>
+</div>
+<div class="row">
+<div class="label"><span class="tag t-opt">看场景可省 / 注意边界</span></div>
+<p>"极简"不等于"含糊":<span class="hi">目标要说清,省的是中间的微步骤</span>。做法是给一个精炼的任务说明 + 一条<span class="hi">让它能自己取上下文的路</span>(文件、搜索、MCP),而不是把一大坨上下文和工具列表一次塞满。</p>
+</div>
+</section>
+
+<section class="s4">
+<h2>④ 一半工程在手机上完成,走路时语音对话</h2>
+<div class="h2note">你转述的:"一半的工程在手机上完成,走路时和 agent 语音对话" —— 核对结果:✅ 方向属实(手机 + 语音 + 远程是核心工作流);"一半"这个比例是社区转述,未见 Boris 给出确切数字</div>
+<div class="row">
+<div class="label"><span class="tag t-prac">实践补充</span> Boris 的移动工作流由三块拼成</div>
+<ul>
+<li><span class="hi">手机 App 直接写</span>:Claude Code 有原生 iOS/Android App,带完整 Code tab,Boris "很大一部分代码是在 iOS App 上写的"。</li>
+<li><span class="hi">语音输入为主</span>:Boris"大部分编码是对着 Claude 说,而不是打字"。CLI 用 <code>/voice</code> 然后按住空格;macOS 双击 <code>fn</code> 听写;iOS 用系统听写。</li>
+<li><span class="hi">远程触发 + 会话穿越</span>:<code>claude remote-control</code> 能从手机把任务踢到你自己机器上跑;<code>--teleport</code> / <code>/teleport</code> 让同一会话在手机/网页/桌面/终端之间搬。Boris 在 <code>/config</code> 里"对所有会话开了 Remote Control"。</li>
+</ul>
+</div>
+<div class="row">
+<blockquote>
+<span class="zh">"离开工位、走着走着想到点什么,就从手机上踢起一个任务——Claude 在你自己机器上跑。"</span>
+<span class="en">"Walk away from your desk, think of something, and kick off a task from mobile — Claude runs on your machine."</span>
+<cite>—— Boris,整理见 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></cite>
+</blockquote>
+</div>
+</section>
+
+<section class="s5">
+<h2>⑤ 视频里另外两条同等关键、但你没提的</h2>
+<div class="h2note">既然要"到底怎么做",这两条是把上面四条串起来的关键,值得一起记</div>
+<div class="row">
+<div class="label"><span class="tag t-quote">官方逐字</span> 错误不要重新 prompt,要写进 CLAUDE.md</div>
+<blockquote>
+<span class="zh">"每次 Claude 犯错,我不会告诉它换个做法。我会让它把这条写进 CLAUDE.md,或者做成一个 skill。能做到这点,Claude 就能一直跑下去。"</span>
+<span class="en">"Every single time Claude makes a mistake, I don't tell it to do it differently. I tell it to write it to the CLAUDE.md, or make a skill, or something. If you can do this, then Claude can just run forever."</span>
+<cite>—— Boris,同视频</cite>
+</blockquote>
+<p><span class="tag t-prac">实践补充</span> 为什么这条是 loop 能成立的前提:对话里纠正 = 一次性补丁;写进 CLAUDE.md/skill = <span class="hi">对所有未来运行的永久修复</span>。错误率持续往下走,同样的错不再复发,loop 才敢长期无人值守地跑。这正是 ① 的地基。</p>
+</div>
+<div class="row">
+<div class="label"><span class="tag t-quote">官方逐字</span> 最重要的一条:给 Claude 一条"自我验证"的路</div>
+<blockquote>
+<span class="zh">"想从 Claude Code 拿到好结果,最重要的事大概就是:给 Claude 一个验证自己工作的方法。有了这个反馈回路,最终结果质量会翻 2–3 倍。"</span>
+<span class="en">"Probably the most important thing to get great results out of Claude Code — give Claude a way to verify its work. If Claude has that feedback loop, it will 2-3x the quality of the final result."</span>
+<cite>—— Boris(其 #1 tip),整理见 <a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a></cite>
+</blockquote>
+<p><span class="tag t-prac">实践补充</span> 验证方式按场景:跑 bash 命令、跑测试、浏览器测试(Claude 的 Chrome 插件)、模拟器。"会自检"是 auto mode 敢全开、loop 敢长跑的另一半地基。</p>
+</div>
+</section>
+<div class="verdict">
+<h3>一句话总结他到底怎么做</h3>
+<p>Boris 把自己从"对话者"退成"系统设计者":<span class="hi">先用 CLAUDE.md + skill 把"别犯这个错"固化成规则,再给 Claude 一条能自检的验证回路,然后把模型放进 auto mode 全自动跑,自己只写决定"干什么、干到什么程度"的 loop / schedule / goal</span>——而这些指挥动作,很多是走在路上用手机语音、或远程踢到自己机器上完成的。</p>
+<p style="color:var(--txt2);font-size:14px;margin-top:12px">底层信念:模型已经强到不需要你精雕 prompt、不需要 plan mode、不需要堆上下文。你越微管理,越拖它后腿。你该做的是<span class="hi">给最少的必要信息 + 一条取上下文的路 + 一条自检的路</span>,剩下交给它。</p>
+</div>
+<footer>
+<b>来源</b>
+<ul>
+<li>视频原片:<a href="https://www.youtube.com/watch?v=Hth_tLaC2j8" target="_blank">《Reflecting on a year of Claude Code》(YouTube, 2026-06-08)</a></li>
+<li>引用汇编:<a href="https://howborisusesclaudecode.com/" target="_blank">howborisusesclaudecode.com</a>(社区整理 Boris 公开推文 + 该视频,标注到具体 Part)</li>
+<li>"写 loop 不写 prompt":<a href="https://www.productmarketfit.tech/p/stop-prompting-ai-and-start-building" target="_blank">Product Market Fit</a> · <a href="https://digg.com/ai/q0idpj2w" target="_blank">Digg 报道</a> · <a href="https://addyosmani.com/blog/loop-engineering/" target="_blank">Addy Osmani: Loop Engineering</a></li>
+</ul>
+<p class="warn">说明:本文逐字引用以视频原片与官方贴文为准。社区汇编站点便于检索,但属二手整理,如需 100% 精确字句请以视频为准。"一半工程在手机上"未见 Boris 给出确切比例,标注为社区转述。</p>
+<p>生成于 2026-06-09</p>
+</footer></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-06-19/claude-design-workflow.html"><small>上一篇</small>Claude Design 产品设计全流程</a><a href="/2026-06-07/how-big-tech-runs-evals.html"><small>下一篇</small>大厂如何做 Eval · 真实证据</a></nav></main>
+<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js" defer></script></body></html>

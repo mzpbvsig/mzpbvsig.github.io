@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/claude-code-development-workflow.html"><title>Claude Code 完整开发流程 · 最佳实践 · hikcc</title><style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:30px 0 6px}
+h3{font-size:15.5px;margin:16px 0 4px;color:#cdd5e0}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-verb{background:#0b3d2e;color:#9af5c4;border:1px solid #155}      /* 官方逐字 */
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}   /* 实践补充 */
+.t-opt{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}    /* 可省略 / 看场景 */
+.t-num{background:#241733;color:#e5c2ff;border:1px solid #5a3a7e}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.warn{background:#241c10;border:1px dashed #5e4a23;color:#f4d59a}
+.good{background:#0e2018;border:1px dashed #1f6b46;color:#a8e9c6}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.s0{border-left:4px solid var(--mut)}
+.card.s1{border-left:4px solid var(--purple)}
+.card.s2{border-left:4px solid var(--accent)}
+.card.s3{border-left:4px solid var(--blue)}
+.card.s4{border-left:4px solid var(--amber)}
+.tree{font:13px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;overflow-x:auto;border-radius:8px;padding:14px 16px;margin:8px 0}
+.tree.g{background:#0b1f17;border:1px solid #143126;color:#cfe9d6}
+.tree.b{background:#0d1622;border:1px solid #1b2c44;color:#dbe7ff}
+.tree.a{background:#1f1810;border:1px solid #3d2f17;color:#f1dcb6}
+.tree.p{background:#170f22;border:1px solid #33214a;color:#e3cdf5}
+.tree .hl{color:#ff8f6b;font-weight:700}
+.tree .q{color:#9af5c4}
+.quote{border-left:3px solid var(--accent);background:#0c1712;padding:8px 12px;margin:8px 0;color:#bfe9cf;font-size:13px;font-style:italic}
+.quote .en{color:#8fe3b0}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+.x{color:#ff8f6b;font-weight:700}
+.ok{color:#7af0b0;font-weight:700}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+ul{margin:6px 0 6px 0;padding-left:20px}
+li{margin:3px 0}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}
+b.k{color:#fff}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin:10px 0 4px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block}</style><link rel="stylesheet" href="/assets/site.css"></head>
+<body class="article-page"><header class="site-nav"><div class="nav-inner">
+<a class="brand" href="/">hikcc</a>
+<nav class="nav-links" aria-label="主导航"><a href="/#library">研究资料库</a><a href="/#topics">主题方向</a><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a></nav>
+<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+</div></header>
+<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-official">官方逐字</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Claude Code 完整开发流程 · 最佳实践</h1>
+<p class="lead">以 Anthropic 官方 <a href="https://code.claude.com/docs/en/best-practices" target="_blank">best-practices</a> 为骨架（标 <span class="tag t-verb">官方逐字</span> 的句子是原文引用），补充 spec-driven 实践。核心要回答的问题：<b>"执行→更新状态→测试→提交"之后还有什么？</b> —— 有，提交只是<b>单 task 内循环</b>的结束，外面还套着<b>收口/验证关</b>。</p>
+<div class="legend">
+<span><i class="dot" style="background:#22c55e"></i>官方逐字</span>
+<span><i class="dot" style="background:#7aa2ff"></i>实践补充</span>
+<span><i class="dot" style="background:#f59e0b"></i>看场景可省</span>
+<span><i class="dot" style="background:#c084fc"></i>大功能才用</span>
+</div>
+<div class="disc warn"><b>一句话先记住：</b>你做的「实现 → 更新状态 → 测试 → 提交」是 <b>单 task 内循环</b>；它<b>外面</b>还有一层 <b>收口</b>：<b>全功能做完 → 换干净上下文 subagent 复查 diff → PR / 人工 gate → CI/CD → 合并 → 清理</b>。单人小改动到提交就够；进了分支/PR/团队，收口不能省。</div>
+
+<h2>一张图看全程</h2>
+<div class="card">
+<div class="tree p">【0 准备·一次性】 CLAUDE.md · 权限/auto · hooks · skills · subagents · MCP · gh
+        │
+【1 大功能起步·可选】 让 Claude 访谈你 → 写 SPEC.md → <span class="hl">开「全新会话」执行</span>
+        │
+┌───────▼ 主循环 = 官方 4 阶段 ──────────────────────────┐
+│ ① Explore(plan mode 只读)                            │
+│ ② Plan(出计划，Ctrl+G 可手改)                        │
+│ ③ Implement ──┐                                       │
+│               └─▶ ↓↓ 单 task 内循环（逐条做）          │
+│ ④ Commit &amp; open PR                                    │
+└────────────────────────────────────────────────────────┘
+        │
+   ┌────▼ 单 task 内循环（你现在做的那圈）────────────┐
+   │ 实现 → 更新 tasks.md [ ]→[x] → 跑测试              │
+   │ → 提交（pre-commit hook 跑测试/lint/类型，         │
+   │    失败<span class="hl">驳回</span>，agent 自我修正） · 每 3–4 task 阶段复查  │
+   └────────────────────────────────────────────────────┘
+        │  （一个 feature / 分支的 task 全做完）
+┌───────▼ 收口 / 验证关（最容易被省、最该做）─────────────┐
+│ ⓐ 对抗式复查：<span class="hl">换「全新上下文 subagent」只看 diff</span>         │
+│    /code-review 或自写 prompt 对 PLAN.md 核对           │
+│    —— 抓单 task 覆盖不到的「跨 spec 回归」              │
+│ ⓑ 开 PR → reviewer agents 审 → 打回 / 合               │
+│ ⓒ 人工最终批准（human gate）→ 触发 CI/CD               │
+│ ⓓ 合并 → 清理（删 worktree / 删分支）→ /clear          │
+└──────────────────────────────────────────────────────────┘</div>
+</div>
+
+<h2><span class="tag t-prac">实践补充</span>0 · 一次性准备（配好就一直省事）</h2>
+<div class="card s0">
+<ul>
+<li><b class="k">CLAUDE.md</b>：<code>/init</code> 生成；只放"删了 Claude 就会犯错"的东西（命令、风格、PR 约定）。<span class="tag t-verb">官方逐字</span> <i>"only include things that apply broadly."</i></li>
+<li><b class="k">hooks</b>：pre-commit 跑测试/lint/类型检查——<b>确定性</b>地每次执行。<span class="tag t-verb">官方逐字</span> <i>"hooks are deterministic and guarantee the action happens."</i></li>
+<li><b class="k">权限 / auto mode</b>：<code>claude --permission-mode auto</code> 让分类器放行常规、拦截风险，少点确认。</li>
+<li><b class="k">skills / subagents / MCP / gh CLI</b>：领域知识、隔离上下文的专职 agent、外部工具接入。</li>
+</ul>
+</div>
+
+<h2><span class="tag t-num">大功能才用</span>1 · 起步：访谈 → SPEC.md → 全新会话</h2>
+<div class="card s1">
+<p style="margin:2px 0 6px">功能大、不确定怎么做时，先让 Claude <b>面试你</b>，把答案写成自包含的 SPEC.md，再<b>开新会话</b>用干净上下文执行。</p>
+<div class="tree p">I want to build [brief description]. <span class="q">Interview me in detail using the AskUserQuestion tool.</span>
+Ask about technical implementation, UI/UX, edge cases, concerns, and tradeoffs.
+Keep interviewing until we've covered everything, then <span class="q">write a complete spec to SPEC.md</span>.</div>
+<div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"Once the spec is complete, start a fresh session to execute it. The new session has clean context focused entirely on implementation."</span></div>
+<p style="margin:6px 0 0;color:var(--mut);font-size:12.5px">好 spec 的标准（官方）：点名涉及的文件与接口、写明<b>不做什么</b>、结尾给一个端到端验证步骤。</p>
+</div>
+
+<h2><span class="tag t-verb">官方逐字</span>2 · 主循环：官方四阶段</h2>
+<div class="card s2">
+<div class="quote"><span class="en">"The recommended workflow has four phases: Explore → Plan → Implement → Commit."</span></div>
+<div class="tree g">① <b>Explore</b>（plan mode）  <span class="q">read /src/auth and understand how we handle sessions and login</span>
+                       └ 只读不改，先搞清现状
+② <b>Plan</b>（plan mode）     <span class="q">What files need to change? ... Create a plan</span>
+                       └ 出详细计划；按 Ctrl+G 打开计划手改
+③ <b>Implement</b>（默认模式） <span class="q">implement... write tests... run the test suite and fix any failures</span>
+                       └ 进入「单 task 内循环」逐条落地（见下）
+④ <b>Commit</b>（默认模式）    <span class="q">commit with a descriptive message and open a PR</span></div>
+<div class="disc warn"><b>什么时候跳过 plan？</b><span class="tag t-verb">官方逐字</span> <i>"If you could describe the diff in one sentence, skip the plan."</i> typo、加日志、重命名这类直接做。</div>
+</div>
+
+<h2><span class="tag t-verb">官方逐字</span> + <span class="tag t-prac">实践补充</span>3 · 单 task 内循环（你现在做的那圈）</h2>
+<div class="card s2">
+<div class="tree g">实现一个 task
+  → 更新 tasks.md 状态 [ ] → [x]
+  → 跑测试
+  → 提交（触发 pre-commit hook：测试 / lint / 类型检查）
+        └ 失败 → <b>驳回提交</b>，agent 看到报错 → 自我修正 → 再提交
+  ※ 每 3–4 个 task：做一次阶段性 code review</div>
+<ul>
+<li><b class="k">纪律：先更新 spec/状态，再合代码</b>（保证可追溯，便于审计与生成测试）。<span class="tag t-prac">实践补充</span></li>
+<li><b class="k">一 task 一 commit</b>，回滚成本最低。<span class="tag t-prac">实践</span> <i>"Single task = one commit for easy rollback."</i></li>
+</ul>
+<h3>TDD 变体（官方称"最强模式"）</h3>
+<div class="tree g">写测试 → 跑确认<b>失败</b> → 提交失败的测试(checkpoint) → 实现到<b>全绿</b>（不准改测试）→ 提交</div>
+<div class="quote"><span class="tag t-verb">官方逐字</span> <span class="en">"test-driven development (TDD) [is] the single strongest pattern for working with agentic coding tools."</span></div>
+<p style="margin:4px 0 0;color:var(--mut);font-size:12.5px">先提交失败测试 → diff 能暴露 Claude 是否偷改了测试来"作弊"过关。</p>
+</div>
+
+<h2><span class="tag t-verb">官方逐字</span>4 · 收口 / 验证关（"提交"之后真正还有的步骤）</h2>
+<div class="card s4">
+<p style="margin:2px 0 8px">官方有专门一节 <b>"Add an adversarial review step"</b>——这就是单 task 循环<b>覆盖不到</b>、最该补的一步。</p>
+<div class="quote"><span class="en">"Before treating a task as done, have a subagent review the diff in a fresh context and report gaps."</span></div>
+<div class="quote"><span class="en">"A reviewer running in a fresh subagent context sees only the diff and the criteria you give it, not the reasoning that produced the change, so it evaluates the result on its own terms."</span></div>
+<div class="tree a">ⓐ 对抗式复查  /code-review（看当前 diff 找 bug）
+              或自写： <span class="q">Use a subagent to review the diff against PLAN.md.
+              Check every requirement is implemented... Report gaps, not style.</span>
+              └ 关键：<b>做代码的 Claude 不给自己打分</b>，换干净上下文 subagent
+ⓑ 开 PR     → reviewer agents（安全/架构/最佳实践）→ 打回自动修订 / 合并
+ⓒ 人工 gate → human review 最终批准 → 触发 CI/CD
+ⓓ 合并清理  → 删 worktree / 删分支 → /clear 进下一个任务</div>
+<div class="disc good"><b>为什么必须做：</b>单 task 测试全绿 ≠ 合在一起没破坏别处。整分支 diff 复查 + 人工 gate 专抓<b>跨 spec 回归</b>，这是逐 task 验证永远碰不到的盲区。</div>
+<div class="disc warn"><b>别过度：</b><span class="tag t-verb">官方逐字</span> <i>"A reviewer prompted to find gaps will usually report some, even when the work is sound... Tell the reviewer to flag only gaps that affect correctness or the stated requirements."</i> 否则会过度抽象、加防御代码、为不可能的情况写测试。</div>
+</div>
+
+<h2>贯穿全程的两条铁律</h2>
+<table>
+<tr><th>铁律</th><th>官方逐字</th><th>怎么落地</th></tr>
+<tr>
+<td><b>① 给 Claude 能自己跑的验证</b></td>
+<td><i>"Give Claude a check it can run... the loop closes on its own."</i></td>
+<td>三档强制力：同一 prompt 里跑 → <code>/goal</code> 条件每轮复检 → <b>Stop hook</b> 硬门（不过不阻塞收尾，8 次后放行）</td>
+</tr>
+<tr>
+<td><b>② 狠管上下文</b></td>
+<td><i>"Use /clear frequently between tasks."</i></td>
+<td>任务间 <code>/clear</code>；同一问题纠正超过 2 次 → <code>/clear</code> 重开换更好 prompt；大功能写 SPEC.md 后开新会话</td>
+</tr>
+</table>
+
+<h2>怎么用它对齐需求（按场景选深度）</h2>
+<table>
+<tr><th>场景</th><th>走到哪一步</th><th>能省什么</th></tr>
+<tr><td>单人 · 一句话能描述的小改</td><td>跳过 plan，直接 ③→④ 提交</td><td>省 plan、省 SPEC、省正式收口</td></tr>
+<tr><td>单人 · 一个中型功能</td><td>plan mode 全 4 阶段 + 单 task 循环 + <b>/code-review</b></td><td>可省正式 PR/人工 gate（但复查别省）</td></tr>
+<tr><td>大功能 / 不确定怎么做</td><td>访谈→SPEC.md→新会话→4 阶段→收口全套</td><td>不省</td></tr>
+<tr><td>团队 / 进分支 PR</td><td><b>全套到 CI/CD + 人工 gate</b></td><td><span class="x">收口一步都不能省</span></td></tr>
+</table>
+<div class="note">
+<b>结论：</b>"执行→更新状态→测试→提交"是<b>单 task 内循环</b>，外面还套着<b>收口层</b>（换干净上下文复查 diff → PR → 人工 gate → CI/CD → 合并 → 清理）。小改动到提交就够，进了分支就不能省；而且官方明确——<b>复查必须换干净上下文的 subagent，写代码的 Claude 不能验自己。</b>
+<hr style="border-color:var(--line)"/>
+<div class="srcs"><b>来源：</b>
+<a href="https://code.claude.com/docs/en/best-practices" target="_blank">Anthropic: Best practices for Claude Code</a>（4 阶段 / 对抗式复查 / 验证 / 上下文，逐字） ·
+      <a href="https://alexop.dev/posts/spec-driven-development-claude-code-in-action/" target="_blank">alexop.dev: Spec-Driven Development in Action</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow" target="_blank">Pimzino: spec-workflow</a> ·
+      <a href="https://github.com/shinpr/claude-code-workflows" target="_blank">shinpr: claude-code-workflows</a>（reviewer agents / PR gate） ·
+      <a href="https://www.datacamp.com/tutorial/claude-code-best-practices" target="_blank">DataCamp: Best Practices（TDD loop）</a>
+</div>
+</div></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-08-02/ralph-to-loop-engineering.html"><small>上一篇</small>从 Ralph Agent 到 Loop Engineering · 三方证据链</a><a href="/2026-07-09/claude-code-evidence-by-complexity.html"><small>下一篇</small>Claude Code 真实用法证据库 · 按复杂度分层</a></nav></main>
+<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js" defer></script></body></html>

@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="保留英文原文与中文解释的即用 prompt 对照材料。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay-bilingual.html"><title>Claude Code「spec 接力」中英对照 · hikcc</title><style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:18px;margin:24px 0 6px}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-v{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-prac{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-warn{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.diag{font:12.5px/1.5 ui-monospace,monospace;color:#cdeccf;background:#10211a;border:1px solid #1f3d2b;border-radius:8px;padding:12px 14px;white-space:pre;overflow-x:auto;margin:12px 0}
+.pair{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:14px 0;overflow:hidden}
+.pair .ph{padding:9px 14px;border-bottom:1px solid var(--line);font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pair .ph .cite{margin-left:auto;font-size:11.5px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.col{padding:12px 14px}
+.col.en{border-right:1px solid var(--line)}
+.lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.en pre{margin:0;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#9af5c4;white-space:pre-wrap;
+background:#0b1f17;border:1px solid #143126;border-radius:7px;padding:9px 11px;overflow-x:auto}
+.zh .body{font-size:14px;color:#e7ecf3;white-space:pre-wrap}
+.col.zh{background:#14181f}
+@media(max-width:760px){.cols{grid-template-columns:1fr}.col.en{border-right:none;border-bottom:1px solid var(--line)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:14px 0}
+.card.warn{border-left:4px solid #f59e0b}
+ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
+.bi{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13.5px;margin:5px 0}
+.bi .e{color:#9af5c4;font-family:ui-monospace,monospace;font-size:12.5px}
+.bi .c{color:#e7ecf3}
+@media(max-width:760px){.bi{grid-template-columns:1fr;gap:2px}}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}</style><link rel="stylesheet" href="/assets/site.css"></head>
+<body class="article-page"><header class="site-nav"><div class="nav-inner">
+<a class="brand" href="/">hikcc</a>
+<nav class="nav-links" aria-label="主导航"><a href="/#library">研究资料库</a><a href="/#topics">主题方向</a><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a></nav>
+<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+</div></header>
+<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-optional">看场景可省</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Claude Code「spec 接力」中英对照</h1>
+<p class="lead">大功能的标准做法：<b>先把需求写成自包含的 spec 文件 → 换干净会话只读它实现</b>。下面每条 prompt <b>左英文（可直接复制喂给 Claude Code）/ 右中文（理解）</b>。详解与证据见同目录 <a href="claude-code-spec接力-详解.html">spec接力-详解.html</a>。</p>
+<div class="disc"><b>读法：</b>英文是真实证据原文，<b>建议直接用英文</b>跑（模型对英文指令最稳）；中文是对照翻译，帮你看懂每句在要求什么。来源标签：<span class="tag t-v">官方逐字</span>官方文档原样 ·<span class="tag t-prac">实践者逐字</span>Harper Reed 原文。
+<div class="diag">① 访谈挖需求        ② 编译成 spec 文件        ③ 换干净会话执行        ④ 自验证收口
+   AskUserQuestion   →   SPEC.md / spec.md   →   /clear 或新窗口    →   跑测试 / /goal
+   逐题反问              design.md  tasks.md      只读 spec 实现         更新 tasks.md 状态</div>
+<h2>① 访谈挖需求 → 写出 spec</h2>
+<div class="pair">
+<div class="ph"><span class="tag t-v">官方逐字</span>Claude Code 原生：让它面试你，再写 SPEC.md<a class="cite" href="https://code.claude.com/docs/en/best-practices" target="_blank">官方 BP ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（直接复制用）</div>
+<pre>I want to build [brief description]. Interview me in detail using the AskUserQuestion tool.
+
+Ask about technical implementation, UI/UX, edge cases, concerns, and tradeoffs. Don't ask obvious questions, dig into the hard parts I might not have considered.
+
+Keep interviewing until we've covered everything, then write a complete spec to SPEC.md.</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<div class="body">我想做【简要描述】。请用 AskUserQuestion 工具详细地面试我。
+
+就技术实现、UI/UX、边界情况、顾虑和取舍来提问。别问显而易见的问题，深挖我可能没考虑到的难点。
+
+一直问下去，直到我们把所有内容都覆盖了；然后把一份完整的 spec 写到 SPEC.md。</div>
+</div>
+</div>
+</div>
+<div class="pair">
+<div class="ph"><span class="tag t-prac">实践者逐字</span>经典原型（Harper Reed）：一次只问一个问题<a class="cite" href="https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/" target="_blank">Harper Reed ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（直接复制用）</div>
+<pre>Ask me one question at a time so we can develop a thorough, step-by-step spec for this idea. Each question should build on my previous answers, and our end goal is to have a detailed specification I can hand off to a developer. Let's do this iteratively and dig into every relevant detail. Remember, only one question at a time.
+
+Here's the idea: <idea></idea></pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<div class="body">一次只问我一个问题，这样我们能为这个想法逐步打磨出一份详尽的 spec。每个问题都建立在我前面回答的基础上，最终目标是得到一份我能直接交给开发者的详细规格。我们迭代着来，深挖每一个相关细节。记住，一次只问一个问题。
+
+想法如下：<idea></idea></div>
+</div>
+</div>
+</div>
+<h2>② 把讨论编译成可交付的规格文件</h2>
+<div class="pair">
+<div class="ph"><span class="tag t-prac">实践者逐字</span>收口：编译成"开发者可直接开工"的规格<a class="cite" href="https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/" target="_blank">Harper Reed ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（直接复制用）</div>
+<pre>Now that we've wrapped up the brainstorming process, can you compile our findings into a comprehensive, developer-ready specification? Include all relevant requirements, architecture choices, data handling details, error handling strategies, and a testing plan so a developer can immediately begin implementation.</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<div class="body">既然我们已经完成了头脑风暴，你能把我们的结论汇编成一份全面、可供开发者直接上手的规格吗？包含所有相关需求、架构选择、数据处理细节、错误处理策略，以及一份测试计划，好让开发者能立刻开始实现。</div>
+</div>
+</div>
+</div>
+<div class="pair">
+<div class="ph"><span class="tag t-prac">实践者逐字</span>生成"实现蓝图"：拆小步、强制 TDD<a class="cite" href="https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/" target="_blank">Harper Reed ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（直接复制用）</div>
+<pre>Draft a detailed, step-by-step blueprint for building this project. Then, once you have a solid plan, break it down into small, iterative chunks that build on each other... Prioritize best practices, incremental progress, and early testing, ensuring no big jumps in complexity at any stage...</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<div class="body">为构建这个项目起草一份详细的、分步骤的蓝图。然后，等你有了扎实的计划，把它拆成层层递进的小块……优先考虑最佳实践、增量推进和尽早测试，确保任何阶段都不出现复杂度的大跳跃……</div>
+</div>
+</div>
+</div>
+<div class="pair">
+<div class="ph"><span class="tag t-prac">实践者逐字</span>生成勾选清单<a class="cite" href="https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/" target="_blank">Harper Reed ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（直接复制用）</div>
+<pre>Can you make a `todo.md` that I can use as a checklist? Be thorough.</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<div class="body">你能做一个 <code>todo.md</code> 让我当勾选清单用吗？要详尽。</div>
+</div>
+</div>
+</div>
+<h2>③ spec 必须"自包含"才接得住（官方原则 · 对照）</h2>
+<div class="card">
+<div class="bi"><div class="e">name the files and interfaces involved</div><div class="c">点名涉及的文件与接口</div></div>
+<div class="bi"><div class="e">state what is out of scope</div><div class="c">写明哪些不在范围内（out of scope）</div></div>
+<div class="bi"><div class="e">end with an end-to-end verification step that proves the feature works</div><div class="c">结尾给一个端到端验证步骤，证明功能确实能用</div></div>
+<div class="bi"><div class="e">Time spent making the spec precise pays off more than time spent watching the implementation.</div><div class="c">把 spec 写精确所花的时间，比盯着实现过程更值。</div></div>
+<a class="cite" href="https://code.claude.com/docs/en/best-practices" target="_blank">官方 Best practices ↗</a>
+</div>
+<h2>④ 换干净会话执行（接力动作 · 对照）</h2>
+<div class="card">
+<div class="bi"><div class="e">/clear  (or open a new session / new window)</div><div class="c">/clear（或开新会话 / 新窗口），让上下文干净</div></div>
+<div class="bi"><div class="e">Implement the feature described in SPEC.md. Follow tasks.md in order, update its status as you go, and run the tests after each step.</div><div class="c">实现 SPEC.md 里描述的功能。按 tasks.md 的顺序来，边做边更新其状态，每步之后都跑测试。</div></div>
+<div class="disc" style="margin:8px 0 0">为什么要换新会话：同一会话里 Claude 带着写 spec 时的<b>隐含假设</b>，会停止逐字读 spec；新会话强迫它像新工程师一样从头逐字读。〔buildthisnow〕</div>
+</div>
+<h2>spec 文件三种形态（对照速查）</h2>
+<div class="card">
+<div class="bi"><div class="e">SPEC.md (single, self-contained)</div><div class="c">官方：单文件、自包含</div></div>
+<div class="bi"><div class="e">requirements / design / tasks</div><div class="c">最小三段：需求（用户故事+验收）/ 设计（数据模型·API·改哪些文件）/ 任务（有序·列依赖）</div></div>
+<div class="bi"><div class="e">spec.md / prompt_plan.md / todo.md</div><div class="c">Harper：规格 / 可粘的实现 prompt 集 / 勾选清单</div></div>
+</div>
+<div class="card warn">
+<div class="ph" style="border:none;padding:0 0 6px;font-weight:600"><span class="tag t-warn">注意</span>plan mode ≠ spec 接力</div>
+<ul>
+<li>plan mode（<code>Shift+Tab</code>）把计划写进 Claude <b>自己的 plans 文件夹</b>，退出时从磁盘读回再执行——但它是<b>同一会话</b> approve→执行，<b>不是</b>干净上下文接力，且 plan 文件藏在文件夹里不好手动审改。〔Armin Ronacher〕</li>
+<li>所以大功能想真正"接力"，用<b>形态 A</b>（自己控的 SPEC.md），别只依赖 plan mode。</li>
+</ul>
+<a class="cite" href="https://lucumr.pocoo.org/2025/12/17/what-is-plan-mode/" target="_blank">Armin Ronacher: What Actually Is Plan Mode? ↗</a>
+</div>
+<div class="note">
+<b>翻译说明：</b>英文为来源原文逐字（官方 / Harper Reed），中文为忠实对照翻译，<code>[...]</code> 与 <code>&lt;IDEA&gt;</code> 是占位符照留。实操建议<b>用英文原文</b>喂 Claude Code。
+    <hr style="border-color:var(--line)"/>
+<div class="srcs"><b>来源：</b>
+<a href="https://code.claude.com/docs/en/best-practices" target="_blank">官方 Best practices</a> ·
+      <a href="https://harper.blog/2025/02/16/my-llm-codegen-workflow-atm/" target="_blank">Harper Reed</a>（<a href="https://simonwillison.net/2025/Feb/21/my-llm-codegen-workflow-atm/" target="_blank">Simon Willison 转载</a>）·
+      <a href="https://www.buildthisnow.com/blog/guide/mechanics/spec-driven-development" target="_blank">Build This Now</a> ·
+      <a href="https://lucumr.pocoo.org/2025/12/17/what-is-plan-mode/" target="_blank">Armin Ronacher</a>
+</div>
+</div>
+</div></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-07-09/claude-code-spec-relay.html"><small>上一篇</small>Claude Code「spec 接力」详解</a><a href="/2026-07-09/spec-document-layout.html"><small>下一篇</small>SPEC 文档怎么分类 · 目录约定</a></nav></main>
+<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js" defer></script></body></html>

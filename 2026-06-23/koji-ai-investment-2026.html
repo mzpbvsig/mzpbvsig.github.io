@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-23/koji-ai-investment-2026.html"><title>Koji 杨远骋「2026 AI 投资观察与思考」分析 · hikcc</title><style>
+  :root{
+    --bg:#0b0f17; --bg2:#11161f; --card:#151c28; --card2:#1a2230;
+    --line:#26303f; --line2:#323e50;
+    --txt:#e6edf3; --txt2:#9aa7b8; --txt3:#6b7689;
+    --blue:#5eb1ff; --blue-bg:rgba(94,177,255,.08);
+    --green:#7ee787; --green-bg:rgba(126,231,135,.08);
+    --amber:#f0c674; --amber-bg:rgba(240,198,116,.10);
+    --red:#ff7b72; --red-bg:rgba(255,123,114,.10);
+    --purple:#c792ea; --purple-bg:rgba(199,146,234,.08);
+    --cyan:#56d4dd; --cyan-bg:rgba(86,212,221,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:'Inter','Noto Sans SC',system-ui,sans-serif;font-size:15.5px;line-height:1.72;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1120px;margin:0 auto;padding:48px 40px 120px}
+  header.hero{border-left:5px solid var(--purple);background:linear-gradient(90deg,var(--purple-bg),transparent 60%);padding:30px 34px;border-radius:0 12px 12px 0;margin-bottom:14px}
+  header.hero h1{margin:0 0 10px;font-size:27px;font-weight:800;letter-spacing:-.01em;line-height:1.3}
+  header.hero .sub{color:var(--txt2);font-size:15px;max-width:84ch}
+  .metaline{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:12px;padding:4px 10px;border-radius:6px;background:var(--card2);border:1px solid var(--line);color:var(--txt2)}
+  .chip b{color:var(--purple);font-weight:500}
+  .disclaim{background:var(--amber-bg);border:1px solid rgba(240,198,116,.3);border-left:4px solid var(--amber);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:14px;color:var(--txt)}
+  .disclaim b{color:var(--amber)}
+  section{margin-top:44px;scroll-margin-top:18px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+  .sec-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--txt3);font-weight:600}
+  h2{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em;padding-left:14px;border-left:4px solid var(--purple)}
+  h2 .en{color:var(--txt3);font-weight:500;font-size:15px;font-family:'JetBrains Mono',monospace}
+  h3{font-size:15px;font-weight:600;margin:22px 0 8px;color:var(--txt2);text-transform:uppercase;letter-spacing:.05em;font-family:'JetBrains Mono',monospace}
+  p{margin:10px 0}
+  .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:4px;vertical-align:middle;margin-right:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.03em}
+  .t-solid{background:var(--green-bg);color:var(--green);border:1px solid rgba(126,231,135,.35)}
+  .t-signal{background:var(--cyan-bg);color:var(--cyan);border:1px solid rgba(86,212,221,.35)}
+  .t-caveated{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(240,198,116,.35)}
+  .t-interested{background:var(--red-bg);color:var(--red);border:1px solid rgba(255,123,114,.35)}
+  .t-aspirational{background:var(--purple-bg);color:var(--purple);border:1px solid rgba(199,146,234,.35)}
+  .execsum{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--cyan);border-radius:10px;padding:18px 22px;font-size:15px;line-height:1.78}
+  .execsum b{color:#fff}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;font-size:12.5px}
+  /* framework flow */
+  .fw{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+  .fnode{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+  .fnode .fn-t{font-weight:600;font-size:15px;margin-bottom:4px}
+  .fnode .fn-t .step{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--purple);margin-right:8px}
+  .fnode .fn-c{color:var(--txt2);font-size:13.5px;margin:4px 0 6px}
+  .fnode .fn-q{font-size:13px;color:var(--cyan);border-left:3px solid var(--line2);padding-left:10px;font-style:italic}
+  .fnode.n1{border-left:4px solid var(--red)}
+  .fnode.n2{border-left:4px solid var(--amber)}
+  .fnode.n3{border-left:4px solid var(--blue)}
+  .fnode.n4{border-left:4px solid var(--green)}
+  .fnode.n5{border-left:4px solid var(--purple)}
+  .fnode.n6{border-left:4px solid var(--cyan)}
+  .fnode.n7{border-left:4px solid var(--txt3)}
+  /* claims table */
+  table.claims{border-collapse:collapse;width:100%;font-size:13.5px;margin-top:10px}
+  table.claims th,table.claims td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  table.claims th{background:var(--card2);color:var(--txt2);font-size:11.5px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.04em}
+  table.claims td .claim{font-weight:600;color:var(--txt);margin-bottom:4px;display:block}
+  table.claims td .q{font-size:12.5px;color:var(--cyan);border-left:3px solid var(--line2);padding:4px 10px;margin:5px 0;display:block;font-style:italic}
+  table.claims td .cav{font-size:12.5px;color:var(--amber);margin-top:4px;display:block}
+  table.claims tr:hover td{background:rgba(255,255,255,.015)}
+  /* playbook cols */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+  .col.c1{border-left:4px solid var(--blue)}
+  .col.c2{border-left:4px solid var(--green)}
+  .col.c3{border-left:4px solid var(--amber)}
+  .col.c4{border-left:4px solid var(--cyan)}
+  .col h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--txt2);font-family:'JetBrains Mono',monospace}
+  .col ul{margin:0;padding-left:20px}
+  .col li{margin:7px 0;font-size:13.5px;color:var(--txt2);line-height:1.65}
+  /* quotes */
+  .quote{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--purple);border-radius:10px;padding:14px 18px;margin:12px 0}
+  .quote .qq{font-size:15px;font-weight:500;margin-bottom:6px;line-height:1.6}
+  .quote .qw{font-size:13px;color:var(--cyan);border-top:1px dashed var(--line);padding-top:7px;margin-top:7px}
+  .quote.q-int{border-left-color:var(--red)}
+  .quote.q-asp{border-left-color:var(--amber)}
+  nav.toc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 24px;margin:22px 0}
+  nav.toc h4{margin:0 0 10px;color:var(--txt2);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+  nav.toc ol{margin:0;padding-left:20px;columns:2;column-gap:32px}
+  nav.toc li{margin:3px 0;font-size:13.5px}
+  nav.toc a{color:var(--txt);text-decoration:none}
+  nav.toc a:hover{color:var(--purple)}
+  code{font-family:'JetBrains Mono',monospace;font-size:.86em;background:var(--bg);padding:1px 5px;border-radius:4px;color:var(--cyan);border:1px solid var(--line)}
+  strong{color:#fff;font-weight:600}
+  a{color:var(--blue)}
+  hr.sep{border:none;border-top:1px solid var(--line);margin:40px 0}
+  .foot{color:var(--txt3);font-size:13px;margin-top:60px;padding-top:20px;border-top:1px solid var(--line);font-family:'JetBrains Mono',monospace}</style><link rel="stylesheet" href="/assets/site.css"></head>
+<body class="article-page"><header class="site-nav"><div class="nav-inner">
+<a class="brand" href="/">hikcc</a>
+<nav class="nav-links" aria-label="主导航"><a href="/#library">研究资料库</a><a href="/#topics">主题方向</a><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a></nav>
+<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+</div></header>
+<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>产品与产业</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-06-23">2026-06-23</time></div><div class="article-content wrap"><header class="hero">
+<h1>Koji 杨远骋「2026 AI 投资观察与思考」深度分析<span style="color:var(--txt3);font-weight:500;font-size:16px"> · 十字路口 × 课代表立正</span></h1>
+<div class="sub">把这期播客当作一份「真格 Venture Partner + 内容人 + 持股者」的 AI 创投一线判断来拆。产出不只是复述 Koji 的战略地图，而是<strong>逐条主张的可信度评估</strong>——区分论据扎实 / 一线体感 / 有条件才成立 / 与其身份利益相关 / 愿景预测，并附金句与打折条件。批判性视角还做了独立信源交叉验证。</div>
+<div class="metaline">
+<span class="chip"><b>视频</b> 十字路口｜2026 过半 AI 投资观察与思考（下）</span>
+<span class="chip"><b>频道</b> Koji杨远骋</span>
+<span class="chip"><b>发布</b> 2026-06-11 · 37:27</span>
+<span class="chip"><b>对谈</b> Koji × 课代表立正</span>
+<span class="chip"><b>分析</b> dynamic workflow · 5 agents · 4视角+综合</span>
+</div>
+</header>
+<div class="disclaim">
+<b>⚠️ 能力边界声明（重要）：</b>我无法观看视频或收听音频，也<strong>没抓到这期视频的原始字幕逐字稿</strong>（视频可能没有自动字幕）。本分析基于 <strong>(1) 视频官方描述</strong>（含上半场要点）+ <strong>(2) 第三方详尽文字整理版</strong>（kelewrites.com《推土机前别捡钢镚——2026 上半年 AI 投资的真问题》）。文字整理版有自己的筛选/解读偏差，引用的「金句」是文字版转述，与视频原话可能略有出入。请以此作为「基于二手整理的深度解读」，非「视频逐字原文分析」。
+</div>
+<nav class="toc">
+<h4>目录</h4>
+<ol>
+<li><a href="#s0">执行摘要</a></li>
+<li><a href="#s1">推土机框架（战略地图）</a></li>
+<li><a href="#s2">主张可信度评估总表（核心）</a></li>
+<li><a href="#s3">实操 playbook（四类受众）</a></li>
+<li><a href="#s4">批判性总评（Koji 三重身份滤镜）</a></li>
+<li><a href="#s5">启示（关键洞察 + 需警惕）</a></li>
+<li><a href="#s6">十二句金句</a></li>
+</ol>
+</nav>
+
+<section id="s0">
+<div class="sec-head"><span class="sec-num">00</span><h2>执行摘要</h2></div>
+<div class="execsum">
+<p style="margin-top:0">这是真格基金 Venture Partner、十字路口播客创办者 Koji（杨远骋）在 2026 年年中的一次 AI 创投一线观察。他的核心判断构成一张自洽的战略地图：以<strong>「基模吞掉 AI 浪潮 90% 收入」</strong>（OpenAI+Anthropic 合占 90%，全部应用层仅 10%）为硬核事实前提，推出<strong>「推土机前别捡钢镚」</strong>的战略警告，再展开两极化逃生路径——往天上跳做探月（AI for Science/Math、具身），或往地下钻做脏活（FDE 前端部署工程师，把 AI 当数字员工植入企业）。</p>
+<p>围绕这条主线，还有估值逻辑（百亿估值=未来星辰大海的折现）、三类赚钱样本（头部应用 ARR / 买中模型公司股票 / 在自己行当用 AI 比同行强一点）、新时代 VC 三角色、给大厂员工的三条创业不变律、五大方向、软件涅槃三块拼图。</p>
+<p><strong>事实判断经独立验证基本成立</strong>（90% 集中度 The Information 89%、Brookings 90% 口径接近；可灵 5 亿 ARR 属实；字节 Seedance 实际约 20 亿，高于引用的 15 亿），框架（探月 vs 脏活、FDE、软件三要素）有真洞察力。</p>
+<p style="margin-bottom:0"><strong>但必须带着 Koji 的三重身份滤镜读</strong>：真格 Venture Partner（AI 叙事热度、泡沫沉淀论利好基金）、十字路口+AI Hacker House 发起人（业务依赖创业生态繁荣）、坚定持仓腾讯（微信 Agent 判断直接关联其持仓）。最坦诚也最有鉴别力的是他公开承认自己不创业是因为焦虑——一个投资人愿意削弱自身存在感，反而显得清醒。</p>
+</div>
+</section>
+
+<section id="s1">
+<div class="sec-head"><span class="sec-num">01</span><h2>推土机框架 · 战略地图 <span class="en">The Bulldozer Framework</span></h2></div>
+<p>整期的因果链：90% 收入被基模吞 → 应用层沦为推土机前的钢镚 → 两极化逃生（探月/脏活）→ 估值靠未来折现解释 → 谁真赚钱（三类）→ 软件以三块涅槃重生。强项是把模糊的「应用层焦虑」量化并赋予清晰路径；弱项是「90%」是单一时点切片、「两极化」是过度二分（遗漏了视频模型 5–15 亿 ARR 等赚钱的中间地带）。</p>
+<div class="fw">
+<div class="fnode n1">
+<div class="fn-t"><span class="step">① 现状诊断</span>90% 收入被基模吞掉</div>
+<div class="fn-c">美国所有 AI 相关软件+模型收入里，OpenAI+Anthropic 合占 90%，全部应用层（Cursor/Manus/Lovable/Cluely 等）只分 10%——应用层创业者集体焦虑因此是结构性而非情绪问题。方向性经独立验证成立，但「90%」是单一时点切片、口径敏感（年度 run-rate vs 累计、是否含定制服务、存在双重计数），不宜当稳态常量。</div>
+<div class="fn-q">「整个由这一波 AI 浪潮所创造的商业价值，被基模吞掉了 90%」</div>
+</div>
+<div class="fnode n2">
+<div class="fn-t"><span class="step">② 战略警告</span>推土机前别捡钢镚</div>
+<div class="fn-c">纯应用层产品等于推土机前的钢镚，护城河就是基模的盲区，而盲区在收缩。对 2C 套壳/wrapper 警告准确，对有私有数据/工作流壁垒的 2B 未必成立。框架脆弱处：假设基模线性扩张——若 scaling 边际递减，捡钢镚反而可持续。</div>
+<div class="fn-q">「你做的不是产品，你做的是『在推土机前面捡钢镚』」</div>
+</div>
+<div class="fnode n3">
+<div class="fn-t"><span class="step">③ 路径一·往天上跳</span>探月 Moonshot</div>
+<div class="fn-c">离白领工作越远越安全：AI for Science（芯片/新材料/挖矿/量子）、AI for Math（需求严谨描述→可验证→RL 进步，是方法论基石）、具身智能（中国已有十几二十家过百亿，预测很快 300 亿）。隐含门槛极高——教授/PhD 创业正反馈已叠加，是少数顶级大脑的赛道，非普通大厂员工可选项。</div>
+<div class="fn-q">「离白领工作越远越安全」</div>
+</div>
+<div class="fnode n4">
+<div class="fn-t"><span class="step">④ 路径二·往地下钻</span>脏活 FDE</div>
+<div class="fn-c">OpenAI 与 Anthropic 同月不约而同提出 FDE（前端部署工程师），像 HR 一样让「数字员工」上岗——梳理流程/文化/上下文/数据库。「有新词=共识凝聚」的观察锋利，是框架落地最具体的一块。国内无现成人才，将井喷但尚未井喷（Karpathy 说 Agent 落地按 decade 算）。对求职者是确定增量方向，对创业者更像大厂/咨询内部职能。</div>
+<div class="fn-q">「把 AI 卖给一家公司，有点像把一个数字员工带进一家公司」</div>
+</div>
+<div class="fnode n5">
+<div class="fn-t"><span class="step">⑤ 估值逻辑</span>未来星辰大海的折现</div>
+<div class="fn-c">百亿估值不是当下现金流支撑，而是市场共识对未来星辰大海的折现。「估值=共识×折现」是扎实金融常识，Koji 不回避这点值得肯定。但「十个泡沫九个沉淀价值」的真相反向：价值沉淀给后来的基础设施使用者，而非泡沫期投机者（铁路狂热、光纤过剩、互联网泡沫皆是）——对 VC 是安慰，对散户跟投是危险信号。</div>
+<div class="fn-q">「给的是一个未来价值在今天的折现」</div>
+</div>
+<div class="fnode n6">
+<div class="fn-t"><span class="step">⑥ 谁赚钱</span>三类真实样本</div>
+<div class="fn-c">头部应用披露 ARR；买中已上市模型公司股票者（Koji 自述持仓押微信 Agent）；在自己行当用 AI 比同行强一点的人（短剧、外贸）。揭示框架真实含义：不是应用层无机会，而是<strong>机会高度集中在头部 + 高度依赖你离推土机的距离</strong>。第三类是普通人最可执行路径，但窗口期短（对手也会迅速学 AI）。</div>
+<div class="fn-q">「在同样竞争要素下比对手强一点，就能赚到钱」</div>
+</div>
+<div class="fnode n7">
+<div class="fn-t"><span class="step">⑦ 软件涅槃</span>界面/数据/工作流三块</div>
+<div class="fn-c">软件不会消亡但涅槃重生，最小单元由界面（WebIsland）、数据（公开场域取不到的私有数据）、工作流（可售 skill）构成。拆解有洞察力，但框架非可操作结论——Koji 自己说「怎么商业化留给创业者」。课代表立正的反向 data point（一书做成 skill 网站几乎没人用）直接削弱工作流商业化可行性：三块中界面和数据相对清晰，工作流最不确定。</div>
+<div class="fn-q">「一个软件工具到底要做成什么样才能产生被投资的价值？」</div>
+</div>
+</div>
+</section>
+
+<section id="s2">
+<div class="sec-head"><span class="sec-num">02</span><h2>主张可信度评估总表 <span class="en">Claim Assessment</span></h2></div>
+<p>这是本分析的<strong>核心</strong>。把 Koji 的关键判断配上可信度评估与金句。批判性视角还做了独立信源交叉验证（括号内为独立查证）。</p>
+<div class="legend">
+<span class="tag t-solid">solid 论据扎实</span>
+<span class="tag t-signal">signal 一线体感</span>
+<span class="tag t-caveated">caveated 有条件</span>
+<span class="tag t-interested">interested 立场相关</span>
+<span class="tag t-aspirational">aspirational 愿景</span>
+</div>
+<div style="overflow-x:auto">
+<table class="claims">
+<thead><tr><th style="width:30%">主张</th><th style="width:16%">评估</th><th>金句 + 打折条件（含独立验证）</th></tr></thead>
+<tbody>
+<tr>
+<td><span class="claim">90% 收入被基模吞掉</span>OpenAI+Anthropic 合占美国 AI 软件+模型收入 90%，应用层仅 10%。</td>
+<td><span class="tag t-caveated">caveated</span></td>
+<td><span class="q">「整个由这一波 AI 浪潮所创造的商业价值，被基模吞掉了 90%」</span><span class="cav">方向性经独立验证成立（The Information 89%、Brookings 90%），但口径敏感：年度 run-rate vs 累计、是否含定制服务、存在双重计数（应用层收入最终也付给基模 API）。「基模」分母未含 Google/Meta/国内厂商。是单一时点切片非增量趋势，应作方向性判断而非精确常量。</span></td>
+</tr>
+<tr>
+<td><span class="claim">推土机前别捡钢镚</span>纯应用层护城河就是基模盲区，盲区在收缩。</td>
+<td><span class="tag t-caveated">caveated</span></td>
+<td><span class="q">「你做的不是产品，你做的是『在推土机前面捡钢镚』」</span><span class="cav">对 2C 套壳/通用 wrapper 警告准确（Cursor/Lovable 确实面临 Claude Code/Codex 直接竞争）；对有私有数据、垂直工作流、监管护城河的 2B 深度产品未必成立。隐喻煽动性强，可能劝退本可在 10% 里赢的人。前提是基模线性扩张——若 scaling 边际递减，捡钢镚反而可持续。</span></td>
+</tr>
+<tr>
+<td><span class="claim">两极化：探月 vs 脏活</span>避推土机只有往天上跳或往地下钻。</td>
+<td><span class="tag t-caveated">caveated</span></td>
+<td><span class="q">「要么往天上跳去做『探月』，要么往地下钻去做『脏活』」</span><span class="cav">「只有两条路」是过度二元化，牺牲了中间地带——视频模型（可灵 5 亿、字节 Seedance 实际约 20 亿 ARR）、垂直行业 SaaS、消费级 AI 原生产品都在赚钱却既非探月也非脏活。探月有精英门槛（教授/PhD），脏活有 To B 组织壁垒。</span></td>
+</tr>
+<tr>
+<td><span class="claim">AI for Math 是方法论基石</span>需求被严谨描述才能被验证、才能 RL 进步。</td>
+<td><span class="tag t-signal">signal</span></td>
+<td><span class="q">「只有需求能被严谨描述，才能被严谨验证，才能用强化学习不断让模型进步」</span><span class="cav">链条在数学领域成立（AlphaProof、IMO 有共识）。但「可形式化」本身是高门槛，大多数真实需求永远无法被严谨描述，因此是窄而深赛道不是普适方法论，对其他行业迁移性有限。</span></td>
+</tr>
+<tr>
+<td><span class="claim">FDE 将井喷</span>OpenAI+Anthropic 同月提 FDE，像 HR 让数字员工上岗。</td>
+<td><span class="tag t-solid">solid</span></td>
+<td><span class="q">「把 AI 卖给一家公司，有点像把一个数字员工带进一家公司」</span><span class="cav">两家头部公司同月同概念确是共识凝聚的强信号，与 Palantir Forward Deployed 模式同源。井喷时间点高度不确定——Karpathy 说按 decade 算，企业 AI 采购预算受 Agent ROI 制约。对求职者是确定增量方向（可能要熬冷启动期），对创业者更像大厂/咨询内部职能而非独立创业机会。</span></td>
+</tr>
+<tr>
+<td><span class="claim">具身百亿估值=未来折现</span>不是当下商业价值，是星辰大海的折现。</td>
+<td><span class="tag t-solid">solid</span></td>
+<td><span class="q">「给的是一个未来价值在今天的折现」</span><span class="cav">「估值=共识×折现」是扎实金融常识，Koji 不回避值得肯定。独立验证：宇树发行估值约 420 亿、银河通用&gt;200 亿，但宇树 2025 营收 17 亿，估值/营收比仍极高。但「十个泡沫九个沉淀价值」的真相反向：价值沉淀给后来的基础设施使用者（铁路狂热多数公司破产、光纤过剩让先驱电信商倒闭），对 VC 是安慰，对散户跟投危险。</span></td>
+</tr>
+<tr>
+<td><span class="claim">谁赚钱：三类样本</span>头部应用 ARR / 买中模型公司股票 / 自己行当用 AI。</td>
+<td><span class="tag t-signal">signal</span></td>
+<td><span class="q">「做短剧、慢剧的人，开始用 AI 后秒掉那些不会用的同行」</span><span class="cav">第一类 ARR 口径不一（年化/当月/含退款），ARR≠利润，多数仍亏损；第二类「买腾讯赌微信 Agent」是信念非框架推论（见下条）；第三类是体感信号缺对比组，且「比对手强一点」窗口期短。揭示框架真实含义：不是应用层无机会，而是机会高度集中在头部 + 依赖离推土机的距离。</span></td>
+</tr>
+<tr>
+<td><span class="claim">微信 Agent = 中国 Agent 普及引爆点</span>腾讯有时间大大的有。</td>
+<td><span class="tag t-interested">interested</span></td>
+<td><span class="q">「只要微信 Agent 推出的那一天，就是中国普通用户全部用上 Agent 的那一天」</span><span class="cav"><strong>立场利益最明显一条。</strong>Koji 自述坚定持仓腾讯，结论直接构成看多论据。技术判断（微信上下文+小程序生态优势）有合理性，但「一定能做对」忽略腾讯历史多次错过窗口（短视频被抖音反超、视频号追赶艰难）；「全部用上」单一归因到微信忽略独立 Agent 应用、手机厂商系统级 Agent、抖音生态的竞争；小程序开放给第三方 Agent 的意愿存疑。</span></td>
+</tr>
+<tr>
+<td><span class="claim">新时代 VC 三角色</span>叙事公司 / Connector as a Service / 新型财务伙伴。</td>
+<td><span class="tag t-solid">solid</span></td>
+<td><span class="q">「自强则万强。最牛逼的创业者，是不需要来自太多 VC 指指点点的」</span><span class="cav">判断扎实自洽，明确反对 VC 媒体化（与 a16z 自我修正一致）。Koji 愿说「创业者越需要我帮忙我越担忧」显清醒。但由 VC 自己讲存在美化自身定位偏向；「最牛创业者不需要指点」与「VC 提供三角色服务」有张力——更可能是话语层从「导师」转向「服务者」。对硬核 deep tech 叙事公司模式可能无效。</span></td>
+</tr>
+<tr>
+<td><span class="claim">创业不变三条</span>不睡也要做的事 / 毫不费劲别人累的事 / 解决自己小问题。</td>
+<td><span class="tag t-solid">solid</span></td>
+<td><span class="q">「不要把创业当做工作不开心所以去创业。没有那种原生的 passion，做不好」</span><span class="cav">经典创业箴言（与 Paul Graham「make something people want」一致），作为资格过滤有价值但非成功率保证。强幸存者偏差——失败者同样有 passion、做不费劲的事，只是没活下来被讲述。第二条「毫不费劲」的比较优势可能被模型 3 年内抹平（如「懂茶」）。第三条在 AI 时代因基模吞食应用层而部分失效。</span></td>
+</tr>
+<tr>
+<td><span class="claim">视频模型：第二次文艺复兴</span>可灵 ARR 5 亿、字节 15 亿；一人做出全球刷屏短片。</td>
+<td><span class="tag t-solid">solid</span></td>
+<td><span class="q">「这会发生生产力革命，甚至会发生第二次文艺复兴」</span><span class="cav">最硬当下数据支撑：可灵 5 亿 ARR 属实；<strong>字节 Seedance 实际约 20 亿 ARR（独立信源《晚点LatePost》，高于引用的 15 亿，方向被低估）</strong>。《僵尸清道夫》一人制作全球刷屏属实。「生产力革命」部分扎实；「第二次文艺复兴」是修辞非可验证预测。「不污名化短剧」的辩护也可被用来为低质内容洗地。头部效应极强（一人刷屏是极端幸存者）。</span></td>
+</tr>
+<tr>
+<td><span class="claim">软件涅槃三块</span>界面/数据/工作流构成新最小单元。</td>
+<td><span class="tag t-caveated">caveated</span></td>
+<td><span class="q">「一个软件工具到底要做成什么样才能产生被投资的价值？」</span><span class="cav">拆解有洞察力（比泛泛「AI-native SaaS」更有抓手），但框架非可操作结论——Koji 自己说「怎么商业化留给创业者」，把最难问题抛回听众。课代表立正反向 data point（一书做成 skill 网站几乎没人用）直接削弱工作流商业化：三块中界面和数据相对清晰，工作流最不确定，可能只是依附大平台的插件。</span></td>
+</tr>
+<tr>
+<td><span class="claim">语音是下一个交互范式</span>打字不是最舒服界面，尤其中文难打。</td>
+<td><span class="tag t-caveated">caveated</span></td>
+<td><span class="q">「打字不是人类最舒服的交流界面。尤其中文很难打」</span><span class="cav">微信 0→1 靠语音有历史证据（Talk Box→米聊/微信）；但「现在该做语音」是体感信号非必然。语音输入已普及（讯飞、搜狗）但语音 native 新产品形态未跑出大案例；UX 瓶颈（噪声、隐私、识别错误）仍在。Flappy Bird 语音版是 demo 级趣味非商业证据。</span></td>
+</tr>
+<tr>
+<td><span class="claim">Koji 自己不创业（焦虑论）</span>创业必然伴生焦虑，享受过程做时间的朋友。</td>
+<td><span class="tag t-signal">signal</span></td>
+<td><span class="q">「创业一定伴生很强的焦虑……永远在拉扯，拉扯翻译过来就是焦虑」</span><span class="cav">本期最坦诚的一段。「焦虑是创业必然伴生物」是体感判断，非所有模式（bootstrapped、lifestyle business）等量焦虑。此理由可能被解读为对当前内容+投资双轨舒适区的合理化；「时间的朋友」是自我合理化修辞——真格 LP 与播客商业化仍是隐性目标。「等 conviction 来」也可能成为永远不行动的借口。</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section id="s3">
+<div class="sec-head"><span class="sec-num">03</span><h2>实操 playbook <span class="en">By Audience</span></h2></div>
+<p>Koji 的建议按四类受众落地，但不是每条都普适。最扎实的是「现象观察」（90% 被吞、FDE 兴起），最需要打折的是带身份利益的判断（泡沫九成沉淀、腾讯股票、新时代 VC 三角色）。</p>
+<div class="cols">
+<div class="col c1">
+<h4>给创业者</h4>
+<ul>
+<li><strong>不变三条（资格测试，满足再谈方向）</strong>：① 找一件不睡也要做的事；② 找一件你毫不费劲别人却累的事（差异化禀赋的可操作定义：可观测、可安利、低摩擦输入）；③ 从真实需求出发，最佳起点是解决自己的小痛点（OpenCode/Hermes Agent 模式）。</li>
+<li><strong>排除坏动机</strong>：不要把创业当「工作不开心所以去创业」的逃避出口；没有原生 passion 做不好，代价是持续的目标拉扯与焦虑。</li>
+<li><strong>两极化选位</strong>：避开已被基模碾压的中间层（通用白领增强、wrapper 套壳），要么往天上跳（叠加教授/PhD 级技术禀赋），要么往地下钻（To B 组织/销售壁垒）。</li>
+<li><strong>用「有没有基模不会自己做的壁垒」鉴别机会</strong>：私有数据、垂直工作流、监管护城河，至少占一个；否则就是推土机前的钢镚。</li>
+<li><strong>五大方向（+语音）</strong>：Everything Agent / 给 Agent 设计产品（飞书 CLI 模式）/ Physical AI / 视频模型 / 软件涅槃 + 语音。<strong>对独立开发者最有用的是「给 Agent 做可发现工具」</strong>。</li>
+</ul>
+</div>
+<div class="col c2">
+<h4>给投资人</h4>
+<ul>
+<li><strong>估值=共识×折现</strong>：不要被营收数字误导；承认泡沫≠零价值，但价值沉淀给后来的基础设施使用者，而非泡沫期投机者。</li>
+<li><strong>新时代 VC 三角色</strong>：叙事公司（帮 Founder 找好并放大叙事）、Connector as a Service（横向链接客户/候选人/workshop）、新型财务伙伴（hiring、财务等 infrastructure）。<strong>反向警示</strong>：创业者越需要 VC 干 ABCDEFG，越要担忧。</li>
+<li><strong>谁在赚钱</strong>：头部应用 ARR（口径不一、多数亏损）；买中已上市模型公司股票；自己行当用 AI 的人。</li>
+<li><strong>选 VC 时</strong>（给创业者反向用）：别选爱「赋能」的，选不添乱的；最牛创业者不需要 VC 指指点点。</li>
+</ul>
+</div>
+<div class="col c3">
+<h4>给大厂想创业的员工</h4>
+<ul>
+<li>先用<strong>不变三条</strong>做资格自检，不满足别裸辞。</li>
+<li>排除坏动机：创业不是逃避当前工作的选项。</li>
+<li>选位避开中间层，要么叠加顶级技术禀赋，要么积累 To B 资源。</li>
+<li>软件产品按<strong>三块拼图自检</strong>：界面/数据/工作流，至少一块是稀缺私有资产才有定价权——纯工作流 skill 化难变现（立正的 skill 网站没人用是明确反例）。</li>
+</ul>
+</div>
+<div class="col c4">
+<h4>给普通从业者</h4>
+<ul>
+<li><strong>门槛最低、最快见效</strong>：在自己行当用 AI 比同行强一点就能变现（短剧、外贸选品/作战/投流）。</li>
+<li><strong>第一条操作指令</strong>：停止 ChatGPT 式聊天，改用 Codex / Claude Code / Cursor / Manus 等 agentic 工具——从「问一句答一句」转向「交任务跑流程」。</li>
+<li><strong>节奏校准</strong>：科技革命落地比所有人想象的都慢（Karpathy：Agent 按 decade 算）。长周期里位置比时机重要，不要因「还没爆发」退出，也不要因「马上爆发」All in。</li>
+<li><strong>给 Agent 做可发现工具</strong>：如果你有工具/技能，把它做成 Agent 可调用形态（CLI/MCP/API），否则对 Agent 而言你「不存在」。</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section id="s4">
+<div class="sec-head"><span class="sec-num">04</span><h2>批判性总评 · Koji 三重身份滤镜 <span class="en">Critical Lens</span></h2></div>
+<div class="execsum" style="border-left-color:var(--red)">
+<p style="margin-top:0">Koji 的多重身份决定了这份判断清单必须带着滤镜读：</p>
+<p><strong>① 真格基金 Venture Partner</strong>——AI 叙事热度、泡沫沉淀论、探月赛道推荐都直接<strong>利好基金已投项目估值与募资环境</strong>。</p>
+<p><strong>② 十字路口播客创办者 + AI Hacker House 发起人</strong>——业务<strong>依赖创业与创作者生态繁荣</strong>，所以「第二次文艺复兴」「不要污名化短剧」「新创业者该去做新事情」都暗含对生态规模的诉求。</p>
+<p><strong>③ 自述坚定持有腾讯等头部公司股票</strong>——「微信 Agent 一定会来、时间大大的有」直接构成对其持仓的看多论据，是他公开披露的下注逻辑，但「腾讯一定能做对」忽略其历史上多次错过窗口（短视频被抖音反超、视频号追赶艰难）。</p>
+<p><strong>最值得警惕的两类内容：</strong></p>
+<p>一是把「历史泡沫沉淀价值」这种<strong>对基金成立的多头安慰，偷换成对散户/跟投者也成立的暗示</strong>——事实是价值沉淀给了后来的基础设施使用者：铁路狂热中绝大多数英国铁路公司破产，光纤过剩让先驱电信商倒闭，价值被 Google/Amazon 这些后用者吃掉。</p>
+<p>二是把<strong>对顶级大脑和大厂精英成立的建议</strong>（探月、PhD 创业、软件三块拼图、时间的朋友），<strong>包装成对普通人和独立开发者也成立的通用判断</strong>——「探月」门槛极高、「时间的朋友」需要无 KPI 的舒适双轨身份，多数人不具备。</p>
+<p><strong>最坦诚也最有鉴别力的</strong>，是他公开承认自己不创业是因为焦虑，且坚持「最牛创业者不需要 VC 指指点点」——一个投资人愿意削弱自身存在感，反而显得清醒。</p>
+<p style="margin-bottom:0"><strong>需独立验证的判断</strong>：90% 数据的精确口径（多家信源 89–90% 但口径各异）、具身商业化收入/估值比、Karpathy decade 论的原始措辞（其本人后来修正过）、可灵与字节 Seedance 最新 ARR（独立信源显示字节实际约 20 亿，<strong>高于</strong>引用的 15 亿）。</p>
+</div>
+</section>
+
+<section id="s5">
+<div class="sec-head"><span class="sec-num">05</span><h2>启示 <span class="en">Takeaways</span></h2></div>
+<div class="cols">
+<div class="col c1">
+<h4>🟢 最值得记住的洞察</h4>
+<ul>
+<li><strong>「推土机前捡钢镚」是强隐喻</strong>：把「应用层为什么短命」讲清楚了——护城河是基模盲区，盲区在收缩。<strong>真正的鉴别力</strong>在于区分：你的产品有没有基模不会自己做的壁垒（私有数据、垂直工作流、监管护城河）。</li>
+<li><strong>90% 集中度是结构性事实</strong>（经独立验证）：应用层焦虑不是矫情。但 10% 里仍有可赢的垂直利基。</li>
+<li><strong>「有新词=共识凝聚」</strong>：两家头部公司同月提 FDE，是行业从模糊需求收敛到明确岗位的信号。</li>
+<li><strong>对普通从业者，AI 是杠杆而非威胁</strong>：推土机框架是投资人/创业者视角；在现有赛道用 AI 比同行强一点即可变现。</li>
+<li><strong>落地速度慢是机会不是风险</strong>：长周期里位置比时机重要。</li>
+</ul>
+</div>
+<div class="col c4" style="border-left-color:var(--red)">
+<h4>⚠️ 需要警惕/打折的点</h4>
+<ul>
+<li><strong>立场相关判断要打折</strong>：「微信 Agent 时间大大的有」（持仓利益）、「泡沫九成沉淀价值」（利好基金叙事）、「第二次文艺复兴」（内容人生态诉求）。</li>
+<li><strong>「两极化」是过度二分</strong>：遗漏了视频模型（5–20 亿 ARR）、垂直 SaaS、消费级 AI 原生产品等赚钱的中间地带。</li>
+<li><strong>幸存者偏差</strong>：OpenCode/Hermes/《僵尸清道夫》是极端幸存者，「不变三条」是过滤条件非成功率保证。</li>
+<li><strong>「90%」是单一时点切片</strong>，口径敏感、存在双重计数，不宜当稳态常量。</li>
+<li><strong>「时间的朋友」「等 conviction」</strong>可能成为永远不行动的借口——需要无 KPI 的舒适双轨身份，多数人不具备。</li>
+<li><strong>工作流商业化是开放难题</strong>：立正的 skill 网站没人用是直接反例，软件涅槃三块里工作流最不确定。</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section id="s6">
+<div class="sec-head"><span class="sec-num">06</span><h2>十二句金句</h2></div>
+<p style="font-size:13.5px;color:var(--txt2)">来自文字整理版转述，与视频原话可能略有出入。<span class="tag t-interested">立场相关</span> <span class="tag t-aspirational">愿景</span> 标注需打折的金句。</p>
+<div class="quote"><div class="qq">「整个由这一波 AI 浪潮所创造的商业价值，被基模吞掉了 90%」</div><div class="qw">整期的硬核事实前提。把模糊的「应用层难赚钱」量化成刺眼数字——但口径敏感，作方向判断而非精确常量。</div></div>
+<div class="quote"><div class="qq">「你做的不是产品，你做的是『在推土机前面捡钢镚』」</div><div class="qw">本期最有传播力的修辞。对套壳工具警告准确，对有壁垒的 2B 未必成立。</div></div>
+<div class="quote"><div class="qq">「要么往天上跳去做『探月』，要么往地下钻去做『脏活』，别在推土机前面捡钢镚」</div><div class="qw">战略地图的一句话压缩。漂亮但过度二分，牺牲了赚钱的中间地带。</div></div>
+<div class="quote"><div class="qq">「只有需求能被严谨描述，才能被严谨验证，才能用强化学习不断让模型进步」</div><div class="qw">AI for Math 的方法论基石。为什么数学领域是 RL 的甜区——但「可形式化」是高门槛，非普适方法。</div></div>
+<div class="quote"><div class="qq">「把 AI 卖给一家公司，有点像把一个数字员工带进一家公司」</div><div class="qw">FDE 的本质：不是卖模型，而是像 HR 一样让数字员工上岗——梳理流程/文化/上下文/数据库。</div></div>
+<div class="quote"><div class="qq">「今天的百亿估值，并不是因为已经产生了这些商业价值所以值这个钱，而是因为大家认为它的未来是星辰大海——给的是一个未来价值在今天的折现」</div><div class="qw">估值逻辑的诚实交代。但「折现」在共识过强时正是泡沫温床——而价值沉淀给后用者，非投机者。</div></div>
+<div class="quote q-int"><div class="qq">「只要微信 Agent 推出的那一天，就是中国普通用户全部用上 Agent 的那一天」</div><div class="qw"><span class="tag t-interested">立场相关</span> 立场利益最明显一条。Koji 自述持仓腾讯，结论直接构成看多论据；忽略腾讯历史多次错过窗口。</div></div>
+<div class="quote"><div class="qq">「自强则万强。最牛逼的创业者，是不需要来自太多 VC 指指点点的」</div><div class="qw">一个投资人愿意削弱自身存在感，反而清醒。反向筛选标准：创业者越需要 VC 帮干 ABCDEFG，越要担忧。</div></div>
+<div class="quote"><div class="qq">「不要把创业当做工作不开心所以去创业。没有那种原生的 passion，做不好」</div><div class="qw">排除坏动机。创业代价是持续的目标拉扯与焦虑，缺 passion 无法支撑长期消耗。</div></div>
+<div class="quote"><div class="qq">「如果 Agent 想 P 图但找不到你的工具，你的工具对它来说就是不存在的——就像一个人在 App Store 里搜不到你一样」</div><div class="qw">Agent 时代的产品分发包：从前端 SEO/应用商店，转向 Agent 可读性（MCP/CLI/API）。不做适配等于被下架。</div></div>
+<div class="quote"><div class="qq">「在同样竞争要素下比对手强一点，就能赚到钱」</div><div class="qw">给普通从业者最可执行的 playbook：不必创业，在现有赛道用 AI 形成局部领先即可变现。门槛最低、最快见效。</div></div>
+<div class="quote q-asp"><div class="qq">「这会发生生产力革命，甚至会发生第二次文艺复兴——每个人都可以把大脑里的东西释放出来变成作品」</div><div class="qw"><span class="tag t-aspirational">愿景</span> 「生产力革命」部分扎实（工具让单人做出过去需团队的作品）；「第二次文艺复兴」是修辞。头部效应极强，一人刷屏是极端幸存者。</div></div>
+</section>
+<hr class="sep"/>
+<section id="appendix">
+<div class="sec-head"><span class="sec-num">附</span><h2>本分析是如何产出的</h2></div>
+<div class="execsum" style="border-left-color:var(--cyan)">
+<p style="margin:0"><strong>数据来源（⚠️ 非原始字幕）：</strong>(1) 视频官方描述（上半场要点：高手怎么用 AI、普通人第一条建议）；(2) 第三方详尽文字整理版 <a href="https://kelewrites.com/posts/koji-ai-investment-2026h2/" target="_blank">kelewrites.com《推土机前别捡钢镚》</a>（下半场 Koji 投资判断的完整内容+金句+案例）。<strong>未拿到 YouTube 原始字幕逐字稿</strong>，文字整理版有自己的筛选/解读偏差。</p>
+<p style="margin:10px 0 0"><strong>方法：</strong>dynamic workflow（5 个 subagent，约 13 万 token，~9 分钟）两阶段：
+    <span class="tag t-signal">阶段 1</span> 4 视角并行——论点地图 / 推土机框架逻辑 / 实操 playbook / 批判性鉴别，每个独立做带「可信度评估+打折条件」的分析；
+    <span class="tag t-signal">阶段 2</span> 综合成结构化解读 + 论点评估表 + 批判性总评。</p>
+<p style="margin:10px 0 0"><strong>关键设计：</strong>批判性鉴别视角做了<strong>独立信源交叉验证</strong>（The Information 89%、Brookings 90%、宇树估值/营收比、字节 Seedance 实际 ARR~20 亿高于引用的 15 亿、泡沫沉淀论的学术证据），并专门点出 Koji 三重身份（真格 VP / 内容人 / 持股腾讯）的立场偏向。§2 论点评估表是这一设计的产物。</p>
+</div>
+<div class="foot">
+    视频来源：<a href="https://www.youtube.com/watch?v=20JIbw45HLM" target="_blank">https://www.youtube.com/watch?v=20JIbw45HLM</a>（十字路口｜2026 过半 AI 投资观察与思考（下）· Koji杨远骋 · 2026-06-11）<br/>
+    文字整理：<a href="https://kelewrites.com/posts/koji-ai-investment-2026h2/" target="_blank">kelewrites.com《推土机前别捡钢镚——2026 上半年 AI 投资的真问题》</a><br/>
+    标签：<span class="tag t-solid">solid</span>论据扎实 ｜ <span class="tag t-signal">signal</span>一线体感 ｜ <span class="tag t-caveated">caveated</span>有条件 ｜ <span class="tag t-interested">interested</span>立场相关 ｜ <span class="tag t-aspirational">aspirational</span>愿景<br/>
+    ⚠️ 本分析基于官方描述+第三方文字整理，非视频原始字幕；金句为文字版转述，与原话可能略有出入<br/>
+    生成于 2026-06-23 · dynamic workflow（4 视角并行分析 → 综合）· 5 agents · ~131k tokens
+  </div>
+</section></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-06-23/boris-cherny-fireside-chat.html"><small>上一篇</small>Boris Cherny 炉边谈话分析</a><a href="/2026-06-22/boris-loops-not-prompts.html"><small>下一篇</small>Boris：不写 prompt，写 loop 的全部内涵</a></nav></main>
+<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js" defer></script></body></html>

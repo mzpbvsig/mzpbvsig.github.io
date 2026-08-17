@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="逐字材料的中英文对照，便于查阅和复用。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/phase-task-checklist-bilingual.html"><title>Phase / Task 清单 · 中英对照 · hikcc</title><style>
+:root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 18px 90px}
+h1{font-size:23px;margin:0 0 6px}
+h2{font-size:18px;margin:24px 0 6px}
+.lead{color:var(--mut);margin:0 0 8px}
+.lead a,.srcs a,.cite{color:var(--blue)}
+.tag{display:inline-block;padding:1px 8px;border-radius:6px;font-size:11.5px;font-weight:700;margin-right:4px;white-space:nowrap}
+.t-off{background:#0b3d2e;color:#9af5c4;border:1px solid #155}
+.t-comm{background:#1a2433;color:#bcd3ff;border:1px solid #2c466e}
+.t-real{background:#3a2410;color:#ffce94;border:1px solid #6e4a23}
+.disc{background:#1c1726;border:1px dashed #4b3a6b;border-radius:10px;padding:11px 14px;color:#cbb6f0;font-size:13px;margin:12px 0}
+.pair{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:14px 0;overflow:hidden}
+.pair .ph{padding:9px 14px;border-bottom:1px solid var(--line);font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pair .ph .cite{margin-left:auto;font-size:11.5px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.col{padding:10px 13px}
+.col.en{border-right:1px solid var(--line)}
+.col.zh{background:#14181f}
+.lbl{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+pre{margin:0;font:12.3px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;overflow-x:auto;
+border-radius:7px;padding:9px 11px}
+.en pre{background:#0b1f17;border:1px solid #143126;color:#cfe9d6}
+.zh pre{background:#0d1622;border:1px solid #1b2c44;color:#dbe7ff}
+@media(max-width:820px){.cols{grid-template-columns:1fr}.col.en{border-right:none;border-bottom:1px solid var(--line)}}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.7px}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:#1d2230;color:var(--mut)}
+code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
+.note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.srcs{font-size:12.7px;color:var(--mut)}</style><link rel="stylesheet" href="/assets/site.css"></head>
+<body class="article-page"><header class="site-nav"><div class="nav-inner">
+<a class="brand" href="/">hikcc</a>
+<nav class="nav-links" aria-label="主导航"><a href="/#library">研究资料库</a><a href="/#topics">主题方向</a><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a></nav>
+<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+</div></header>
+<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-optional">看场景可省</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Phase / Task 清单 · 中英对照</h1>
+<p class="lead">把需求拆成 <b>Phase 阶段 → Task 原子任务 → 勾选清单</b> 写进 <code>tasks.md</code> 驱动 Claude Code。下面<b>左英文逐字（真实仓库原文，可直接照搬）/ 右中文平移</b>。讲解与标记含义见同目录 <a href="claude-code-task-phase清单-真实用法.html">真实用法.html</a>。</p>
+<div class="disc"><b>真实性：</b>左列 markdown 全部从公开仓库逐字拉取、未改写；右列是按相同结构的中文平移（占位符 <code>[...]</code>、<code>_Requirements_</code> 等照留）。实操建议<b>直接用英文原文</b>喂 Claude Code。</div>
+
+<h2>形态 1 · GitHub spec-kit 官方模板</h2>
+<div class="pair">
+<div class="ph"><span class="tag t-off">官方逐字</span>templates/tasks-template.md（节选）<a class="cite" href="https://github.com/github/spec-kit/blob/main/templates/tasks-template.md" target="_blank">github/spec-kit ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（原文）</div>
+<pre>## Format: `[ID] [P?] [Story] Description`
+- **[P]**: Can run in parallel (different files, no deps)
+- **[Story]**: Which user story (e.g., US1, US2, US3)
+- Include exact file paths in descriptions
+
+## Phase 1: Setup (Shared Infrastructure)
+**Purpose**: Project initialization and basic structure
+- [ ] T001 Create project structure per impl plan
+- [ ] T002 Initialize [language] project with [framework]
+- [ ] T003 [P] Configure linting and formatting tools
+
+## Phase 2: Foundational (Blocking Prerequisites)
+**Purpose**: Core infra that MUST be complete before
+ANY user story
+**⚠️ CRITICAL**: No user story work can begin until
+this phase is complete
+- [ ] T004 Setup database schema and migrations
+- [ ] T005 [P] Implement auth/authorization framework
+- [ ] T007 Create base models all stories depend on
+**Checkpoint**: Foundation ready - user story impl
+can now begin in parallel
+
+## Phase 3: User Story 1 - [Title] (Priority: P1) 🎯 MVP
+**Goal**: [What this story delivers]
+**Independent Test**: [How to verify it alone]
+### Tests for US1 (OPTIONAL - only if requested) ⚠️
+&gt; **NOTE: Write tests FIRST, ensure they FAIL
+&gt; before implementation**
+- [ ] T010 [P] [US1] Contract test for [endpoint] in
+      tests/contract/test_[name].py
+### Implementation for User Story 1
+- [ ] T012 [P] [US1] Create [Entity1] model in
+      src/models/[entity1].py
+- [ ] T014 [US1] Implement [Service] in
+      src/services/[service].py (depends on T012, T013)
+**Checkpoint**: US1 fully functional, testable alone</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<pre>## 格式：`[ID] [P?] [Story] 描述`
+- **[P]**：可并行（改不同文件、无依赖）
+- **[Story]**：归属哪个用户故事（如 US1、US2、US3）
+- 描述里要写上确切文件路径
+
+## 阶段 1：搭建（共享基础设施）
+**目的**：项目初始化与基本结构
+- [ ] T001 按实现计划创建项目结构
+- [ ] T002 用 [框架] 初始化 [语言] 项目
+- [ ] T003 [P] 配置 lint 与格式化工具
+
+## 阶段 2：地基（阻塞性前置）
+**目的**：在任何用户故事开工前必须完成的
+核心基础设施
+**⚠️ 关键**：本阶段未完成前，任何用户故事
+都不能动工
+- [ ] T004 搭建数据库 schema 与迁移
+- [ ] T005 [P] 实现认证/授权框架
+- [ ] T007 创建所有故事都依赖的基础模型
+**检查点**：地基就绪——用户故事现在可以
+并行开工
+
+## 阶段 3：用户故事 1 - [标题]（优先级：P1）🎯 MVP
+**目标**：[这个故事交付什么]
+**独立测试**：[如何单独验证它能用]
+### 用户故事1的测试（可选——仅当被要求时）⚠️
+&gt; **注意：先写测试、确认它们失败，
+&gt; 再去实现**
+- [ ] T010 [P] [US1] 为 [接口] 写契约测试，放
+      tests/contract/test_[name].py
+### 用户故事 1 的实现
+- [ ] T012 [P] [US1] 创建 [Entity1] 模型于
+      src/models/[entity1].py
+- [ ] T014 [US1] 实现 [Service] 于
+      src/services/[service].py（依赖 T012、T013）
+**检查点**：US1 完全可用、可独立测试</pre>
+</div>
+</div>
+</div>
+<table>
+<tr><th>标记</th><th>含义（中）</th></tr>
+<tr><td><code>T001</code></td><td>任务唯一 ID，便于引用与表达依赖</td></tr>
+<tr><td><code>[P]</code></td><td>可并行（不同文件、无依赖）</td></tr>
+<tr><td><code>[US1]</code></td><td>归属用户故事，使每个故事可独立实现/测试/交付为 MVP</td></tr>
+<tr><td><code>(depends on …)</code></td><td>显式依赖，前置没完成就不能动</td></tr>
+<tr><td><code>**Checkpoint**</code></td><td>检查点：到此应可独立跑通、可验证</td></tr>
+<tr><td><code>- [ ] / - [x]</code></td><td>未完成 / 已完成 勾选框</td></tr>
+</table>
+
+<h2>形态 2 · Pimzino/claude-code-spec-workflow（专为 Claude Code）</h2>
+<div class="pair">
+<div class="ph"><span class="tag t-comm">社区逐字</span>.claude/templates/tasks-template.md（节选）<a class="cite" href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/templates/tasks-template.md" target="_blank">Pimzino ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（原文）</div>
+<pre>## Atomic Task Requirements
+- **File Scope**: Touches 1-3 related files maximum
+- **Time Boxing**: Completable in 15-30 minutes
+- **Single Purpose**: One testable outcome per task
+- **Specific Files**: Must specify exact files
+
+## Good vs Bad Task Examples
+❌ "Implement authentication system"
+   (affects many files, multiple purposes)
+✅ "Create User model in models/user.py with
+   email/password fields"
+
+## Tasks
+- [ ] 2. Create base model class in
+      src/models/FeatureModel.ts
+  - File: src/models/FeatureModel.ts
+  - Implement base model extending BaseModel class
+  - Purpose: Provide data layer foundation
+  - _Leverage: src/models/BaseModel.ts,
+    src/utils/validation.ts_
+  - _Requirements: 2.1_
+- [ ] 3. Add specific model methods to FeatureModel.ts
+  - File: src/models/FeatureModel.ts (continue task 2)
+  - Implement create, update, delete methods
+  - _Requirements: 2.2, 2.3_</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<pre>## 原子任务要求
+- **文件范围**：最多碰 1–3 个相关文件
+- **时间盒**：15–30 分钟内能完成
+- **单一目的**：每个任务一个可测产出
+- **明确文件**：必须写明确切文件
+
+## 好 vs 坏 任务示例
+❌ "实现认证系统"
+   （牵动很多文件、目的不单一）
+✅ "在 models/user.py 创建带 邮箱/密码
+   字段的 User 模型"
+
+## 任务
+- [ ] 2. 在 src/models/FeatureModel.ts
+      创建基础模型类
+  - 文件：src/models/FeatureModel.ts
+  - 实现继承 BaseModel 的基础模型
+  - 目的：提供数据层地基
+  - _复用：src/models/BaseModel.ts,
+    src/utils/validation.ts_
+  - _需求：2.1_
+- [ ] 3. 给 FeatureModel.ts 增加具体模型方法
+  - 文件：src/models/FeatureModel.ts（接续任务2）
+  - 实现 create、update、delete 方法
+  - _需求：2.2, 2.3_</pre>
+</div>
+</div>
+</div>
+<table>
+<tr><th>字段</th><th>含义（中）</th></tr>
+<tr><td><code>File:</code></td><td>本任务要创建/修改的确切文件</td></tr>
+<tr><td><code>Purpose:</code></td><td>这步要达成的单一目的</td></tr>
+<tr><td><code>_Leverage: …_</code></td><td>可复用的现有代码，别重造轮子</td></tr>
+<tr><td><code>_Requirements: X.Y_</code></td><td>回链 requirements 文档的需求编号，保证可追溯</td></tr>
+</table>
+
+<h2>真实用过 · 已打勾的 tasks.md（非模板）</h2>
+<div class="pair">
+<div class="ph"><span class="tag t-real">真实文件逐字</span>.claude/specs/typescript-conversion/tasks.md（节选）<a class="cite" href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/specs/typescript-conversion/tasks.md" target="_blank">真实文件 ↗</a></div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（原文）</div>
+<pre># Implementation Plan - TypeScript Frontend Conversion
+## Status: ✅ APPROVED
+
+## Tasks
+### Phase 1: TypeScript Infrastructure Setup
+- [x] 1. Create frontend TypeScript configuration
+  - Create `src/dashboard/client/tsconfig.json`
+    extending main config
+  - Configure for browser (DOM lib, ES2020 target)
+  - _Leverage: tsconfig.json_
+  - _Requirements: 1.1, 1.2, 1.3_
+- [x] 2. Set up frontend bundling system
+  - Install esbuild as dev dependency
+  - Add bundle scripts to package.json
+    (build:frontend, watch:frontend)
+  - _Requirements: 1.1, 1.5_
+
+### Phase 2: Single Dashboard Removal
+- [x] 4. Remove single-project dashboard files
+  - Delete `src/dashboard/public/app.js` (423 lines)
+  - _Requirements: 3.1, 3.2, 3.5_
+- [x] 5. Update server routes for unified dashboard
+  - Remove single dashboard route from
+    `src/dashboard/server.ts`
+  - _Leverage: src/dashboard/server.ts_</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<pre># 实现计划 - TypeScript 前端转换
+## 状态：✅ 已审批
+
+## 任务
+### 阶段 1：TypeScript 基础设施搭建
+- [x] 1. 创建前端 TypeScript 配置
+  - 创建 `src/dashboard/client/tsconfig.json`，
+    继承主配置
+  - 面向浏览器配置（DOM 库、ES2020 目标）
+  - _复用：tsconfig.json_
+  - _需求：1.1, 1.2, 1.3_
+- [x] 2. 搭建前端打包系统
+  - 安装 esbuild 作为开发依赖
+  - 给 package.json 加打包脚本
+    （build:frontend, watch:frontend）
+  - _需求：1.1, 1.5_
+
+### 阶段 2：移除单项目 Dashboard
+- [x] 4. 删除单项目 dashboard 文件
+  - 删除 `src/dashboard/public/app.js`（423 行）
+  - _需求：3.1, 3.2, 3.5_
+- [x] 5. 更新服务器路由为统一 dashboard
+  - 从 `src/dashboard/server.ts`
+    移除单 dashboard 路由
+  - _复用：src/dashboard/server.ts_</pre>
+</div>
+</div>
+</div>
+<div class="disc">这份是<b>真实跑过</b>的：<code>## Status: ✅ APPROVED</code> 经过审批闸门、任务全 <code>[x]</code> 完成、<code>### Phase 1/2</code> 分阶段、每条写死确切文件 + <code>_Requirements_</code> 回链。这就是"sprint/task/phase 清单"在真实项目里的样子。</div>
+
+<h2>清单怎么被驱动（对照）</h2>
+<div class="pair">
+<div class="ph"><span class="tag t-comm">社区逐字</span>四阶段 + 每任务循环</div>
+<div class="cols">
+<div class="col en"><div class="lbl">English（原文）</div>
+<pre>Requirements → Design → Tasks → Implementation
+(bug fix: Report → Analyze → Fix → Verify)
+
+For each task in tasks.md:
+  Implement → Review → log-implementation
+            → Mark completed ( [x] )
+
+Approval gate between each phase.</pre>
+</div>
+<div class="col zh"><div class="lbl">中文对照</div>
+<pre>需求 → 设计 → 任务 → 实现
+（修 bug：报告 → 分析 → 修复 → 验证）
+
+对 tasks.md 里的每条任务：
+  实现 → 审查 → 记录实现
+       → 标记完成（ [x] ）
+
+每个阶段之间都有审批闸门。</pre>
+</div>
+</div>
+</div>
+<div class="note">
+<b>怎么用：</b>大功能在 spec 接力的"③ tasks"环节产出这种 <code>tasks.md</code>（Phase + 确切文件 + 依赖 + Requirements 回链 + 勾选框）；实现时逐条做、做完打 <code>[x]</code>、每条跑验证，阶段闸门处停下等确认。长任务因此可中断可续接、每步可验收。<br/><br/>
+<b>诚实边界：</b>① 这两套是<b>社区/工具包约定</b>（spec-kit 为 GitHub 官方工具包但 agent 无关；Pimzino 为社区），<b>非</b> Claude Code 内置强制格式。② Claude Code 另有<b>自带</b>任务追踪（<code>~/.claude/tasks/</code>、TodoWrite，支持依赖/阻塞/跨会话），与本文 markdown 清单是两套，可配合勿混。
+    <hr style="border-color:var(--line)"/>
+<div class="srcs"><b>来源（逐字可核）：</b>
+<a href="https://github.com/github/spec-kit/blob/main/templates/tasks-template.md" target="_blank">spec-kit · tasks-template.md</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/templates/tasks-template.md" target="_blank">Pimzino · 模板</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow/blob/main/.claude/specs/typescript-conversion/tasks.md" target="_blank">Pimzino · 真实 tasks.md</a> ·
+      <a href="https://github.com/Pimzino/claude-code-spec-workflow" target="_blank">Pimzino README</a>
+</div>
+</div></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-07-09/phase-task-checklist.html"><small>上一篇</small>Phase / Task 清单 · 真实用法</a><a href="/2026-07-09/task-phase-sprint.html"><small>下一篇</small>Task / Phase / Sprint 三者关系</a></nav></main>
+<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js" defer></script></body></html>
