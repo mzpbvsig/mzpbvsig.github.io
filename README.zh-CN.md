@@ -1,3 +1,7 @@
+<div align="center">
+
+<img src="assets/readme/hikcc-logo.png" alt="HiKcc. 标识" width="180">
+
 # HiKcc.
 
 > 以原始证据为基础，持续研究 AI 系统、Agent 工作流、评测方法与产品产业。
@@ -5,6 +9,8 @@
 [English](README.md) | 简体中文
 
 [网站](https://hikcc.top/) · [GitHub Pages](https://mzpbvsig.github.io/) · [RSS](https://hikcc.top/rss.xml) · [源仓库](https://github.com/mzpbvsig/hikcc)
+
+</div>
 
 ## 关于
 

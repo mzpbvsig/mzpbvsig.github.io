@@ -1,3 +1,7 @@
+<div align="center">
+
+<img src="assets/readme/hikcc-logo.png" alt="HiKcc. logo" width="180">
+
 # HiKcc.
 
 > Evidence-first notes on AI systems, agent workflows, evaluation, and the AI product landscape.
@@ -5,6 +9,8 @@
 English | [简体中文](README.zh-CN.md)
 
 [Website](https://hikcc.top/) · [GitHub Pages](https://mzpbvsig.github.io/) · [RSS](https://hikcc.top/rss.xml) · [Source repository](https://github.com/mzpbvsig/hikcc)
+
+</div>
 
 ## About
 
