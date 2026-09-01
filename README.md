@@ -22,7 +22,9 @@ The site is built and published automatically from [mzpbvsig/hikcc](https://gith
 
 ```text
 index.html           Research index
+ai/index.html        Human-readable AI knowledge endpoint
 YYYY-MM-DD/*.html    Canonical dated articles
+api/*.json           Structured site, article, and category data
 assets/              Shared styles and scripts
 rss.xml              RSS 2.0 feed
 sitemap.xml          Search-engine sitemap

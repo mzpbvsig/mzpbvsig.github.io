@@ -10,6 +10,8 @@ Canonical origin: https://mzpbvsig.github.io/
 Server mirror: https://hikcc.top/
 RSS: https://mzpbvsig.github.io/rss.xml
 Sitemap: https://mzpbvsig.github.io/sitemap.xml
+AI knowledge page: https://mzpbvsig.github.io/ai/
+Structured API index: https://mzpbvsig.github.io/api/index.json
 
 ## Evidence model
 
@@ -193,6 +195,7 @@ T0 · 理解 / 探索（只读问答，不改代码）
 - Topic: Claude Code (claude)
 - Evidence label: 实践补充 (practice)
 - Summary: 逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。
+- Main sections: 三类轮次（这是“真实使用”最该看懂的地方）
 
 Content snapshot: 真实 Claude Code 会话逐轮拆解（中文）
 样本：Simon Willison 公开的一次 15+ 小时连续会话 ——把 C 写的 JS 沙箱引擎 MicroQuickJS（Fabrice Bellard 著）完整移植成纯 Python。

@@ -1,0 +1,25 @@
+{
+  "name": "HiKcc.",
+  "description": "一个以原始证据为基础的中文 AI 研究档案。",
+  "language": "zh-CN",
+  "canonical_url": "https://mzpbvsig.github.io/",
+  "mirror_url": "https://hikcc.top/",
+  "updated": "2026-08-17",
+  "article_count": 29,
+  "category_count": 4,
+  "evidence_types": {
+    "official": "官方逐字",
+    "practice": "实践补充",
+    "optional": "看场景可省"
+  },
+  "endpoints": {
+    "knowledge_page": "https://mzpbvsig.github.io/ai/",
+    "site": "https://mzpbvsig.github.io/api/site.json",
+    "articles": "https://mzpbvsig.github.io/api/articles.json",
+    "categories": "https://mzpbvsig.github.io/api/categories.json",
+    "llms": "https://mzpbvsig.github.io/llms.txt",
+    "llms_full": "https://mzpbvsig.github.io/llms-full.txt",
+    "sitemap": "https://mzpbvsig.github.io/sitemap.xml",
+    "rss": "https://mzpbvsig.github.io/rss.xml"
+  }
+}

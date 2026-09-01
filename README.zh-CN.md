@@ -22,7 +22,9 @@
 
 ```text
 index.html           研究首页
+ai/index.html        面向人和机器的 AI 知识入口
 YYYY-MM-DD/*.html    按日期组织的正式文章
+api/*.json           站点、文章与主题结构化数据
 assets/              公共样式与脚本
 rss.xml              RSS 2.0 订阅
 sitemap.xml          搜索引擎站点地图

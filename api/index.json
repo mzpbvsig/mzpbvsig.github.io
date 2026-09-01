@@ -1,0 +1,15 @@
+{
+  "name": "HiKcc. AI knowledge endpoints",
+  "description": "Machine-readable entry points for the HiKcc. evidence-first AI research archive.",
+  "updated": "2026-08-17",
+  "endpoints": {
+    "knowledge_page": "https://mzpbvsig.github.io/ai/",
+    "site": "https://mzpbvsig.github.io/api/site.json",
+    "articles": "https://mzpbvsig.github.io/api/articles.json",
+    "categories": "https://mzpbvsig.github.io/api/categories.json",
+    "llms": "https://mzpbvsig.github.io/llms.txt",
+    "llms_full": "https://mzpbvsig.github.io/llms-full.txt",
+    "sitemap": "https://mzpbvsig.github.io/sitemap.xml",
+    "rss": "https://mzpbvsig.github.io/rss.xml"
+  }
+}

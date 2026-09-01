@@ -7,6 +7,8 @@ HiKcc. 会区分官方逐字引用、实践补充和看场景可省的材料，�
 ## Canonical links
 
 - [Website](https://mzpbvsig.github.io/): canonical website and complete article index
+- [AI knowledge page](https://mzpbvsig.github.io/ai/): human-readable narrative, topics, machine endpoints, and complete research catalog
+- [Structured API index](https://mzpbvsig.github.io/api/index.json): JSON directory for site, article, and category data
 - [Full AI-readable catalog](https://mzpbvsig.github.io/llms-full.txt): expanded descriptions and outlines for every article
 - [RSS feed](https://mzpbvsig.github.io/rss.xml): chronological updates
 - [Sitemap](https://mzpbvsig.github.io/sitemap.xml): canonical crawl inventory

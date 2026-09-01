@@ -1,0 +1,184 @@
+{
+  "name": "HiKcc. research categories",
+  "updated": "2026-08-17",
+  "count": 4,
+  "categories": [
+    {
+      "id": "agents",
+      "label": "Agent 与 Eval",
+      "description": "Agent 架构、长程任务、评测方法、反馈循环与工程工作流。",
+      "article_count": 10,
+      "articles": [
+        {
+          "title": "DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications",
+          "date": "2026-08-17",
+          "url": "https://mzpbvsig.github.io/2026-08-17/dsh-find-simplifications.html"
+        },
+        {
+          "title": "DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review",
+          "date": "2026-08-17",
+          "url": "https://mzpbvsig.github.io/2026-08-17/dsh-code-review.html"
+        },
+        {
+          "title": "DeepSeek Harness · Codex AI Coding 工作流证据分析",
+          "date": "2026-08-15",
+          "url": "https://mzpbvsig.github.io/2026-08-15/deepseek-harness-codex-workflow.html"
+        },
+        {
+          "title": "Agent Note 不是 Task · 与 Sprint / PR 的关系",
+          "date": "2026-08-14",
+          "url": "https://mzpbvsig.github.io/2026-08-14/agent-note-task-sprint-pr.html"
+        },
+        {
+          "title": "从 Ralph Agent 到 Loop Engineering · 三方证据链",
+          "date": "2026-08-02",
+          "url": "https://mzpbvsig.github.io/2026-08-02/ralph-to-loop-engineering.html"
+        },
+        {
+          "title": "长程自主任务通用方法论",
+          "date": "2026-06-22",
+          "url": "https://mzpbvsig.github.io/2026-06-22/long-horizon-autonomous-tasks.html"
+        },
+        {
+          "title": "Deli_AutoResearch 原文对照译注手册",
+          "date": "2026-06-22",
+          "url": "https://mzpbvsig.github.io/2026-06-22/deli-autoresearch-annotated.html"
+        },
+        {
+          "title": "一个真实案例的复利过程",
+          "date": "2026-06-22",
+          "url": "https://mzpbvsig.github.io/2026-06-22/compound-engineering-case-study.html"
+        },
+        {
+          "title": "大厂如何做 Eval · 真实证据",
+          "date": "2026-06-07",
+          "url": "https://mzpbvsig.github.io/2026-06-07/how-big-tech-runs-evals.html"
+        },
+        {
+          "title": "官方解读 · 动态工作流",
+          "date": "2026-06-02",
+          "url": "https://mzpbvsig.github.io/2026-06-02/dynamic-workflows.html"
+        }
+      ]
+    },
+    {
+      "id": "claude",
+      "label": "Claude Code",
+      "description": "Claude Code 的官方材料、真实会话、提示方式与研发协作实践。",
+      "article_count": 14,
+      "articles": [
+        {
+          "title": "Claude Code 完整开发流程 · 最佳实践",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/claude-code-development-workflow.html"
+        },
+        {
+          "title": "Claude Code 真实用法证据库 · 按复杂度分层",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/claude-code-evidence-by-complexity.html"
+        },
+        {
+          "title": "真实 Claude Code 会话逐轮拆解",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/claude-code-session-breakdown.html"
+        },
+        {
+          "title": "领域知识与业务，才是真正的关键",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/domain-knowledge-matters.html"
+        },
+        {
+          "title": "提示词不必每次都结构化",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/prompts-do-not-need-structure.html"
+        },
+        {
+          "title": "Claude Code「spec 接力」详解",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay.html"
+        },
+        {
+          "title": "Claude Code「spec 接力」中英对照",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay-bilingual.html"
+        },
+        {
+          "title": "SPEC 文档怎么分类 · 目录约定",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/spec-document-layout.html"
+        },
+        {
+          "title": "Phase / Task 清单 · 真实用法",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/phase-task-checklist.html"
+        },
+        {
+          "title": "Phase / Task 清单 · 中英对照",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/phase-task-checklist-bilingual.html"
+        },
+        {
+          "title": "Task / Phase / Sprint 三者关系",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/task-phase-sprint.html"
+        },
+        {
+          "title": "Boris Cherny 炉边谈话分析",
+          "date": "2026-06-23",
+          "url": "https://mzpbvsig.github.io/2026-06-23/boris-cherny-fireside-chat.html"
+        },
+        {
+          "title": "Boris：不写 prompt，写 loop 的全部内涵",
+          "date": "2026-06-22",
+          "url": "https://mzpbvsig.github.io/2026-06-22/boris-loops-not-prompts.html"
+        },
+        {
+          "title": "Boris 内部对话：不写 prompt，写 loop",
+          "date": "2026-06-09",
+          "url": "https://mzpbvsig.github.io/2026-06-09/boris-internal-talk-loops.html"
+        }
+      ]
+    },
+    {
+      "id": "engineering",
+      "label": "AI 工程与原理",
+      "description": "模型执行原理、AI 工程、工具接口与技术实现。",
+      "article_count": 3,
+      "articles": [
+        {
+          "title": "Transformer 执行流程：从分词到 Top-k",
+          "date": "2026-07-09",
+          "url": "https://mzpbvsig.github.io/2026-07-09/transformer-from-tokenization-to-topk.html"
+        },
+        {
+          "title": "ChatGPT Pro + DevSpace MCP 的 Codex 设计研究",
+          "date": "2026-06-19",
+          "url": "https://mzpbvsig.github.io/2026-06-19/chatgpt-pro-devspace-mcp.html"
+        },
+        {
+          "title": "官方解读 · HTML 的不合理有效性",
+          "date": "2026-05-20",
+          "url": "https://mzpbvsig.github.io/2026-05-20/unreasonable-effectiveness-of-html.html"
+        }
+      ]
+    },
+    {
+      "id": "industry",
+      "label": "产品与产业",
+      "description": "AI 产品、设计方法、产业观察与投资判断。",
+      "article_count": 2,
+      "articles": [
+        {
+          "title": "Koji 杨远骋「2026 AI 投资观察与思考」分析",
+          "date": "2026-06-23",
+          "url": "https://mzpbvsig.github.io/2026-06-23/koji-ai-investment-2026.html"
+        },
+        {
+          "title": "Claude Design 产品设计全流程",
+          "date": "2026-06-19",
+          "url": "https://mzpbvsig.github.io/2026-06-19/claude-design-workflow.html"
+        }
+      ]
+    }
+  ]
+}
