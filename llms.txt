@@ -6,12 +6,11 @@ HiKcc. 会区分官方逐字引用、实践补充和看场景可省的材料，�
 
 ## Canonical links
 
-- [Website](https://hikcc.top/): canonical website and complete article index
-- [Full AI-readable catalog](https://hikcc.top/llms-full.txt): expanded descriptions and outlines for every article
-- [RSS feed](https://hikcc.top/rss.xml): chronological updates
-- [Sitemap](https://hikcc.top/sitemap.xml): canonical crawl inventory
-- [GitHub Pages mirror](https://mzpbvsig.github.io/): public mirror of the same generated site
-- [Public generated repository](https://github.com/mzpbvsig/mzpbvsig.github.io): public files behind the GitHub Pages mirror
+- [Website](https://mzpbvsig.github.io/): canonical website and complete article index
+- [Full AI-readable catalog](https://mzpbvsig.github.io/llms-full.txt): expanded descriptions and outlines for every article
+- [RSS feed](https://mzpbvsig.github.io/rss.xml): chronological updates
+- [Sitemap](https://mzpbvsig.github.io/sitemap.xml): canonical crawl inventory
+- [Public generated repository](https://github.com/mzpbvsig/mzpbvsig.github.io): public files behind this GitHub Pages site
 
 ## Evidence labels
 
@@ -21,35 +20,35 @@ HiKcc. 会区分官方逐字引用、实践补充和看场景可省的材料，�
 
 ## Research collection
 
-- [DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications](https://hikcc.top/2026-08-17/dsh-find-simplifications.html): 拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。
-- [DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review](https://hikcc.top/2026-08-17/dsh-code-review.html): 拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。
-- [DeepSeek Harness · Codex AI Coding 工作流证据分析](https://hikcc.top/2026-08-15/deepseek-harness-codex-workflow.html): 从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。
-- [Agent Note 不是 Task · 与 Sprint / PR 的关系](https://hikcc.top/2026-08-14/agent-note-task-sprint-pr.html): 用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。
-- [从 Ralph Agent 到 Loop Engineering · 三方证据链](https://hikcc.top/2026-08-02/ralph-to-loop-engineering.html): 核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。
-- [Claude Code 完整开发流程 · 最佳实践](https://hikcc.top/2026-07-09/claude-code-development-workflow.html): 从需求到实现、验证和交付，梳理官方材料中的完整开发流程。
-- [Claude Code 真实用法证据库 · 按复杂度分层](https://hikcc.top/2026-07-09/claude-code-evidence-by-complexity.html): 按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。
-- [真实 Claude Code 会话逐轮拆解](https://hikcc.top/2026-07-09/claude-code-session-breakdown.html): 逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。
-- [领域知识与业务，才是真正的关键](https://hikcc.top/2026-07-09/domain-knowledge-matters.html): 为什么代码生成能力提高后，领域知识和业务判断反而更重要。
-- [提示词不必每次都结构化](https://hikcc.top/2026-07-09/prompts-do-not-need-structure.html): 用真实证据理解自然表达、上下文与结构化提示之间的边界。
-- [Claude Code「spec 接力」详解](https://hikcc.top/2026-07-09/claude-code-spec-relay.html): 拆解 spec 接力的形态、做法、证据和适用条件。
-- [Claude Code「spec 接力」中英对照](https://hikcc.top/2026-07-09/claude-code-spec-relay-bilingual.html): 保留英文原文与中文解释的即用 prompt 对照材料。
-- [SPEC 文档怎么分类 · 目录约定](https://hikcc.top/2026-07-09/spec-document-layout.html): 整理 spec 文档的分类、存放目录和真实项目约定。
-- [Phase / Task 清单 · 真实用法](https://hikcc.top/2026-07-09/phase-task-checklist.html): 分析 Phase、Task、Sprint 清单如何服务长程开发。
-- [Phase / Task 清单 · 中英对照](https://hikcc.top/2026-07-09/phase-task-checklist-bilingual.html): 逐字材料的中英文对照，便于查阅和复用。
-- [Task / Phase / Sprint 三者关系](https://hikcc.top/2026-07-09/task-phase-sprint.html): 用真实证据辨析三个规划层级的职责和组合方式。
-- [Transformer 执行流程：从分词到 Top-k](https://hikcc.top/2026-07-09/transformer-from-tokenization-to-topk.html): 逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。
-- [Boris Cherny 炉边谈话分析](https://hikcc.top/2026-06-23/boris-cherny-fireside-chat.html): Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。
-- [Koji 杨远骋「2026 AI 投资观察与思考」分析](https://hikcc.top/2026-06-23/koji-ai-investment-2026.html): 围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。
-- [Boris：不写 prompt，写 loop 的全部内涵](https://hikcc.top/2026-06-22/boris-loops-not-prompts.html): 还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。
-- [长程自主任务通用方法论](https://hikcc.top/2026-06-22/long-horizon-autonomous-tasks.html): 从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。
-- [Deli_AutoResearch 原文对照译注手册](https://hikcc.top/2026-06-22/deli-autoresearch-annotated.html): SKILL.md 原文、翻译与关键机制注释的完整对照。
-- [一个真实案例的复利过程](https://hikcc.top/2026-06-22/compound-engineering-case-study.html): 从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。
-- [ChatGPT Pro + DevSpace MCP 的 Codex 设计研究](https://hikcc.top/2026-06-19/chatgpt-pro-devspace-mcp.html): 分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。
-- [Claude Design 产品设计全流程](https://hikcc.top/2026-06-19/claude-design-workflow.html): 从一个需求到生产，拆解 AI 参与产品设计的完整流程。
-- [Boris 内部对话：不写 prompt，写 loop](https://hikcc.top/2026-06-09/boris-internal-talk-loops.html): 从内部对话理解长程编码任务中循环、环境与验证的关系。
-- [大厂如何做 Eval · 真实证据](https://hikcc.top/2026-06-07/how-big-tech-runs-evals.html): 追踪领先团队的评估实践，区分公开事实与经验转述。
-- [官方解读 · 动态工作流](https://hikcc.top/2026-06-02/dynamic-workflows.html): 从官方原文理解动态工作流及其对 agent 系统的意义。
-- [官方解读 · HTML 的不合理有效性](https://hikcc.top/2026-05-20/unreasonable-effectiveness-of-html.html): 为什么 HTML 成为人和模型共享信息、生成工具的重要界面。
+- [DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications](https://mzpbvsig.github.io/2026-08-17/dsh-find-simplifications.html): 拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。
+- [DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review](https://mzpbvsig.github.io/2026-08-17/dsh-code-review.html): 拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。
+- [DeepSeek Harness · Codex AI Coding 工作流证据分析](https://mzpbvsig.github.io/2026-08-15/deepseek-harness-codex-workflow.html): 从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。
+- [Agent Note 不是 Task · 与 Sprint / PR 的关系](https://mzpbvsig.github.io/2026-08-14/agent-note-task-sprint-pr.html): 用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。
+- [从 Ralph Agent 到 Loop Engineering · 三方证据链](https://mzpbvsig.github.io/2026-08-02/ralph-to-loop-engineering.html): 核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。
+- [Claude Code 完整开发流程 · 最佳实践](https://mzpbvsig.github.io/2026-07-09/claude-code-development-workflow.html): 从需求到实现、验证和交付，梳理官方材料中的完整开发流程。
+- [Claude Code 真实用法证据库 · 按复杂度分层](https://mzpbvsig.github.io/2026-07-09/claude-code-evidence-by-complexity.html): 按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。
+- [真实 Claude Code 会话逐轮拆解](https://mzpbvsig.github.io/2026-07-09/claude-code-session-breakdown.html): 逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。
+- [领域知识与业务，才是真正的关键](https://mzpbvsig.github.io/2026-07-09/domain-knowledge-matters.html): 为什么代码生成能力提高后，领域知识和业务判断反而更重要。
+- [提示词不必每次都结构化](https://mzpbvsig.github.io/2026-07-09/prompts-do-not-need-structure.html): 用真实证据理解自然表达、上下文与结构化提示之间的边界。
+- [Claude Code「spec 接力」详解](https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay.html): 拆解 spec 接力的形态、做法、证据和适用条件。
+- [Claude Code「spec 接力」中英对照](https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay-bilingual.html): 保留英文原文与中文解释的即用 prompt 对照材料。
+- [SPEC 文档怎么分类 · 目录约定](https://mzpbvsig.github.io/2026-07-09/spec-document-layout.html): 整理 spec 文档的分类、存放目录和真实项目约定。
+- [Phase / Task 清单 · 真实用法](https://mzpbvsig.github.io/2026-07-09/phase-task-checklist.html): 分析 Phase、Task、Sprint 清单如何服务长程开发。
+- [Phase / Task 清单 · 中英对照](https://mzpbvsig.github.io/2026-07-09/phase-task-checklist-bilingual.html): 逐字材料的中英文对照，便于查阅和复用。
+- [Task / Phase / Sprint 三者关系](https://mzpbvsig.github.io/2026-07-09/task-phase-sprint.html): 用真实证据辨析三个规划层级的职责和组合方式。
+- [Transformer 执行流程：从分词到 Top-k](https://mzpbvsig.github.io/2026-07-09/transformer-from-tokenization-to-topk.html): 逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。
+- [Boris Cherny 炉边谈话分析](https://mzpbvsig.github.io/2026-06-23/boris-cherny-fireside-chat.html): Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。
+- [Koji 杨远骋「2026 AI 投资观察与思考」分析](https://mzpbvsig.github.io/2026-06-23/koji-ai-investment-2026.html): 围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。
+- [Boris：不写 prompt，写 loop 的全部内涵](https://mzpbvsig.github.io/2026-06-22/boris-loops-not-prompts.html): 还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。
+- [长程自主任务通用方法论](https://mzpbvsig.github.io/2026-06-22/long-horizon-autonomous-tasks.html): 从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。
+- [Deli_AutoResearch 原文对照译注手册](https://mzpbvsig.github.io/2026-06-22/deli-autoresearch-annotated.html): SKILL.md 原文、翻译与关键机制注释的完整对照。
+- [一个真实案例的复利过程](https://mzpbvsig.github.io/2026-06-22/compound-engineering-case-study.html): 从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。
+- [ChatGPT Pro + DevSpace MCP 的 Codex 设计研究](https://mzpbvsig.github.io/2026-06-19/chatgpt-pro-devspace-mcp.html): 分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。
+- [Claude Design 产品设计全流程](https://mzpbvsig.github.io/2026-06-19/claude-design-workflow.html): 从一个需求到生产，拆解 AI 参与产品设计的完整流程。
+- [Boris 内部对话：不写 prompt，写 loop](https://mzpbvsig.github.io/2026-06-09/boris-internal-talk-loops.html): 从内部对话理解长程编码任务中循环、环境与验证的关系。
+- [大厂如何做 Eval · 真实证据](https://mzpbvsig.github.io/2026-06-07/how-big-tech-runs-evals.html): 追踪领先团队的评估实践，区分公开事实与经验转述。
+- [官方解读 · 动态工作流](https://mzpbvsig.github.io/2026-06-02/dynamic-workflows.html): 从官方原文理解动态工作流及其对 agent 系统的意义。
+- [官方解读 · HTML 的不合理有效性](https://mzpbvsig.github.io/2026-05-20/unreasonable-effectiveness-of-html.html): 为什么 HTML 成为人和模型共享信息、生成工具的重要界面。
 
 ## Retrieval guidance
 

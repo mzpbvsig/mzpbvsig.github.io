@@ -6,10 +6,9 @@
 
 HiKcc. 是一个中文 AI 研究档案。内容围绕 Claude Code、Agent 与 Eval、AI 工程原理，以及产品与产业观察展开。站点强调原始证据、逐字引用与转述分离、结论可追溯；它不是新闻聚合站，也不把实践判断伪装成官方结论。
 
-Canonical origin: https://hikcc.top/
-Public mirror: https://mzpbvsig.github.io/
-RSS: https://hikcc.top/rss.xml
-Sitemap: https://hikcc.top/sitemap.xml
+Canonical origin: https://mzpbvsig.github.io/
+RSS: https://mzpbvsig.github.io/rss.xml
+Sitemap: https://mzpbvsig.github.io/sitemap.xml
 
 ## Evidence model
 
@@ -21,7 +20,7 @@ Sitemap: https://hikcc.top/sitemap.xml
 
 ### DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications
 
-- Canonical URL: https://hikcc.top/2026-08-17/dsh-find-simplifications.html
+- Canonical URL: https://mzpbvsig.github.io/2026-08-17/dsh-find-simplifications.html
 - Published: 2026-08-17
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 实践补充 (practice)
@@ -45,7 +44,7 @@ Agent 的主要工作是搜代码、读调用点、判定所有权和生命周�
 
 ### DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review
 
-- Canonical URL: https://hikcc.top/2026-08-17/dsh-code-review.html
+- Canonical URL: https://mzpbvsig.github.io/2026-08-17/dsh-code-review.html
 - Published: 2026-08-17
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 实践补充 (practice)
@@ -68,7 +67,7 @@ metadata 的……
 
 ### DeepSeek Harness · Codex AI Coding 工作流证据分析
 
-- Canonical URL: https://hikcc.top/2026-08-15/deepseek-harness-codex-workflow.html
+- Canonical URL: https://mzpbvsig.github.io/2026-08-15/deepseek-harness-codex-workflow.html
 - Published: 2026-08-15
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 实践补充 (practice)
@@ -92,7 +91,7 @@ DeepSeek Harness 讲了完整的 Codex 编码工作流吗？
 
 ### Agent Note 不是 Task · 与 Sprint / PR 的关系
 
-- Canonical URL: https://hikcc.top/2026-08-14/agent-note-task-sprint-pr.html
+- Canonical URL: https://mzpbvsig.github.io/2026-08-14/agent-note-task-sprint-pr.html
 - Published: 2026-08-14
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 实践补充 (practice)
@@ -117,7 +116,7 @@ Agent Note 为什么这样设计？
 
 ### 从 Ralph Agent 到 Loop Engineering · 三方证据链
 
-- Canonical URL: https://hikcc.top/2026-08-02/ralph-to-loop-engineering.html
+- Canonical URL: https://mzpbvsig.github.io/2026-08-02/ralph-to-loop-engineering.html
 - Published: 2026-08-02
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 实践补充 (practice)
@@ -141,7 +140,7 @@ Graph Agent 把工作流显式写……
 
 ### Claude Code 完整开发流程 · 最佳实践
 
-- Canonical URL: https://hikcc.top/2026-07-09/claude-code-development-workflow.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/claude-code-development-workflow.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 官方逐字 (official)
@@ -167,7 +166,7 @@ Content snapshot: Claude Code 完整开发流程 · 最佳实践
 
 ### Claude Code 真实用法证据库 · 按复杂度分层
 
-- Canonical URL: https://hikcc.top/2026-07-09/claude-code-evidence-by-complexity.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/claude-code-evidence-by-complexity.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 官方逐字 (official)
@@ -188,7 +187,7 @@ T0 · 理解 / 探索（只读问答，不改代码）
 
 ### 真实 Claude Code 会话逐轮拆解
 
-- Canonical URL: https://hikcc.top/2026-07-09/claude-code-session-breakdown.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/claude-code-session-breakdown.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 实践补充 (practice)
@@ -216,7 +215,7 @@ simonwillison.net 原文 ↗ 。
 
 ### 领域知识与业务，才是真正的关键
 
-- Canonical URL: https://hikcc.top/2026-07-09/domain-knowledge-matters.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/domain-knowledge-matters.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 实践补充 (practice)
@@ -236,7 +235,7 @@ Anthropic 官方 CL……
 
 ### 提示词不必每次都结构化
 
-- Canonical URL: https://hikcc.top/2026-07-09/prompts-do-not-need-structure.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/prompts-do-not-need-structure.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 实践补充 (practice)
@@ -258,7 +257,7 @@ Content snapshot: 提示词不必每次都结构化
 
 ### Claude Code「spec 接力」详解
 
-- Canonical URL: https://hikcc.top/2026-07-09/claude-code-spec-relay.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 实践补充 (practice)
@@ -278,7 +277,7 @@ AskUserQuestion → SPEC.md / spec.md → /clear 或新窗口 → 跑测试 / /g
 
 ### Claude Code「spec 接力」中英对照
 
-- Canonical URL: https://hikcc.top/2026-07-09/claude-code-spec-relay-bilingual.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay-bilingual.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 看场景可省 (optional)
@@ -299,7 +298,7 @@ Ask about technical implementation……
 
 ### SPEC 文档怎么分类 · 目录约定
 
-- Canonical URL: https://hikcc.top/2026-07-09/spec-document-layout.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/spec-document-layout.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 看场景可省 (optional)
@@ -321,7 +320,7 @@ Content snapshot: SPEC 文档怎么分类 · 要不要保存 · 存哪些文件�
 
 ### Phase / Task 清单 · 真实用法
 
-- Canonical URL: https://hikcc.top/2026-07-09/phase-task-checklist.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/phase-task-checklist.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 实践补充 (practice)
@@ -339,7 +338,7 @@ spec.md design.md Phase→Task→[ ] 逐条做、打勾[x]、跑测试
 
 ### Phase / Task 清单 · 中英对照
 
-- Canonical URL: https://hikcc.top/2026-07-09/phase-task-checklist-bilingual.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/phase-task-checklist-bilingual.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 看场景可省 (optional)
@@ -361,7 +360,7 @@ English（原文）
 
 ### Task / Phase / Sprint 三者关系
 
-- Canonical URL: https://hikcc.top/2026-07-09/task-phase-sprint.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/task-phase-sprint.html
 - Published: 2026-07-09
 - Topic: Claude Code (claude)
 - Evidence label: 实践补充 (practice)
@@ -384,7 +383,7 @@ Phase： 项目级的大阶段（在 sprint 之上 ）。
 
 ### Transformer 执行流程：从分词到 Top-k
 
-- Canonical URL: https://hikcc.top/2026-07-09/transformer-from-tokenization-to-topk.html
+- Canonical URL: https://mzpbvsig.github.io/2026-07-09/transformer-from-tokenization-to-topk.html
 - Published: 2026-07-09
 - Topic: AI 工程与原理 (engineering)
 - Evidence label: 实践补充 (practice)
@@ -420,7 +419,7 @@ Q/K/V 投影
 
 ### Boris Cherny 炉边谈话分析
 
-- Canonical URL: https://hikcc.top/2026-06-23/boris-cherny-fireside-chat.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-23/boris-cherny-fireside-chat.html
 - Published: 2026-06-23
 - Topic: Claude Code (claude)
 - Evidence label: 官方逐字 (official)
@@ -445,7 +444,7 @@ ROI 与部……
 
 ### Koji 杨远骋「2026 AI 投资观察与思考」分析
 
-- Canonical URL: https://hikcc.top/2026-06-23/koji-ai-investment-2026.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-23/koji-ai-investment-2026.html
 - Published: 2026-06-23
 - Topic: 产品与产业 (industry)
 - Evidence label: 实践补充 (practice)
@@ -469,7 +468,7 @@ Content snapshot: Koji 杨远骋「2026 AI 投资观察与思考」深度分析 
 
 ### Boris：不写 prompt，写 loop 的全部内涵
 
-- Canonical URL: https://hikcc.top/2026-06-22/boris-loops-not-prompts.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-22/boris-loops-not-prompts.html
 - Published: 2026-06-22
 - Topic: Claude Code (claude)
 - Evidence label: 官方逐字 (official)
@@ -486,7 +485,7 @@ loop 是你盖起来、 会自己找活、自己验证、自己记教训 的那�
 
 ### 长程自主任务通用方法论
 
-- Canonical URL: https://hikcc.top/2026-06-22/long-horizon-autonomous-tasks.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-22/long-horizon-autonomous-tasks.html
 - Published: 2026-06-22
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 实践补充 (practice)
@@ -519,7 +518,7 @@ Content snapshot: 长程自主任务通用方法论 · 从 Deli_AutoResearch ski
 
 ### Deli_AutoResearch 原文对照译注手册
 
-- Canonical URL: https://hikcc.top/2026-06-22/deli-autoresearch-annotated.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-22/deli-autoresearch-annotated.html
 - Published: 2026-06-22
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 官方逐字 (official)
@@ -542,7 +541,7 @@ ZH 译文 中文翻译
 
 ### 一个真实案例的复利过程
 
-- Canonical URL: https://hikcc.top/2026-06-22/compound-engineering-case-study.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-22/compound-engineering-case-study.html
 - Published: 2026-06-22
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 实践补充 (practice)
@@ -560,7 +559,7 @@ Content snapshot: 一个真实案例的"复利过程"：从 lessons.md 到 100% 
 
 ### ChatGPT Pro + DevSpace MCP 的 Codex 设计研究
 
-- Canonical URL: https://hikcc.top/2026-06-19/chatgpt-pro-devspace-mcp.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-19/chatgpt-pro-devspace-mcp.html
 - Published: 2026-06-19
 - Topic: AI 工程与原理 (engineering)
 - Evidence label: 实践补充 (practice)
@@ -577,7 +576,7 @@ DevSpace 是一个很聪明的“Codex 式 MCP 桥” ：它把本机项目、�
 
 ### Claude Design 产品设计全流程
 
-- Canonical URL: https://hikcc.top/2026-06-19/claude-design-workflow.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-19/claude-design-workflow.html
 - Published: 2026-06-19
 - Topic: 产品与产业 (industry)
 - Evidence label: 实践补充 (practice)
@@ -597,7 +596,7 @@ Claude Design = Anthropic Labs 的 对话式视觉设计产品 （左聊天 / �
 
 ### Boris 内部对话：不写 prompt，写 loop
 
-- Canonical URL: https://hikcc.top/2026-06-09/boris-internal-talk-loops.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-09/boris-internal-talk-loops.html
 - Published: 2026-06-09
 - Topic: Claude Code (claude)
 - Evidence label: 官方逐字 (official)
@@ -621,7 +620,7 @@ Content snapshot: 不跟 agent 对话,跟 loop 对话
 
 ### 大厂如何做 Eval · 真实证据
 
-- Canonical URL: https://hikcc.top/2026-06-07/how-big-tech-runs-evals.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-07/how-big-tech-runs-evals.html
 - Published: 2026-06-07
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 官方逐字 (official)
@@ -644,7 +643,7 @@ Content snapshot: 大厂如何做 Eval —— 真实证据
 
 ### 官方解读 · 动态工作流
 
-- Canonical URL: https://hikcc.top/2026-06-02/dynamic-workflows.html
+- Canonical URL: https://mzpbvsig.github.io/2026-06-02/dynamic-workflows.html
 - Published: 2026-06-02
 - Topic: Agent 与 Eval (agents)
 - Evidence label: 官方逐字 (official)
@@ -667,7 +666,7 @@ Subagent workflow 里被生出来的单个 Claude 实例，各自有聚焦目标
 
 ### 官方解读 · HTML 的不合理有效性
 
-- Canonical URL: https://hikcc.top/2026-05-20/unreasonable-effectiveness-of-html.html
+- Canonical URL: https://mzpbvsig.github.io/2026-05-20/unreasonable-effectiveness-of-html.html
 - Published: 2026-05-20
 - Topic: AI 工程与原理 (engineering)
 - Evidence label: 官方逐字 (official)

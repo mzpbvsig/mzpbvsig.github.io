@@ -8,7 +8,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-[Website](https://hikcc.top/) · [GitHub Pages](https://mzpbvsig.github.io/) · [RSS](https://hikcc.top/rss.xml) · [AI-readable index](https://hikcc.top/llms.txt) · [Source repository](https://github.com/mzpbvsig/hikcc)
+[Website](https://mzpbvsig.github.io/) · [RSS](https://mzpbvsig.github.io/rss.xml) · [AI-readable index](https://mzpbvsig.github.io/llms.txt) · [Source repository](https://github.com/mzpbvsig/hikcc)
 
 </div>
 

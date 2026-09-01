@@ -46,4 +46,4 @@ Disallow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://hikcc.top/sitemap.xml
+Sitemap: https://mzpbvsig.github.io/sitemap.xml
