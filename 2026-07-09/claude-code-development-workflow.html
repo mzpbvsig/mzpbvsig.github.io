@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://hikcc.top/2026-07-09/claude-code-development-workflow.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Claude Code 完整开发流程 · 最佳实践 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://hikcc.top/2026-07-09/claude-code-development-workflow.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Claude Code 完整开发流程 · 最佳实践 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -51,7 +51,7 @@ b.k{color:#fff}
 <nav class="nav-links" aria-label="主导航"><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a><a href="/rss.xml">RSS 订阅</a></nav>
 <button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-official">官方逐字</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Claude Code 完整开发流程 · 最佳实践</h1>
 <p class="lead">以 Anthropic 官方 <a href="https://code.claude.com/docs/en/best-practices" target="_blank">best-practices</a> 为骨架（标 <span class="tag t-verb">官方逐字</span> 的句子是原文引用），补充 spec-driven 实践。核心要回答的问题：<b>"执行→更新状态→测试→提交"之后还有什么？</b> —— 有，提交只是<b>单 task 内循环</b>的结束，外面还套着<b>收口/验证关</b>。</p>
 <div class="legend">

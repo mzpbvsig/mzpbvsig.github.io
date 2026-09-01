@@ -8,7 +8,7 @@
 
 English | [简体中文](README.zh-CN.md)
 
-[Website](https://hikcc.top/) · [GitHub Pages](https://mzpbvsig.github.io/) · [RSS](https://hikcc.top/rss.xml) · [Source repository](https://github.com/mzpbvsig/hikcc)
+[Website](https://hikcc.top/) · [GitHub Pages](https://mzpbvsig.github.io/) · [RSS](https://hikcc.top/rss.xml) · [AI-readable index](https://hikcc.top/llms.txt) · [Source repository](https://github.com/mzpbvsig/hikcc)
 
 </div>
 
@@ -26,4 +26,6 @@ YYYY-MM-DD/*.html    Canonical dated articles
 assets/              Shared styles and scripts
 rss.xml              RSS 2.0 feed
 sitemap.xml          Search-engine sitemap
+llms.txt             Concise AI-readable site map
+llms-full.txt        Expanded AI-readable research catalog
 ```

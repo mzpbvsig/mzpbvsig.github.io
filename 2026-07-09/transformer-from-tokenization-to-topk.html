@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://hikcc.top/2026-07-09/transformer-from-tokenization-to-topk.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Transformer 执行流程：从分词到 Top-k · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://hikcc.top/2026-07-09/transformer-from-tokenization-to-topk.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Transformer 执行流程：从分词到 Top-k · HiKcc.</title><style>
 :root{
   --bg:#0f1115; --card:#171a21; --ink:#e6e8eb; --mut:#9aa4b2; --line:#262b36;
   --tok:#3b82f6;   /* 分词/嵌入 蓝 */
@@ -70,7 +70,7 @@ ul.tight{margin:6px 0;padding-left:22px} ul.tight li{margin:3px 0}
 <nav class="nav-links" aria-label="主导航"><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a><a href="/rss.xml">RSS 订阅</a></nav>
 <button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>AI 工程与原理</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Transformer 执行流程：从分词到 Top-k</h1>
 <p class="lead">把一次「文本 → 下一个 token」的前向推理，按阶段拆开，逐段给出<b>算法步骤</b>与<b>时间复杂度</b>。
   符号约定见下；每条复杂度结论尽量附可溯源链接与英文原文。分析以<b>推理（inference）</b>视角为主，分词段会额外点出训练与编码的区别。</p>

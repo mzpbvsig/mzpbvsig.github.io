@@ -8,7 +8,7 @@
 
 [English](README.md) | 简体中文
 
-[网站](https://hikcc.top/) · [GitHub Pages](https://mzpbvsig.github.io/) · [RSS](https://hikcc.top/rss.xml) · [源仓库](https://github.com/mzpbvsig/hikcc)
+[网站](https://hikcc.top/) · [GitHub Pages](https://mzpbvsig.github.io/) · [RSS](https://hikcc.top/rss.xml) · [AI 可读索引](https://hikcc.top/llms.txt) · [源仓库](https://github.com/mzpbvsig/hikcc)
 
 </div>
 
@@ -26,4 +26,6 @@ YYYY-MM-DD/*.html    按日期组织的正式文章
 assets/              公共样式与脚本
 rss.xml              RSS 2.0 订阅
 sitemap.xml          搜索引擎站点地图
+llms.txt             精简 AI 可读站点索引
+llms-full.txt        扩展 AI 可读研究目录
 ```

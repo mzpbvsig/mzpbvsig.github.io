@@ -1,0 +1,691 @@
+# HiKcc. — Full AI-readable research catalog
+
+> This file provides a structured snapshot of every public research article. The canonical HTML pages remain the citation source of record.
+
+## Site identity
+
+HiKcc. 是一个中文 AI 研究档案。内容围绕 Claude Code、Agent 与 Eval、AI 工程原理，以及产品与产业观察展开。站点强调原始证据、逐字引用与转述分离、结论可追溯；它不是新闻聚合站，也不把实践判断伪装成官方结论。
+
+Canonical origin: https://hikcc.top/
+Public mirror: https://mzpbvsig.github.io/
+RSS: https://hikcc.top/rss.xml
+Sitemap: https://hikcc.top/sitemap.xml
+
+## Evidence model
+
+- 官方逐字：以官方原文或直接发言为核心证据。引用与作者解读在正文中分别标注。
+- 实践补充：基于原始资料的分析、比较、方法提炼或实践建议。
+- 看场景可省：便于查阅与复用，但是否需要取决于具体工作场景。
+
+## Article catalog
+
+### DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications
+
+- Canonical URL: https://hikcc.top/2026-08-17/dsh-find-simplifications.html
+- Published: 2026-08-17
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 实践补充 (practice)
+- Summary: 拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。
+- Main sections: 1 · 什么请求会触发它？；2 · 一次完整执行会怎样进行？；3 · 什么才算“强候选”？；4 · 哪些“看起来能删”其实证据很薄？；5 · 最重要的分流：最后到底产出什么？；6 · 仓库里的真实正例：删除 mutable session summary；7 · 另一个正例：不是删除 backend，而是合并重复生命周期；8 · 为什么先读架构？“包多”不等于“过度设计”；9 · 它和 Review、Task、Agent Note 的关系；10 · 优点与真实代价；11 · 如果按你的 Task-first 思路改造；12 · 最终判断；主要来源
+
+Content snapshot: DeepSeek Harness Skills · 02
+dsh-find-simplifications
+不是自动精简，而是先证明“什么值得删”
+它把“找点可以简化的地方”变成一次仓库级减法审计：扫描多个领域，区分生产与非生产消费者，核对既有设计理由，证明收益与代价，然后把大候选写成 proposed Agent Note、小候选写成局部 TODO；证据薄弱的想法直接淘汰。
+核验日期：2026-08-17 · 仓库 master： 47f943859bef60e4160492346772ded9b24f765a · 当前文件 146 行（96 LOC）、11 个章节；自 2026-06-20 建立后有 16 次相关提交。
+最短结论
+它是“技术债候选发现与立案规范”，不是重构执行器。
+Agent 的主要工作是搜代码、读调用点、判定所有权和生命周期、查 Agent Note，再输出可实施的简化提案。真正删代码通常发生在后续 Task / PR。
+与你的思路最相关
+它有证据标准，却没有任务状态模型。
+没有 task id、负责人、进度、重试、依赖或全局队列。Agent Note 记录“为什么值得这样改”，并不记录“现在做到哪一步”。
+1 · 什么请求会触发它？
+仓库减法审计 寻找死 API、重复表示、投机功能、过度防御、重复生命周期机制、只服务测试的包或产物。
+整理 Agent Not……
+
+### DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review
+
+- Canonical URL: https://hikcc.top/2026-08-17/dsh-code-review.html
+- Published: 2026-08-17
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 实践补充 (practice)
+- Summary: 拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。
+- Main sections: 1 · 它什么时候触发？；2 · 一次 review 实际怎样开始？；3 · change-scope 到底解决什么？；4 · 六条硬阻塞要求；5 · 十五类人工检查，可以压缩成六个问题；6 · 一个合成 PR 示例：新增 maxOutputBytes；7 · 自动化与人工判断怎样分工？；8 · 它与其他 skills 的关系；9 · 这套 review 的真正优点；10 · 局限与成本；11 · 如果搬到你自己的 AI Coding 工作流；12 · 证据强度与版本说明；主要来源
+
+Content snapshot: DeepSeek Harness Skills · 01
+dsh-code-review
+不是查格式，而是查“绿色 CI 仍可能漏掉什么”
+这是 DeepSeek Harness 的 PR 语义审查入口。它先固定真实 base/head 与变更范围，再把评审者引向生命周期、接口两端、能力归属、执行点强制、状态发布、真实入口、测试强度、文档和 Agent Note，而不是把 review 退化成 lint 与覆盖率复述。
+核验日期：2026-08-17 · 仓库 master： 47f943859bef60e4160492346772ded9b24f765a · 直接来源：当前 SKILL.md、关联 AGENTS、测试策略、防御性模式、prose skill、Agent Notes 与 change-scope 决策。
+最短结论
+它是“评审判断标准加载器”，不是自动代码扫描器。
+真正执行评审的仍是 Agent：读 PR、读上下文、追调用链、检查状态与测试，再按证据报告缺陷。skill 的价值是把仓库积累的高价值失败模式装进这次 review。
+重要边界
+它不会自动替作者跑完所有检查，也不会自动批准或合并 PR。
+change-scope 只报告路径与 Git 层；CI 负责机械门禁；语义正确性、证据是否充分以及是否阻塞仍由评审者判断。
+1 · 它什么时候触发？
+metadata 的……
+
+### DeepSeek Harness · Codex AI Coding 工作流证据分析
+
+- Canonical URL: https://hikcc.top/2026-08-15/deepseek-harness-codex-workflow.html
+- Published: 2026-08-15
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 实践补充 (practice)
+- Summary: 从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。
+- Main sections: 先回答你的原问题；网页版的“本地能力”不是很有限吗？；这张 Trajectory 截图具体说明了什么？；具体到一次任务：人下达以后会发生什么？；哪些步骤不是每次都发生？；仓库实际公开了哪几层 AI Coding 证据？；从证据拼出的 Codex 生产工作流；一个真实 codex/* 分支透露出的迭代节奏；最重要的设计：把“思考”变成长期资产；公开材料缺少的五个关键镜头；你可以直接复用的 Codex 工作法；证据强度与最终判断；主要来源
+
+Content snapshot: Evidence Review · Codex AI Coding
+DeepSeek Harness 讲了完整的 Codex 编码工作流吗？
+短答案： 讲出了完整工作流的工程骨架，但没有公开完整的 Codex 会话。 它最值得研究的不是 Harness 产品源码，而是团队如何把 Agent 放进“理解约束 → 记录决策 → 实现 → 定向验证 → PR 评审 → 合并”的生产闭环。
+核验日期：2026-08-15 · 范围：OpenAI 官方 Codex 文档，以及公开仓库的文档、Agent Notes、skills、Git 历史与公开 GitHub 页面。文中“官方逐字”只指链接来源原文；由多份材料拼出的流程标为“实践补充”。
+实践补充 · 可以确认
+这是一个相当完整的 AI Coding 操作系统。
+任务隔离、代码库探索、设计记录、实现纪律、分层测试、评审、PR stack、CI 与合并规则都能找到明确材料，Git 历史还能看到大量 codex/* 分支的真实迭代痕迹。
+关键缺失 · 不能确认
+它不是逐轮会话档案。
+没有首轮任务提示、Codex 的逐步计划与工具调用、人在何处纠偏、评审讨论原文、模型与推理配置。因此不能把提交历史倒推成“一次无人干预完成”。
+先回答你的原问题
+结论
+如果你问“能不能从中学到一套利用 Codex 写代码的方法”：能，而且信息量很大。
+仓库把团队认可……
+
+### Agent Note 不是 Task · 与 Sprint / PR 的关系
+
+- Canonical URL: https://hikcc.top/2026-08-14/agent-note-task-sprint-pr.html
+- Published: 2026-08-14
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 实践补充 (practice)
+- Summary: 用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。
+- Main sections: 四个对象分别回答什么问题？；他有没有“全局记录”？有，但拆成三本账；“从 Issue、PR、Note 三处拼接”具体是什么意思？；一个任务过来，记录下来到底有什么用？；它真正的优点是什么？；为什么它可能不符合你的思路？；更符合你思路的混合方案；最关键的区别；Agent Note 确实记录状态，但记录的是“决策状态”；为什么 proposed Agent Note 看起来很像 Task？；它们在一次真实任务里怎么组合？；Sprint 在这个仓库里处于什么位置？；别把 Agent Note 写成这三种东西；这些结论在源码哪里？；主要来源
+
+Content snapshot: Concept Map · DeepSeek Harness
+Agent Note 和 Task / Sprint 很像吗？
+外形有一点像，职责完全不同。 Task 管执行，Sprint 管排期，Agent Note 管决策。 在 DeepSeek Harness 的公开流程中，Task 和 Agent Note 都是正式对象；Sprint 并不是公开流程里的一等对象。
+核验日期：2026-08-14 · 依据：Agent Notes 规范、文档分类规则、Issue/Task 模板、PR 模板和 Issue 生命周期实现。
+最短答案
+Agent Note 更像 ADR / Design Decision Record，不像任务清单。
+它在实施前可能包含 Proposal、Acceptance criteria 和 Risks，所以乍看像 Task；但实施完成后必须删除计划与验收清单，改写为“已经交付的决定、替代方案、后果和验证依据”。
+四个对象分别回答什么问题？
+Task / Issue 做什么？
+谁负责、优先级、交付物、验收条件、测试证据、当前进度。
+Sprint 这段时间做哪些任务？
+一个时间盒或批次容器。DeepSeek Harness 的公开流程没有把它建模为正式对象。
+Agent Note 为什么这样设计？
+问题、选中的方案、落选方案、代价、收益、验证和重新讨论的边界。
+……
+
+### 从 Ralph Agent 到 Loop Engineering · 三方证据链
+
+- Canonical URL: https://hikcc.top/2026-08-02/ralph-to-loop-engineering.html
+- Published: 2026-08-02
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 实践补充 (practice)
+- Summary: 核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。
+- Main sections: 先把四个词分清；证据时间线：这股风到底怎么起来的；三方真正一致的，不是口号，而是六个工程部件；宣传最容易省略的四个边界；所以，他们到底在说什么？；证据评级；主要来源
+
+Content snapshot: Evidence Review · Agent Loops
+你说的不是 Graph Agent，
+更像是 Ralph Agent
+从 2025 年的 Ralph Wiggum Bash 循环，到 OpenAI 的真实工程案例、Anthropic 的长时 harness，再到 Boris Cherny 的“我的工作是写 loops”：他们讲的是同一条技术演化，但并没有宣布“prompt 已死”或“无人软件公司已经成熟”。
+核验日期：2026-08-02 · 优先采用原作者文章、公司工程博客、原始演讲视频；二手报道仅用于定位原视频与交叉核验。
+实践补充 · 结论
+真实共识：人的杠杆点从“每轮亲自提示”上移到“设计可持续闭环”。
+目标、状态、工具、验证、停止条件和恢复路径，比某一句神奇 prompt 更重要。模型仍在写代码；人开始编排“谁发现工作、谁执行、谁验收、何时停止”。
+溯源纠正
+“Google 也正式表态”证据不足。
+可查到的是 Addy Osmani 的个人文章。页面明确声明其观点不代表 Google；因此只能记为 Google 背景专家的个人判断，不能记为 Google 官方路线。
+先把四个词分清
+网络传播把 Ralph、harness、loop engineering 和 graph agent 混成了一个词，实际上它们处在不同层级。
+Graph Agent 把工作流显式写……
+
+### Claude Code 完整开发流程 · 最佳实践
+
+- Canonical URL: https://hikcc.top/2026-07-09/claude-code-development-workflow.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 官方逐字 (official)
+- Summary: 从需求到实现、验证和交付，梳理官方材料中的完整开发流程。
+- Main sections: 一张图看全程；实践补充 0 · 一次性准备（配好就一直省事）；大功能才用 1 · 起步：访谈 → SPEC.md → 全新会话；官方逐字 2 · 主循环：官方四阶段；官方逐字 + 实践补充 3 · 单 task 内循环（你现在做的那圈）；官方逐字 4 · 收口 / 验证关（"提交"之后真正还有的步骤）；贯穿全程的两条铁律；怎么用它对齐需求（按场景选深度）
+
+Content snapshot: Claude Code 完整开发流程 · 最佳实践
+以 Anthropic 官方 best-practices 为骨架（标 官方逐字 的句子是原文引用），补充 spec-driven 实践。核心要回答的问题： "执行→更新状态→测试→提交"之后还有什么？ —— 有，提交只是 单 task 内循环 的结束，外面还套着 收口/验证关 。
+官方逐字
+实践补充
+看场景可省
+大功能才用
+一句话先记住： 你做的「实现 → 更新状态 → 测试 → 提交」是 单 task 内循环 ；它 外面 还有一层 收口 ： 全功能做完 → 换干净上下文 subagent 复查 diff → PR / 人工 gate → CI/CD → 合并 → 清理 。单人小改动到提交就够；进了分支/PR/团队，收口不能省。
+一张图看全程
+【0 准备·一次性】 CLAUDE.md · 权限/auto · hooks · skills · subagents · MCP · gh
+│
+【1 大功能起步·可选】 让 Claude 访谈你 → 写 SPEC.md → 开「全新会话」执行
+│
+┌───────▼ 主循环 = 官方 4 阶段 ──────────────────────────┐
+│ ① Explore(plan mode 只读) │
+│ ② Plan(出计划，Ctrl+G 可手改) │
+│ ③ Implement ─……
+
+### Claude Code 真实用法证据库 · 按复杂度分层
+
+- Canonical URL: https://hikcc.top/2026-07-09/claude-code-evidence-by-complexity.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 官方逐字 (official)
+- Summary: 按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。
+- Main sections: T0 · 理解 / 探索（只读问答，不改代码）；T1 · 小改 / 明确的 bug（一句话能描述 diff → 直接做，不 plan）；T2 · 中等功能（多文件 / 方案不确定 → Explore→Plan→Implement→Commit）；T3 · 大功能（先 interview → 写 SPEC.md → 另开干净会话执行 → 自验证闭环）；T4 · 代码库级 / 批量 / 高保真（多会话并行 · fan-out · 写者-审者 · 子代理编排）；横切：什么复杂度该上什么机制（含真实锚点）
+
+Content snapshot: Claude Code 真实用法证据库 · 按复杂度分层
+目标：用 真实证据 说明不同复杂度的需求，应该怎么和 Claude Code 持续对话、用上哪些机制（plan mode / subagent / skills / MCP / 多会话 / 自验证闭环），用于对齐"完成需求"的方式。
+诚实前提（重要）： 公网上 不存在 一份"够长、逐行、又正确用满 skills/MCP/subagent 工具链"的真实连续 transcript（那种会被完整公开的，多是个人单会话蛮力 vibe coding，是反面教材）。
+所以本库是 真实片段拼成的证据库 ，不是一段连续对话：① 官方文档里的 逐字示例 prompt ；② Anthropic 官方团队报告里的 真实工作流模式 ；③ 资深实践者公开写法。每条都标了来源与类型。Anthropic 那份团队报告原文是二进制 PDF，无法逐字解析，团队细节均来自官方博客+权威转述，统一标【团队报告·转述】。
+标签：
+官方逐字 官方文档原样的示例 prompt
+官方·转述 官方文档要点（我归纳）
+团队报告·转述 Anthropic 团队用法（经转述）
+实践者 资深用户公开经验
+T0 · 理解 / 探索（只读问答，不改代码）
+复杂度：低。典型：上手新代码库、定位功能、问"这段为什么这么写"。核心机制： subagent 隔离调查 ，避免把一堆文件读进主……
+
+### 真实 Claude Code 会话逐轮拆解
+
+- Canonical URL: https://hikcc.top/2026-07-09/claude-code-session-breakdown.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 实践补充 (practice)
+- Summary: 逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。
+
+Content snapshot: 真实 Claude Code 会话逐轮拆解（中文）
+样本：Simon Willison 公开的一次 15+ 小时连续会话 ——把 C 写的 JS 沙箱引擎 MicroQuickJS（Fabrice Bellard 著）完整移植成纯 Python。
+这是目前公网唯一一份够长、够真的完整 transcript。原始记录：
+simonwillison.net 原文 ↗ 。
+下面把每一“轮”（一次往返）按时间顺序铺开：人怎么说、Claude 做了什么，命令/文件都是真实抓取的原始内容。
+57 总轮次
+35 真人手敲的 prompt
+16 自动压缩接续
+6 Stop 钩子提醒
+1048 真实 bash 命令
+443 最终通过的测试
+三类轮次（这是“真实使用”最该看懂的地方）
+🧑 真人输入 —— 人真正打的字。这是“怎么跟 Claude Code 对话”的核心。注意：大多很短（“继续”“做完它”“勤提交”），靠的是 纪律性指令 而非长篇说明。
+🔄 自动压缩接续 —— 上下文满了，Claude Code 自动把长对话压成摘要再继续。 15 小时里发生 16 次 。不是人打的字，但它撑起了“持续对话”。
+🪝 Stop 钩子提醒 —— 用户装的 git 检查钩子，在 Claude 想收尾时提醒“还没提交/推送”，自动注入逼它守纪律。
+#1
+🧑 真人输入 · 第 1 条
+原始页 page-001 ↗
+……
+
+### 领域知识与业务，才是真正的关键
+
+- Canonical URL: https://hikcc.top/2026-07-09/domain-knowledge-matters.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 实践补充 (practice)
+- Summary: 为什么代码生成能力提高后，领域知识和业务判断反而更重要。
+- Main sections: 证据：业界已得出同样结论；为什么工具不是关键；关键转念：你学的每个机制，都是"领域知识的容器"；那该把精力放哪（务实落地）
+
+Content snapshot: 领域知识与业务，才是真正的关键
+你已经学完了所有 机制 （流程 / spec / 文件夹 / 复查）。一个对的结论浮现了：这些机制是 通用管道 ，谁都能学会、很快趋同；真正拉开产出差距的，是你往管道里灌的 领域知识与业务理解 。本文用证据印证它，并把你学过的每个机制重新解释成"装领域知识的容器"。
+机制（流程·spec·文件夹·复查）= 管道 ，会贬值、会趋同
+领域知识 + 业务理解 = 你灌进管道的水 ，才是差异与价值所在
+证据：业界已得出同样结论
+SDD 研究 "specifications should use domain-oriented ubiquitous language to describe business intent rather than specific tech-bound implementations."
+—— spec 要用「领域通用语言」表达业务意图，而不是绑死技术实现。
+Augment "creating specifications accurate enough for AI generation requires reverse-engineering years of implicit business logic."
+—— 让 spec 精确到能给 AI 生成，难点是把多年「隐性业务逻辑」逆向出来。
+Anthropic 官方 CL……
+
+### 提示词不必每次都结构化
+
+- Canonical URL: https://hikcc.top/2026-07-09/prompts-do-not-need-structure.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 实践补充 (practice)
+- Summary: 用真实证据理解自然表达、上下文与结构化提示之间的边界。
+- Main sections: 证据：官方原话就叫你别每次都结构化；为什么"不必精雕"——靠对话累积，不靠单句完美；支撑这种"随口说+随手纠"的官方工具；结构化是旋钮：三档，按场景拧；那什么时候才值得多写几句？
+
+Content snapshot: 提示词不必每次都结构化
+你的直觉：真实开发里输入的 prompt 不该每次都那么结构化，应该贴近自然语言习惯；每次都精雕很累，也不符合"小修改"的意图。 ——官方文档明确支持这个判断。 结构化是个 旋钮 ，只在"赌注高/不看着跑"时才拧大，不是常态税。
+结构化程度 ∝ (出错代价 × 模糊度)
+小修改 → 短句直说；探索 → 故意模糊；只有 大/有风险/无人看管 才上结构
+证据：官方原话就叫你别每次都结构化
+官方逐字 "For tasks where the scope is clear and the fix is small (like fixing a typo, adding a log line, or renaming a variable) ask Claude to do it directly."
+小而明确的事——typo、加日志、重命名——直接说就行。
+官方逐字 "If you could describe the diff in one sentence, skip the plan."
+一句话能描述改动，就跳过计划。
+官方逐字 "Vague prompts can be useful when you're exploring and can afford to course-correct."
+模糊的 prompt 在探索、能边走边纠时反而有用。
+官方逐字……
+
+### Claude Code「spec 接力」详解
+
+- Canonical URL: https://hikcc.top/2026-07-09/claude-code-spec-relay.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 实践补充 (practice)
+- Summary: 拆解 spec 接力的形态、做法、证据和适用条件。
+- Main sections: 形态 A · 手动 spec 文件 → 新会话（主流，证据最硬）；spec 文件到底长什么样（三处证据互相印证）；形态 B · plan mode 的内部 plan 文件 注意：默认不是换新会话；为什么"接力到新会话"有效（证据）；证据等级（诚实标注）
+
+Content snapshot: Claude Code「spec 接力」详解
+把大功能的需求 先写成一个自包含的 spec 文件 ，再 换一个干净上下文的会话 去实现——这就是"spec 接力(spec relay / handoff)"。本文讲清它的两种形态、具体做法、文件长什么样，并标注每条的真实证据来源。
+一句话定义： 需求 → 写成磁盘上的真实文件（spec/design/tasks）→ /clear 或新会话 → 新会话 只读这份文件 逐条实现、边做边更新状态、跑测试验收。
+为什么要"接力"到新会话： 同一会话里 Claude 带着写 spec 时的隐含假设，会 不再逐字读 spec ；新会话强迫它像新工程师一样从头逐字读。〔buildthisnow〕
+形态 A · 手动 spec 文件 → 新会话（主流，证据最硬）
+你显式让 Claude 写一个真实文件，自己能审能改，然后真正换新会话执行。官方推荐路径就是这种。
+① 访谈挖需求 ② 编译成 spec 文件 ③ 换干净会话执行 ④ 自验证收口
+AskUserQuestion → SPEC.md / spec.md → /clear 或新窗口 → 跑测试 / /goal
+逐题反问 design.md tasks.md 只读 spec 实现 更新 tasks.md 状态
+───────────────────────────────────────────……
+
+### Claude Code「spec 接力」中英对照
+
+- Canonical URL: https://hikcc.top/2026-07-09/claude-code-spec-relay-bilingual.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 看场景可省 (optional)
+- Summary: 保留英文原文与中文解释的即用 prompt 对照材料。
+- Main sections: ① 访谈挖需求 → 写出 spec；② 把讨论编译成可交付的规格文件；③ spec 必须"自包含"才接得住（官方原则 · 对照）；④ 换干净会话执行（接力动作 · 对照）；spec 文件三种形态（对照速查）
+
+Content snapshot: Claude Code「spec 接力」中英对照
+大功能的标准做法： 先把需求写成自包含的 spec 文件 → 换干净会话只读它实现 。下面每条 prompt 左英文（可直接复制喂给 Claude Code）/ 右中文（理解） 。详解与证据见同目录 spec接力-详解.html 。
+读法： 英文是真实证据原文， 建议直接用英文 跑（模型对英文指令最稳）；中文是对照翻译，帮你看懂每句在要求什么。来源标签： 官方逐字 官方文档原样 · 实践者逐字 Harper Reed 原文。
+① 访谈挖需求 ② 编译成 spec 文件 ③ 换干净会话执行 ④ 自验证收口
+AskUserQuestion → SPEC.md / spec.md → /clear 或新窗口 → 跑测试 / /goal
+逐题反问 design.md tasks.md 只读 spec 实现 更新 tasks.md 状态
+① 访谈挖需求 → 写出 spec
+官方逐字 Claude Code 原生：让它面试你，再写 SPEC.md 官方 BP ↗
+English（直接复制用）
+I want to build [brief description]. Interview me in detail using the AskUserQuestion tool.
+Ask about technical implementation……
+
+### SPEC 文档怎么分类 · 目录约定
+
+- Canonical URL: https://hikcc.top/2026-07-09/spec-document-layout.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 看场景可省 (optional)
+- Summary: 整理 spec 文档的分类、存放目录和真实项目约定。
+- Main sections: 三个问题，直接答；最轻量 ① Anthropic 官方：只要 SPEC.md，不规定文件夹；逐字证据 ② GitHub spec-kit： specs/ + 编号文件夹；逐字证据 ③ Pimzino： .claude/specs/ + 功能名文件夹；关键区别： specs/ vs .claude/specs/；实践变体 进阶：按"生命周期"再分夹；怎么选（务实建议）
+
+Content snapshot: SPEC 文档怎么分类 · 要不要保存 · 存哪些文件夹
+回答三件事： ① 每个功能的 spec 怎么分类 、 ② 文档要不要持续保存 、 ③ 存到哪些文件夹 。基于三套真实约定（Anthropic 官方 / GitHub spec-kit / Pimzino），标 官方逐字 的是原文引用。
+官方逐字
+实践补充
+看场景
+一句话先记住： 一个功能 = 一个文件夹 ，夹里放「需求 / 设计 / 任务」三件套； 持续保存并 check 进 git （它是"为什么有这段代码"的永久档案）；位置二选一 —— specs/001-功能名/ （spec-kit，可见强排序）或 .claude/specs/功能名/ （Pimzino，跟配置放一起）。
+三个问题，直接答
+问题 答案
+每个功能怎么分类 一功能一夹 。要排序用 001-短名 ；要语义用 功能名 。夹内固定放需求/设计/任务三件套
+要持续保存吗 要 ，而且 check 进 git 。它是 source of truth、"为什么代码长这样"的永久记录，新会话出问题可 pin 回来当恢复点
+存哪 specs/ （spec-kit）或 .claude/specs/ （Pimzino）； 全局 长期文件单独放 .specify/memory/ 或 .claude/steering/
+最轻量 ① Anthropic 官方：只要 SPEC.md，不……
+
+### Phase / Task 清单 · 真实用法
+
+- Canonical URL: https://hikcc.top/2026-07-09/phase-task-checklist.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 实践补充 (practice)
+- Summary: 分析 Phase、Task、Sprint 清单如何服务长程开发。
+- Main sections: 形态 1 · GitHub spec-kit 官方模板（Phase + 任务ID + 并行/故事标记）；形态 2 · Pimzino/claude-code-spec-workflow（原子任务 + Leverage/Requirements 回链）；清单是怎么被"驱动"的（实现阶段循环）；两种形态速查对照
+
+Content snapshot: Claude Code 的 Phase / Task / Sprint 清单 · 真实用法
+很多人会把需求拆成 Phase（阶段）→ Task（原子任务）→ 勾选清单 写进一个 tasks.md ，让 Claude Code 逐条实现、边做边打勾。下面是 逐字、来自真实仓库 的两种主流形态（含一份真正用过、已打勾的文件），右侧配中文讲解。它是 spec 接力里"③ tasks"那一环的具体长相。
+真实性说明： 下面的 markdown 块均为 从公开仓库逐字拉取 ，未改写。两种约定：① GitHub 官方 spec-kit （agent 无关，含 Claude Code）；② 社区 Pimzino/claude-code-spec-workflow （专为 Claude Code）。注意：这跟 Claude Code 自带 的任务系统（ ~/.claude/tasks/ / TodoWrite）是 两回事 ——这里讲的是"你写进仓库、用来驱动 agent 的 markdown 清单"。
+需求 → 设计 → 任务清单(tasks.md) → 实现
+spec.md design.md Phase→Task→[ ] 逐条做、打勾[x]、跑测试
+↑ 本文讲的就是这一格
+形态 1 · GitHub spec-kit 官方模板（Phase + 任务ID + 并行/故事标记）
+官方逐字 temp……
+
+### Phase / Task 清单 · 中英对照
+
+- Canonical URL: https://hikcc.top/2026-07-09/phase-task-checklist-bilingual.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 看场景可省 (optional)
+- Summary: 逐字材料的中英文对照，便于查阅和复用。
+- Main sections: 形态 1 · GitHub spec-kit 官方模板；形态 2 · Pimzino/claude-code-spec-workflow（专为 Claude Code）；真实用过 · 已打勾的 tasks.md（非模板）；清单怎么被驱动（对照）
+
+Content snapshot: Phase / Task 清单 · 中英对照
+把需求拆成 Phase 阶段 → Task 原子任务 → 勾选清单 写进 tasks.md 驱动 Claude Code。下面 左英文逐字（真实仓库原文，可直接照搬）/ 右中文平移 。讲解与标记含义见同目录 真实用法.html 。
+真实性： 左列 markdown 全部从公开仓库逐字拉取、未改写；右列是按相同结构的中文平移（占位符 [...] 、 _Requirements_ 等照留）。实操建议 直接用英文原文 喂 Claude Code。
+形态 1 · GitHub spec-kit 官方模板
+官方逐字 templates/tasks-template.md（节选） github/spec-kit ↗
+English（原文）
+## Format: `[ID] [P?] [Story] Description`
+- **[P]**: Can run in parallel (different files, no deps)
+- **[Story]**: Which user story (e.g., US1, US2, US3)
+- Include exact file paths in descriptions
+## Phase 1: Setup (Shared Infrastructure)
+**Purpose**: Projec……
+
+### Task / Phase / Sprint 三者关系
+
+- Canonical URL: https://hikcc.top/2026-07-09/task-phase-sprint.html
+- Published: 2026-07-09
+- Topic: Claude Code (claude)
+- Evidence label: 实践补充 (practice)
+- Summary: 用真实证据辨析三个规划层级的职责和组合方式。
+- Main sections: 体系 A · 真实证据 通用 Agile / Scrum；体系 B · 逐字证据 Claude Code 的 spec 工具（spec-kit / Pimzino）；关键冲突（最容易踩的坑）；体系 C · 构造建议（非官方） 想把三者合成一套时的务实映射
+
+Content snapshot: Task / Phase / Sprint 三者关系
+这三个词分属 两个不同体系 ，而且 "Phase" 在两边层级正好相反 ， "Sprint" 在真正的 Claude Code spec 工具里根本不出现 。本文把两套层级、冲突点、以及"想合成一套时的务实映射"讲清，并标注哪些是真实证据、哪些是构造建议。
+一句话先记住： Agile 里 Phase > Sprint > Task ；spec-kit 里 Feature > User Story > Phase > Task （无 Sprint）。同一个词 "Phase"，一个在 Sprint 之上、一个在 User Story 之下——这是最大歧义来源。
+体系 A · 真实证据 通用 Agile / Scrum
+Project 项目
+└─ Phase / Iteration 阶段 / 迭代 ← 这里的 Phase = 高层"生命周期阶段"
+└─ Sprint 冲刺（1–4 周 时间盒 ）
+└─ Task 任务（从 backlog 拉进 sprint backlog）
+└─ Subtask 子任务
+层级： Phase > Sprint > Task。
+Sprint： 一个固定时长的时间盒；sprint 里"装"从产品 backlog 挑出的任务/故事。
+Phase： 项目级的大阶段（在 sprint 之上 ）。
+证据：Tempo……
+
+### Transformer 执行流程：从分词到 Top-k
+
+- Canonical URL: https://hikcc.top/2026-07-09/transformer-from-tokenization-to-topk.html
+- Published: 2026-07-09
+- Topic: AI 工程与原理 (engineering)
+- Evidence label: 实践补充 (practice)
+- Summary: 逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。
+- Main sections: ① 总览：一图看懂各阶段复杂度；② 分词：BPE 编码；③ 注意力：整个流程的「平方瓶颈」；④ 收尾：把隐藏向量变回「词表上的分数」；⑤ 采样：从 V 维 logits 里抽出下一个 token；⑥ 闭环：生成一个 token，再喂回去
+
+Content snapshot: Transformer 执行流程：从分词到 Top-k
+把一次「文本 → 下一个 token」的前向推理，按阶段拆开，逐段给出 算法步骤 与 时间复杂度 。
+符号约定见下；每条复杂度结论尽量附可溯源链接与英文原文。分析以 推理（inference） 视角为主，分词段会额外点出训练与编码的区别。
+符号约定
+n 序列长度（token 数）
+d 模型隐藏维度 d_model
+L Transformer 层数
+h 注意力头数，d_k=d/h
+d_ff FFN 中间维度（≈4d）
+V 词表大小（3万~20万+）
+k top-k 保留的候选数
+l 单个词的字节/字符长度
+三类标签
+官方逐字 —— 来自论文/权威文档的原文结论（附英文 + 链接）。
+实践补充 —— 工程实现里的真实做法（KV cache、低秩等），帮你把书本公式落到代码。
+看场景可省 —— 可选环节（如 temperature、top-p），不影响主流程复杂度量级。
+① 总览：一图看懂各阶段复杂度
+阶段 核心运算 时间复杂度 主要瓶颈
+分词 BPE 编码
+对每个词反复做最高优先合并 O(n·l²)（朴素） 字符级，量级很小
+词嵌入查表
+token id → 向量（gather） O(n)（≈O(n·d) 出数据） 查表 O(1)/token
+位置编码
+加正弦/RoPE 旋转 O(n·d) —
+Q/K/V 投影
+3 个 (n×d)……
+
+### Boris Cherny 炉边谈话分析
+
+- Canonical URL: https://hikcc.top/2026-06-23/boris-cherny-fireside-chat.html
+- Published: 2026-06-23
+- Topic: Claude Code (claude)
+- Evidence label: 官方逐字 (official)
+- Summary: Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。
+- Main sections: 执行摘要；抽象阶梯 The Ladder of Abstraction；瓶颈迁移链 Bottleneck Migration；主张可信度评估总表 Claim Assessment；Anthropic 产品矩阵 Product Matrix；ROI 与部署 playbook；批判性总评 Critical Lens；启示 Takeaways；十句值得记住的原话；本分析是如何产出的
+
+Content snapshot: Boris Cherny 炉边谈话深度分析 · Claude Code 负责人 @ Code w/ Claude
+把这场 41 分钟对谈当作一份「Anthropic 半官方产品叙事 + 卖方话术 + 真实工程洞察」的混合体来拆。产出不只是复述，而是 逐条主张的可信度评估 ——区分真实信号 / 营销 / 有附加条件 / 愿景性尚未兑现，并附英文原话与打折条件。
+视频 Fireside Chat with Boris Cherny, Head of Claude Code
+频道 @Scale
+发布 2026-06-19 · 41:05
+对谈 Jesse Chen (Meta Dev Infra) × Boris Cherny (Anthropic)
+分析 dynamic workflow · 5 agents · 4视角+综合
+⚠️ 能力边界声明（重要）： 我无法真正观看视频画面或收听音频。本分析完全基于 YouTube 自动字幕的 文本逐字稿 （由 web 抓取获得）。字幕可能存在识别误差；语气、表情、现场反应等非语言信息我无法获取。引用的英文原话来自字幕文本，与实际口述可能略有出入。请以此作为「文本级深度解读」，而非「视频内容权威转录」。
+目录
+执行摘要
+抽象阶梯（产品哲学地基）
+瓶颈迁移链（最有判断力的洞察）
+主张可信度评估总表（核心）
+Anthropic 产品矩阵
+ROI 与部……
+
+### Koji 杨远骋「2026 AI 投资观察与思考」分析
+
+- Canonical URL: https://hikcc.top/2026-06-23/koji-ai-investment-2026.html
+- Published: 2026-06-23
+- Topic: 产品与产业 (industry)
+- Evidence label: 实践补充 (practice)
+- Summary: 围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。
+- Main sections: 执行摘要；推土机框架 · 战略地图 The Bulldozer Framework；主张可信度评估总表 Claim Assessment；实操 playbook By Audience；批判性总评 · Koji 三重身份滤镜 Critical Lens；启示 Takeaways；十二句金句；本分析是如何产出的
+
+Content snapshot: Koji 杨远骋「2026 AI 投资观察与思考」深度分析 · 十字路口 × 课代表立正
+把这期播客当作一份「真格 Venture Partner + 内容人 + 持股者」的 AI 创投一线判断来拆。产出不只是复述 Koji 的战略地图，而是 逐条主张的可信度评估 ——区分论据扎实 / 一线体感 / 有条件才成立 / 与其身份利益相关 / 愿景预测，并附金句与打折条件。批判性视角还做了独立信源交叉验证。
+视频 十字路口｜2026 过半 AI 投资观察与思考（下）
+频道 Koji杨远骋
+发布 2026-06-11 · 37:27
+对谈 Koji × 课代表立正
+分析 dynamic workflow · 5 agents · 4视角+综合
+⚠️ 能力边界声明（重要）： 我无法观看视频或收听音频，也 没抓到这期视频的原始字幕逐字稿 （视频可能没有自动字幕）。本分析基于 (1) 视频官方描述 （含上半场要点）+ (2) 第三方详尽文字整理版 （kelewrites.com《推土机前别捡钢镚——2026 上半年 AI 投资的真问题》）。文字整理版有自己的筛选/解读偏差，引用的「金句」是文字版转述，与视频原话可能略有出入。请以此作为「基于二手整理的深度解读」，非「视频逐字原文分析」。
+目录
+执行摘要
+推土机框架（战略地图）
+主张可信度评估总表（核心）
+实操 playbook（四类受众）
+批判……
+
+### Boris：不写 prompt，写 loop 的全部内涵
+
+- Canonical URL: https://hikcc.top/2026-06-22/boris-loops-not-prompts.html
+- Published: 2026-06-22
+- Topic: Claude Code (claude)
+- Evidence label: 官方逐字 (official)
+- Summary: 还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。
+- Main sections: 先纠正溯源：这句话到底是谁、在哪、怎么说的；10 层内涵地图；L1 · 本体论：loop 是什么，prompt 是什么；L2 · 认识论：正确性从"prompt 对"迁移到"系统收敛"；L3 · 工程范式四时代；L4 · 控制论与反馈回路；L5 · 角色与权力：人从"对话者"退为"系统设计者"；L6 · 经济学：token 取代注意力，loop 是复利；L7 · 风险与边界：loop 的新失败模式 + token 预算批判；L8 · 产品映射：loop 在 Claude Code 里到底长什么样；L9 · 历史脉络与类比；L10 · 对个体的可操作启示：周一怎么改；仍未 unpack 的缺口（深思者会追问的）
+
+Content snapshot: Boris Cherny 说"我现在不写 prompt，只设计 loop"——的全部内涵
+主源： 《Reflecting on a year of Claude Code》 （Boris Cherny × Cat Wu，2026-06-08）+ ~6/2 WorkOS「Acquired Unplugged」现场 + Addy Osmani《Loop Engineering》 （2026-06-07）+ Claude Code Best Practices · 由 34-agent 动态工作流（8 源挖掘 + 7 条对抗核验 + 10 内涵维度 + 完整性批判 + 8 缺口补研）生成 · 2026-06-22
+Claude Code 的作者 Boris Cherny 说他现在不再写 prompt，而是设计 loop。这句话在 2026 年刷屏，但 真意远不止"多跑几次" 。本文把它拆成 溯源纠正 + 10 层内涵 + 产品映射 + 风险与未解缺口 ，每条附英文原文与可溯源链接，区分「官方逐字 / 实践转述 / 看场景可省 / 溯源纠正」。
+prompt 是你交出去的一句 一次性产物 （花掉就没了）；
+loop 是你盖起来、 会自己找活、自己验证、自己记教训 的那台机器（会复利）。
+你不再说"这句话"，你造"这个结构"——人从 对话者 退为 系统设计者 。
+先纠正溯源：这句话到底是谁、……
+
+### 长程自主任务通用方法论
+
+- Canonical URL: https://hikcc.top/2026-06-22/long-horizon-autonomous-tasks.html
+- Published: 2026-06-22
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 实践补充 (practice)
+- Summary: 从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。
+- Main sections: 一句话本质；三大失败模式（设计起点）；通用设计原则（12 条 · 对抗验证修正后）；五层架构；六个反馈环；一次迭代的 6 步状态机；迁移到非研究任务；⚠️ 通用性边界与反例（对抗验证产出）；诚实边界（Limits）；常见陷阱速查；一页纸速查表；这套方法论是如何产出的
+
+Content snapshot: 长程自主任务通用方法论 · 从 Deli_AutoResearch skill 抽取
+把一个面向学术研究的自主 agent 协议，剥离 research 语境后提炼成一套「如何设计任何长程（数天–数周）无人值守 agent 框架」的可复用设计原则与组件清单。 本版已经过 3 个对抗视角（忠实性 / 通用性 / 完备性）验证并修正 ，标注了原文出处、过度泛化的边界、以及迁移时必须重新标定的部分。
+来源 Deli_AutoResearch SKILL.md
+网页 victorchen96.github.io/auto_research
+产出 dynamic workflow · 8 agents
+流程 4维分析 → 综合 → 3视角对抗验证
+日期 2026-06-22
+目录
+一句话本质
+三大失败模式（设计起点）
+通用设计原则（12 条 · 修正后）
+五层架构
+六个反馈环
+一次迭代的 6 步状态机
+迁移到非研究任务
+⚠️ 通用性边界与反例（验证产出）
+诚实边界（Limits）
+常见陷阱速查
+一页纸速查表
+00 一句话本质
+长程自主 agent 的可靠性 来自工程脚手架而非模型能力 ——用 状态外化 把对话降级为缓存、用 独立监督 消除自评偏差、用 分层看门狗 覆盖静默死亡、用 强制多样性与结构转向 逃逸局部最优，并始终把人类 降级为异常处理器而非必经节点 。
+看场景可省 · 前提
+本方法……
+
+### Deli_AutoResearch 原文对照译注手册
+
+- Canonical URL: https://hikcc.top/2026-06-22/deli-autoresearch-annotated.html
+- Published: 2026-06-22
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 官方逐字 (official)
+- Summary: SKILL.md 原文、翻译与关键机制注释的完整对照。
+- Main sections: 动机 Motivation；行为约束 Behavioral Constraints；架构 Architecture；状态文件 State Files；用法 Usage；停滞检测与改向 Stall Detection & Pivoting；心跳看门狗 Heartbeat Watchdog；子代理调度模式 Subagent Scheduling Patterns；工程约束 Engineering Constraints；验证与局限 Validation & Limits；统一术语表 Glossary（术语校对产出）；本译注是如何产出的
+
+Content snapshot: Deli_AutoResearch SKILL.md · 原文对照译注手册
+把整份 skill 协议按原文 10 节做 中英逐句对照 + 结构化解析 ：每条都保留英文原文逐字、给中文翻译、附设计意图与关键术语。这是「翻译 + 精读」，不改写、不抽象——与另一份《通用方法论》互补，那份是抽象提炼，这份是忠于原文的译注。
+原文 SKILL.md（10 节 + frontmatter）
+来源 victorchen96.github.io/auto_research
+产出 dynamic workflow · 11 agents
+校对 全局术语一致性 + 翻译忠实性
+日期 2026-06-22
+阅读说明 · 标签与术语约定
+EN 原文 英文逐字（含原文 their/its 笔误也照录，不「修好」）
+ZH 译文 中文翻译
+解析 设计意图 / 易误解处 / 机制关联
+校对修正 术语校对建议的统一
+术语约定（术语校对统一）： 代码标识符与命令 保留英文不译 —— stale_count 、 last_seen 、 findings.jsonl 、 directions_tried.json 、 orchestrator （编排器）、 work agent 、 resume 、 /loop 、 level=decision 、 durable cron （首次括注「持久化定时任务」）。概念词用中文……
+
+### 一个真实案例的复利过程
+
+- Canonical URL: https://hikcc.top/2026-06-22/compound-engineering-case-study.html
+- Published: 2026-06-22
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 实践补充 (practice)
+- Summary: 从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。
+- Main sections: 主案例 · GymCoach：一条字面意义上的"毕业"复利管线；案例 2 · Anthropic 自家团队（Boris）：可量化的复利曲线；案例 3 · 复利工程（Every / Aman Khan）：命名 + 个人 skill 库；复利机制：7 个步骤（三案例共同）；诚实现实核查：这条复利曲线其实是"断言"，不是"测量" 补研最重要发现
+
+Content snapshot: 一个真实案例的"复利过程"：从 lessons.md 到 100% 代码由 Claude 写
+主案例： GymCoach 自治仓库 （11 天 PR #6→#256，lessons.md L1-L13 毕业）+ Anthropic 自家团队 （20%→30%→100%）+ Every「复利工程」 · 26-agent 动态工作流（8 候选挖掘 + 6 数字对抗核验 + 3 案例逐字深挖 + 机制 + 12 缺口补研）· 2026-06-22
+"loop 会复利"——这句话最字面、最可逐字核对的公开实现，是一个叫 GymCoach 的开源仓库：它把"故障→毕业成 skill/规则"做成了一条 显式管线 ，11-12 天里 README 路线图被全部勾完。下面把它的复利过程逐阶段、逐字展开，再配 Anthropic 团队的可量化曲线，最后 诚实核查 ：这条复利曲线其实是"断言而非测量"。
+复利 = 把每一次纠错外部化成一份持久资产 （CLAUDE.md 规则 / skill / 测试 / verify 门），
+这份资产被下一次循环 自动加载并复用 ——于是规则集单调增长、错误率单调下降、单位产出边际成本走低。
+只重复不沉淀 = 一次性 prompt（花掉即弃）；复利 = 一次性纠错成本一次付清，之后免费复用无数次 。
+主案例 · GymCoach：一条字面意义上的"毕业"复利管线
+谁……
+
+### ChatGPT Pro + DevSpace MCP 的 Codex 设计研究
+
+- Canonical URL: https://hikcc.top/2026-06-19/chatgpt-pro-devspace-mcp.html
+- Published: 2026-06-19
+- Topic: AI 工程与原理 (engineering)
+- Evidence label: 实践补充 (practice)
+- Summary: 分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。
+- Main sections: 结论先行；证据摘录；DevSpace 是什么；和 Codex 的对应关系；ChatGPT Pro 能不能用；连接与安全设计；推荐工作流；三种方案取舍；最小实施清单；我的设计建议；不确定项
+
+Content snapshot: ChatGPT Pro + DevSpace MCP 的 Codex 设计研究
+当前日期：2026-06-19 · 研究对象： Waishnav/devspace 、ChatGPT MCP、OpenAI Codex、MCP 官方规格 · 方法：Context7 解析 MCP 文档 + 官方 OpenAI Codex manual + DevSpace 仓库源码/文档 + OpenAI Help Center。
+这份研究回答一个很具体的问题：能不能用 ChatGPT Pro + DevSpace MCP 做出接近 Codex 的本地 coding-agent 工作流？结论不绕：DevSpace 的设计很像 Codex loop，但 ChatGPT Pro 当前不是完整写入/修改型 MCP 的最佳承载面 。
+结论先行
+DevSpace 是一个很聪明的“Codex 式 MCP 桥” ：它把本机项目、文件编辑、搜索、shell、worktree、AGENTS/CLAUDE 指令和 skills 暴露给 MCP host。
+但如果目标明确写成 ChatGPT Pro 变 Codex ，关键限制是：OpenAI 官方 Help 当前写明 Full MCP 只给 Business / Enterprise / Edu ，Pro 只能连接 read/fetch 权限的 MCP。
+官方逐字 高风险结……
+
+### Claude Design 产品设计全流程
+
+- Canonical URL: https://hikcc.top/2026-06-19/claude-design-workflow.html
+- Published: 2026-06-19
+- Topic: 产品与产业 (industry)
+- Evidence label: 实践补充 (practice)
+- Summary: 从一个需求到生产，拆解 AI 参与产品设计的完整流程。
+- Main sections: 一句话定义 + 关键事实；全流程地图：从一个需求出发的 7 步；速查：输入 · 产出 · 导出；第 0 步 · 需求定义与输入；第 1 步 · 调研与参考素材；第 2 步 · 概念与首版生成；第 3 步 · 视觉风格与设计系统；第 4 步 · 交互原型；第 5 步 · 多格式产出；第 6 步 · 交付与工程化；诚实纠正：核验推翻的 4 个常见说法；诚实清单：还没解决的缺口（执行前必读）；定价与访问（官方）
+
+Content snapshot: Claude Design 产品设计全流程 · 从一个需求到生产
+主源： Introducing Claude Design by Anthropic Labs （2026-04-17）· 由 36-agent 动态工作流多源挖掘 + 对抗核验 + 缺口补研生成 · 当前日期 2026-06-19
+本文回答一个问题： 拿到一个产品需求，怎么用 Claude Design 一步步走到可交付/可生产的成果？ 全程区分 官方逐字 、 实践补充 、 看场景可省 三类信息，每条结论附可溯源链接；并诚实标注核验中发现的 纠正项与未解缺口 。
+一句话定义 + 关键事实
+Claude Design = Anthropic Labs 的 对话式视觉设计产品 （左聊天 / 右实时画布），
+用 Claude Opus 4.7 把"描述需求"变成 可点击原型 / 幻灯片 / 单页 / 落地页 ，并能 一条指令打包交给 Claude Code 写成生产代码。
+入口 claude.ai/design
+发布 2026-04-17（research preview） 官方页日期字段曾被一处源误取为 2025-11-13，已由核验独立查主源纠正
+模型 Claude Opus 4.7（"我们最强大的视觉模型"）
+谁能用 Pro / Max / Team / Enterprise（ 无免费档 ；Enterprise 默……
+
+### Boris 内部对话：不写 prompt，写 loop
+
+- Canonical URL: https://hikcc.top/2026-06-09/boris-internal-talk-loops.html
+- Published: 2026-06-09
+- Topic: Claude Code (claude)
+- Evidence label: 官方逐字 (official)
+- Summary: 从内部对话理解长程编码任务中循环、环境与验证的关系。
+- Main sections: ① 不跟 agent 对话,跟 loop 对话；② 从 4.6 起不用 plan mode,全开 auto mode；③ 不做 prompt engineering,也不做 context engineering；④ 一半工程在手机上完成,走路时语音对话；⑤ 视频里另外两条同等关键、但你没提的
+
+Content snapshot: 不跟 agent 对话,跟 loop 对话
+—— Boris 一周年内部复盘里到底说了什么
+把网上流传的那段"信息密度极高的 20 分钟对话"还原到出处,并逐条核对四个高传播金句的原话。
+视频出处: 《Reflecting on a year of Claude Code》——Boris Cherny(Claude Code 负责人)与 Cat Wu(产品负责人)对谈
+发布: 2026-06-08 · 平台: YouTube · youtube.com/watch?v=Hth_tLaC2j8
+⚠️ 它不是"泄露的内部会议",是 Claude Code 一周年(GA 满一年)的官方公开复盘对谈。本文逐字引用以视频/官方贴文为准;部分整理转引自社区站点 howborisusesclaudecode.com (汇编自 Boris 公开推文 + 该视频)。
+标签: 官方逐字 视频/官方原话 ·
+实践补充 我补的用法/背景 ·
+看场景可省 可选项,不是必须
+① 不跟 agent 对话,跟 loop 对话
+你转述的:"让 loop 替我来 prompt" —— 核对结果:✅ 属实,是 Boris 最核心的范式转变
+官方逐字
+"我已经不再给 Claude 写 prompt 了。我跑的是一堆 loop,是它们在 prompt Claude、在决定该做什么。我的工作是写 loop。"
+"I don'……
+
+### 大厂如何做 Eval · 真实证据
+
+- Canonical URL: https://hikcc.top/2026-06-07/how-big-tech-runs-evals.html
+- Published: 2026-06-07
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 官方逐字 (official)
+- Summary: 追踪领先团队的评估实践，区分公开事实与经验转述。
+- Main sections: 一、先看一个最反直觉的结论；二、Eval 的"零件":harness、suite、eval-driven development；三、怎么打分?三种 grader 的取舍；四、最被低估的一步:judge 必须对齐人类；五、人工评估为什么删不掉；六、真实战场:产品团队的代价；七、大厂踩过的坑(逐字清单)；八、一个被忽视的新风险:模型"知道自己在被测"；九、把证据收敛成一张行动清单；来源清单(全部一手)
+
+Content snapshot: 大厂如何做 Eval —— 真实证据
+写代码 → 验证(verify)→ 评估(eval)。前两步管"做对了没",eval 管"做得好不好 / 做的是不是对的事"。
+本文只收录可溯源的一手工程博客与官方文档,逐字引用附英文原文与链接。
+官方逐字 来自厂商一手文档/博客的原话
+实践补充 我对证据的归纳与解读
+看场景可省 进阶细节,按需要看
+整理日期 2026-06-07 · 一手来源:Anthropic 工程博客 / OpenAI 开发者文档 / LinkedIn 工程博客 / The Pragmatic Engineer
+一、先看一个最反直觉的结论
+几乎所有大厂的一手文章都在说同一句话: eval 比你想的更难,也比你想的更早就该开始,而且小样本就够用。
+官方逐字 Anthropic:不要等攒够几百条才开始
+"We started with a set of about 20 queries representing real usage patterns… A prompt tweak might boost success rates from 30% to 80%."
+"我们一开始只用了约 20 条代表真实使用模式的查询……一次提示词微调就可能把成功率从 30% 拉到 80%。"
+— Anthropic, How we built our multi-agent resear……
+
+### 官方解读 · 动态工作流
+
+- Canonical URL: https://hikcc.top/2026-06-02/dynamic-workflows.html
+- Published: 2026-06-02
+- Topic: Agent 与 Eval (agents)
+- Evidence label: 官方逐字 (official)
+- Summary: 从官方原文理解动态工作流及其对 agent 系统的意义。
+- Main sections: 核心定义；为什么需要它：治三种"失败模式"；6 个常用编排模式；标杆案例：Bun 从 Zig 移植到 Rust；什么时候别用（官方明确划线）；实用建议；它在你已学的版图里的位置
+
+Content snapshot: 官方解读 · 动态工作流 Dynamic Workflows
+原文： A harness for every task: dynamic workflows in Claude Code · 2026-06-02 · Claude 官方博客
+这篇是我们刚聊的 fork / subagent 的"放大版"：Claude Code 现在能 自己写一个多 agent 编排 （dynamic workflow），针对具体任务定制，去啃复杂、长时、需要对抗校验的活。本文逐节拆它 是什么、怎么跑、解决什么、什么时候别用 。
+动态工作流 = Claude 临时写一段 JavaScript ，
+在后台 编排几十~上百个 subagent （各自独立上下文）去协作完成一个大任务
+核心定义
+词 含义
+Agentic harness
+(执行骨架) 协调 agent 行为的底层执行框架
+Dynamic workflow
+(动态工作流) 一段 JavaScript 编排文件 ，负责 spawn 和管理一群 subagent（各自隔离上下文）
+Subagent workflow 里被生出来的单个 Claude 实例，各自有聚焦目标
+技术能力： workflow 跑的是 JS（含 spawn subagent 的特殊函数 + JSON/Math/Array 等标准库），可指定 模型、worktree 隔离、被打……
+
+### 官方解读 · HTML 的不合理有效性
+
+- Canonical URL: https://hikcc.top/2026-05-20/unreasonable-effectiveness-of-html.html
+- Published: 2026-05-20
+- Topic: AI 工程与原理 (engineering)
+- Evidence label: 官方逐字 (official)
+- Summary: 为什么 HTML 成为人和模型共享信息、生成工具的重要界面。
+- Main sections: 为什么用 HTML：官方给的 5 个理由；官方推荐的 5 类用法；最该记住的一句；怎么开始（Getting started 要点）
+
+Content snapshot: 官方解读 · HTML 的不合理有效性
+原文： Using Claude Code: The unreasonable effectiveness of HTML · 作者 Thariq Shihipar · 2026-05-20 · Claude 官方博客
+这篇官方文章的核心： 让 Claude Code 用 HTML 而不是 Markdown 输出 ，能拿到更高信息密度、更清晰的视觉组织、更易分享、可交互、更好地吸纳多源上下文。 它正好印证了你"一律生成 HTML"的做法 ——你不是个人偏好，是踩在官方观点上。
+官方结论： HTML > Markdown 作为 Claude Code 的产出格式
+作者原话：用 HTML 是因为它让我" feel much more in the loop with Claude "
+为什么用 HTML：官方给的 5 个理由
+理由 说什么
+① 信息密度
+Information Density HTML 能塞表格、CSS、SVG 图、代码块、JS 交互、空间排布、内嵌图片—— 比 Markdown 承载多得多 的数据
+② 视觉清晰
+Visual Clarity 大文档用 tab/插图/链接组织后更可读。作者原话： "I tend to not actually read more than a 100-line Markdown file" ——长……
+
+## Citation guidance
+
+Cite the canonical HTML article, not this catalog, when supporting a substantive claim. Follow the source links inside each article and preserve the article's distinction between quotation and paraphrase.

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://hikcc.top/2026-06-22/boris-loops-not-prompts.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Boris：不写 prompt，写 loop 的全部内涵 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://hikcc.top/2026-06-22/boris-loops-not-prompts.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Boris：不写 prompt，写 loop 的全部内涵 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;--pink:#f778ba;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -60,7 +60,7 @@ details summary:hover{color:#fff}
 <nav class="nav-links" aria-label="主导航"><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a><a href="/rss.xml">RSS 订阅</a></nav>
 <button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-official">官方逐字</span><time datetime="2026-06-22">2026-06-22</time></div><div class="article-content wrap"><h1>Boris Cherny 说"我现在不写 prompt，只设计 loop"——的全部内涵</h1>
 <p class="meta">主源：<a href="https://www.youtube.com/watch?v=Hth_tLaC2j8" target="_blank">《Reflecting on a year of Claude Code》</a>（Boris Cherny × Cat Wu，2026-06-08）+ ~6/2 WorkOS「Acquired Unplugged」现场 + <a href="https://addyosmani.com/blog/loop-engineering/" target="_blank">Addy Osmani《Loop Engineering》</a>（2026-06-07）+ <a href="https://www.anthropic.com/engineering/claude-code-best-practices" target="_blank">Claude Code Best Practices</a> · 由 34-agent 动态工作流（8 源挖掘 + 7 条对抗核验 + 10 内涵维度 + 完整性批判 + 8 缺口补研）生成 · 2026-06-22</p>
 <p class="lead">Claude Code 的作者 Boris Cherny 说他现在不再写 prompt，而是设计 loop。这句话在 2026 年刷屏，但<b>真意远不止"多跑几次"</b>。本文把它拆成<b>溯源纠正 + 10 层内涵 + 产品映射 + 风险与未解缺口</b>，每条附英文原文与可溯源链接，区分「官方逐字 / 实践转述 / 看场景可省 / 溯源纠正」。</p>

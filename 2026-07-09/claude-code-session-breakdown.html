@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://hikcc.top/2026-07-09/claude-code-session-breakdown.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>真实 Claude Code 会话逐轮拆解 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://hikcc.top/2026-07-09/claude-code-session-breakdown.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>真实 Claude Code 会话逐轮拆解 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;
 --human:#2563eb;--compact:#a855f7;--hook:#f59e0b;--bash:#0b3d2e;--accent:#22c55e;}
 *{box-sizing:border-box}
@@ -51,7 +51,7 @@ background:#0b1f17;border:1px solid #143126;border-radius:7px;padding:6px 9px;ov
 <nav class="nav-links" aria-label="主导航"><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a><a href="/rss.xml">RSS 订阅</a></nav>
 <button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>真实 Claude Code 会话逐轮拆解（中文）</h1>
 <p class="lead">样本：Simon Willison 公开的一次 <b>15+ 小时连续会话</b>——把 C 写的 JS 沙箱引擎 MicroQuickJS（Fabrice Bellard 著）完整移植成纯 Python。
   这是目前公网唯一一份够长、够真的完整 transcript。原始记录：

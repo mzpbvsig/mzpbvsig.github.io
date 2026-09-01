@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从官方原文理解动态工作流及其对 agent 系统的意义。"><meta name="theme-color" content="#ffffff"><link rel="canonical" href="https://hikcc.top/2026-06-02/dynamic-workflows.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>官方解读 · 动态工作流 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从官方原文理解动态工作流及其对 agent 系统的意义。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://hikcc.top/2026-06-02/dynamic-workflows.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>官方解读 · 动态工作流 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -43,7 +43,7 @@ b.k{color:#fff}
 <nav class="nav-links" aria-label="主导航"><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a><a href="/rss.xml">RSS 订阅</a></nav>
 <button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><h1>保持好奇，也保持证据。</h1></section>
+<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Agent 与 Eval</span><span class="evidence evidence-official">官方逐字</span><time datetime="2026-06-02">2026-06-02</time></div><div class="article-content wrap"><h1>官方解读 · 动态工作流 Dynamic Workflows</h1>
 <p class="meta">原文：<a href="https://claude.com/blog/a-harness-for-every-task-dynamic-workflows-in-claude-code" target="_blank">A harness for every task: dynamic workflows in Claude Code</a> · 2026-06-02 · Claude 官方博客</p>
 <p class="lead">这篇是我们刚聊的 <b>fork / subagent</b> 的"放大版"：Claude Code 现在能<b>自己写一个多 agent 编排</b>（dynamic workflow），针对具体任务定制，去啃复杂、长时、需要对抗校验的活。本文逐节拆它<b>是什么、怎么跑、解决什么、什么时候别用</b>。</p>
