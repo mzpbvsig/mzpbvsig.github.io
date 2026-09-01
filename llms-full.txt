@@ -7,6 +7,7 @@
 HiKcc. 是一个中文 AI 研究档案。内容围绕 Claude Code、Agent 与 Eval、AI 工程原理，以及产品与产业观察展开。站点强调原始证据、逐字引用与转述分离、结论可追溯；它不是新闻聚合站，也不把实践判断伪装成官方结论。
 
 Canonical origin: https://mzpbvsig.github.io/
+Server mirror: https://hikcc.top/
 RSS: https://mzpbvsig.github.io/rss.xml
 Sitemap: https://mzpbvsig.github.io/sitemap.xml
 

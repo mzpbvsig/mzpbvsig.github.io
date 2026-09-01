@@ -10,6 +10,7 @@ HiKcc. 会区分官方逐字引用、实践补充和看场景可省的材料，�
 - [Full AI-readable catalog](https://mzpbvsig.github.io/llms-full.txt): expanded descriptions and outlines for every article
 - [RSS feed](https://mzpbvsig.github.io/rss.xml): chronological updates
 - [Sitemap](https://mzpbvsig.github.io/sitemap.xml): canonical crawl inventory
+- [Server mirror](https://hikcc.top/): independently hosted mirror of the same generated research site
 - [Public generated repository](https://github.com/mzpbvsig/mzpbvsig.github.io): public files behind this GitHub Pages site
 
 ## Evidence labels
