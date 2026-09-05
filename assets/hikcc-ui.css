@@ -1,0 +1,29 @@
+/* HiKcc shared visual system v1 — standalone, no framework dependency. */
+:root{
+  --hikcc-bg:#07131b;--hikcc-surface:#10222e;--hikcc-text:#c2cfd8;
+  --hikcc-heading:#eef3f6;--hikcc-muted:#94aab8;--hikcc-border:#293e4b;
+  --hikcc-frost:rgba(184,211,227,.19);--hikcc-link:#9fc6ec;
+  --hikcc-blue:#99c2f3;--hikcc-green:#9acfb7;--hikcc-amber:#e6ba8d;
+  --hikcc-radius:18px;--hikcc-reading-width:900px;
+  --hikcc-font:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --hikcc-orb-animation:hikcc-orb-float 8s ease-in-out infinite;
+}
+.hikcc-theme{margin:0;background:var(--hikcc-bg);color:var(--hikcc-text);font:16px/1.9 var(--hikcc-font);color-scheme:dark;-webkit-font-smoothing:antialiased}
+.hikcc-theme *{box-sizing:border-box}.hikcc-theme :is(h1,h2,h3,strong){color:var(--hikcc-heading)}
+.hikcc-theme a{color:var(--hikcc-link);text-underline-offset:4px}
+.hikcc-theme :is(a,button,input,textarea):focus-visible{outline:2px solid var(--hikcc-amber);outline-offset:4px}
+.hikcc-container{width:min(calc(100% - 40px),var(--hikcc-reading-width));margin-inline:auto}
+.hikcc-surface{padding:28px;border:1px solid var(--hikcc-frost);border-radius:var(--hikcc-radius);background:var(--hikcc-surface)}
+.hikcc-glass{padding:12px 20px;border:1px solid var(--hikcc-frost);border-radius:var(--hikcc-radius);background:rgba(7,19,27,.86);backdrop-filter:blur(20px)}
+.hikcc-kicker{color:var(--hikcc-muted);font-size:11px;letter-spacing:.12em}.hikcc-muted{color:var(--hikcc-muted)}
+.hikcc-button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 24px;border:1px solid var(--hikcc-frost);border-radius:28px;background:transparent;color:var(--hikcc-heading)!important;font:500 14px/1.5 var(--hikcc-font);text-decoration:none;cursor:pointer;transition:transform .2s,background .2s}
+.hikcc-button:hover{background:#1b3342;transform:translateY(-2px)}
+.hikcc-button-primary{background:var(--hikcc-heading);border-color:var(--hikcc-heading);color:var(--hikcc-bg)!important}.hikcc-button-primary:hover{background:#dce8f0}
+.hikcc-quote{margin:20px 0;padding:18px 22px;border-left:2px solid var(--hikcc-link);border-radius:0 12px 12px 0;background:var(--hikcc-surface)}
+.hikcc-code{max-width:100%;overflow:auto;padding:20px;border:1px solid var(--hikcc-border);border-radius:12px;background:#06111a;color:#c5dcec;font:13px/1.9 ui-monospace,Consolas,monospace}
+.hikcc-table{max-width:100%;overflow:auto;border:1px solid var(--hikcc-border);border-radius:12px;scrollbar-color:#425d70 #0b1b26}
+.hikcc-table table{border-collapse:collapse;width:100%;min-width:500px}.hikcc-table :is(th,td){padding:14px 18px;text-align:left;border-bottom:1px solid var(--hikcc-border)}.hikcc-table th{background:#152b38;color:var(--hikcc-heading)}.hikcc-table td{background:#0c1c27}
+.hikcc-orb{display:block;max-width:100%;transform-origin:72% 42%;animation:var(--hikcc-orb-animation);will-change:transform}
+@keyframes hikcc-orb-float{0%,100%{transform:translate3d(0,5px,0) scale(1.03) rotate(-.35deg);filter:brightness(1)}50%{transform:translate3d(-5px,-12px,0) scale(1.055) rotate(.5deg);filter:brightness(1.13)}}
+@media(max-width:760px){.hikcc-surface{padding:20px}@keyframes hikcc-orb-float{0%,100%{transform:translate3d(0,3px,0) scale(1.03);filter:brightness(1)}50%{transform:translate3d(-2px,-6px,0) scale(1.05);filter:brightness(1.1)}}}
+@media(prefers-reduced-motion:reduce){.hikcc-orb{animation:none!important}.hikcc-theme *{scroll-behavior:auto!important;transition:none!important}}

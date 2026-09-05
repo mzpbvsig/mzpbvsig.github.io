@@ -1,5 +1,5 @@
 /* Reading is part of the same dark visual system as the homepage. */
-.article-page{--paper:#07131b;--white:#10212c;--ink:#edf3f7;--body:#c2cfd8;--muted:#94aab8;--line:#263b48;--blue:#99c2f3;--green:#9acfb7;--amber:#e6ba8d;background:var(--night);color:var(--body);color-scheme:dark;padding-top:108px}
+.article-page{--paper:var(--hikcc-bg);--white:var(--hikcc-surface);--ink:var(--hikcc-heading);--body:var(--hikcc-text);--muted:var(--hikcc-muted);--line:var(--hikcc-border);--blue:var(--hikcc-blue);--green:var(--hikcc-green);--amber:var(--hikcc-amber);background:var(--night);color:var(--body);color-scheme:dark;padding-top:108px}
 .article-page .site-nav{background:rgba(7,19,27,.92)!important;border-bottom:1px solid var(--frost);backdrop-filter:blur(22px)}
 .article-page .nav-inner{min-height:108px}
 .article-page .site-nav .brand,.article-page .nav-links a{color:#eef3f6!important}
