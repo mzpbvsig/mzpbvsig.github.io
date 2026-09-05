@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-22/compound-engineering-case-study.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>一个真实案例的复利过程 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#07131b"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-22/compound-engineering-case-study.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>一个真实案例的复利过程 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--purple:#c084fc;--pink:#f778ba;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -50,13 +50,13 @@ b.k{color:#fff}
 .tl .ph .asset b{color:#9af5c4}
 .kv{display:grid;grid-template-columns:150px 1fr;gap:3px 12px;font-size:13px;margin:6px 0}.kv .k{color:var(--mut)}
 .upd{display:inline-block;font-size:11px;background:#0b3d2e;border:1px solid #155;color:#9af5c4;border-radius:5px;padding:0 6px;margin-left:6px;vertical-align:1px}
-.fix-upd{display:inline-block;font-size:11px;background:#3a1220;border:1px solid #6e2238;color:#ffb3c8;border-radius:5px;padding:0 6px;margin-left:6px;vertical-align:1px}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"></head>
+.fix-upd{display:inline-block;font-size:11px;background:#3a1220;border:1px solid #6e2238;color:#ffb3c8;border-radius:5px;padding:0 6px;margin-left:6px;vertical-align:1px}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"><link rel="stylesheet" href="/assets/reading.css?v=20260905-2"></head>
 <body class="article-page"><header class="site-nav"><div class="nav-inner">
 <a class="brand" href="/">HiKcc.<small>RESEARCH &amp; NOTES</small></a>
 <nav id="main-navigation" class="nav-links" aria-label="主导航"><a href="/#top">首页</a><a href="/#selected">精选研究</a><a href="/#topics">研究方向</a><a href="/#library">全部文章</a></nav>
 <div class="nav-tools"><button class="nav-search" type="button" data-open-search aria-label="搜索研究"><i class="icon icon-search" aria-hidden="true"></i>搜索<kbd>⌘ / Ctrl K</kbd></button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">菜单</button></div>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
+<div class="reading-intro"><a href="/#library"><i class="icon icon-down" aria-hidden="true"></i> RESEARCH &amp; NOTES / 研究与笔记</a><span>保持好奇，也保持证据。</span></div>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Agent 与 Eval</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-06-22">2026-06-22</time></div><div class="article-content wrap"><h1>一个真实案例的"复利过程"：从 lessons.md 到 100% 代码由 Claude 写</h1>
 <p class="meta">主案例：<a href="https://github.com/Julien-Au/gymcoach" target="_blank">GymCoach 自治仓库</a>（11 天 PR #6→#256，lessons.md L1-L13 毕业）+ <a href="https://www.anthropic.com/institute/recursive-self-improvement" target="_blank">Anthropic 自家团队</a>（20%→30%→100%）+ <a href="https://every.to/guides/compound-engineering" target="_blank">Every「复利工程」</a> · 26-agent 动态工作流（8 候选挖掘 + 6 数字对抗核验 + 3 案例逐字深挖 + 机制 + 12 缺口补研）· 2026-06-22</p>
 <p class="lead">"loop 会复利"——这句话最字面、最可逐字核对的公开实现，是一个叫 <b>GymCoach</b> 的开源仓库：它把"故障→毕业成 skill/规则"做成了一条<b>显式管线</b>，11-12 天里 README 路线图被全部勾完。下面把它的复利过程逐阶段、逐字展开，再配 Anthropic 团队的可量化曲线，最后<b>诚实核查</b>：这条复利曲线其实是"断言而非测量"。</p>

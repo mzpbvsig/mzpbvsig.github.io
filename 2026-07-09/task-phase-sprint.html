@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用真实证据辨析三个规划层级的职责和组合方式。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/task-phase-sprint.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Task / Phase / Sprint 三者关系 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="用真实证据辨析三个规划层级的职责和组合方式。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#07131b"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/task-phase-sprint.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Task / Phase / Sprint 三者关系 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -31,13 +31,13 @@ th{background:#1d2230;color:var(--mut)}
 code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
 .note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
 .srcs{font-size:12.7px;color:var(--mut)}
-b.k{color:#fff}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"></head>
+b.k{color:#fff}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"><link rel="stylesheet" href="/assets/reading.css?v=20260905-2"></head>
 <body class="article-page"><header class="site-nav"><div class="nav-inner">
 <a class="brand" href="/">HiKcc.<small>RESEARCH &amp; NOTES</small></a>
 <nav id="main-navigation" class="nav-links" aria-label="主导航"><a href="/#top">首页</a><a href="/#selected">精选研究</a><a href="/#topics">研究方向</a><a href="/#library">全部文章</a></nav>
 <div class="nav-tools"><button class="nav-search" type="button" data-open-search aria-label="搜索研究"><i class="icon icon-search" aria-hidden="true"></i>搜索<kbd>⌘ / Ctrl K</kbd></button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">菜单</button></div>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
+<div class="reading-intro"><a href="/#library"><i class="icon icon-down" aria-hidden="true"></i> RESEARCH &amp; NOTES / 研究与笔记</a><span>保持好奇，也保持证据。</span></div>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Task / Phase / Sprint 三者关系</h1>
 <p class="lead">这三个词分属<b>两个不同体系</b>，而且 <b>"Phase" 在两边层级正好相反</b>，<b>"Sprint" 在真正的 Claude Code spec 工具里根本不出现</b>。本文把两套层级、冲突点、以及"想合成一套时的务实映射"讲清，并标注哪些是真实证据、哪些是构造建议。</p>
 <div class="disc warn"><b>一句话先记住：</b>Agile 里 <b>Phase &gt; Sprint &gt; Task</b>；spec-kit 里 <b>Feature &gt; User Story &gt; Phase &gt; Task</b>（无 Sprint）。同一个词 "Phase"，一个在 Sprint 之上、一个在 User Story 之下——这是最大歧义来源。</div>

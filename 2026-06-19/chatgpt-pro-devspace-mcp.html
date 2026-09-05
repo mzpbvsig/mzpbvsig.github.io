@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-19/chatgpt-pro-devspace-mcp.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>ChatGPT Pro + DevSpace MCP 的 Codex 设计研究 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#07131b"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-19/chatgpt-pro-devspace-mcp.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>ChatGPT Pro + DevSpace MCP 的 Codex 设计研究 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e8ebef;--mut:#9aa4b2;--line:#272d38;--green:#22c55e;--blue:#7aa2ff;--amber:#f59e0b;--red:#fb7185;--cyan:#67e8f9;--violet:#c084fc}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.68 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -50,13 +50,13 @@ td b{color:#fff}
 .srcs{font-size:12.5px;color:var(--mut);line-height:1.85;border-top:1px solid var(--line);padding-top:14px;margin-top:30px}
 .srcs b{color:#d5deea}
 .small{font-size:12.5px;color:var(--mut)}
-@media(max-width:800px){.flow,.grid2{grid-template-columns:1fr}.kvs{grid-template-columns:1fr}.wrap{padding:22px 14px 70px}}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"></head>
+@media(max-width:800px){.flow,.grid2{grid-template-columns:1fr}.kvs{grid-template-columns:1fr}.wrap{padding:22px 14px 70px}}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"><link rel="stylesheet" href="/assets/reading.css?v=20260905-2"></head>
 <body class="article-page"><header class="site-nav"><div class="nav-inner">
 <a class="brand" href="/">HiKcc.<small>RESEARCH &amp; NOTES</small></a>
 <nav id="main-navigation" class="nav-links" aria-label="主导航"><a href="/#top">首页</a><a href="/#selected">精选研究</a><a href="/#topics">研究方向</a><a href="/#library">全部文章</a></nav>
 <div class="nav-tools"><button class="nav-search" type="button" data-open-search aria-label="搜索研究"><i class="icon icon-search" aria-hidden="true"></i>搜索<kbd>⌘ / Ctrl K</kbd></button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">菜单</button></div>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
+<div class="reading-intro"><a href="/#library"><i class="icon icon-down" aria-hidden="true"></i> RESEARCH &amp; NOTES / 研究与笔记</a><span>保持好奇，也保持证据。</span></div>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>AI 工程与原理</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-06-19">2026-06-19</time></div><div class="article-content wrap"><h1>ChatGPT Pro + DevSpace MCP 的 Codex 设计研究</h1>
 <p class="meta">当前日期：2026-06-19 · 研究对象：<a href="https://github.com/Waishnav/devspace/tree/main" target="_blank">Waishnav/devspace</a>、ChatGPT MCP、OpenAI Codex、MCP 官方规格 · 方法：Context7 解析 MCP 文档 + 官方 OpenAI Codex manual + DevSpace 仓库源码/文档 + OpenAI Help Center。</p>
 <p class="lead">这份研究回答一个很具体的问题：能不能用 <b>ChatGPT Pro + DevSpace MCP</b> 做出接近 <b>Codex</b> 的本地 coding-agent 工作流？结论不绕：DevSpace 的设计很像 Codex loop，但 <b>ChatGPT Pro 当前不是完整写入/修改型 MCP 的最佳承载面</b>。</p>

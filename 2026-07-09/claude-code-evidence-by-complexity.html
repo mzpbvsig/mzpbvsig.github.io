@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/claude-code-evidence-by-complexity.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Claude Code 真实用法证据库 · 按复杂度分层 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#07131b"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/claude-code-evidence-by-complexity.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Claude Code 真实用法证据库 · 按复杂度分层 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -36,13 +36,13 @@ li{margin:3px 0}
 .matrix{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
 .matrix th,.matrix td{border:1px solid var(--line);padding:6px 8px;text-align:left}
 .matrix th{background:#1d2230;color:var(--mut)}
-.yes{color:var(--accent);font-weight:700}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"></head>
+.yes{color:var(--accent);font-weight:700}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"><link rel="stylesheet" href="/assets/reading.css?v=20260905-2"></head>
 <body class="article-page"><header class="site-nav"><div class="nav-inner">
 <a class="brand" href="/">HiKcc.<small>RESEARCH &amp; NOTES</small></a>
 <nav id="main-navigation" class="nav-links" aria-label="主导航"><a href="/#top">首页</a><a href="/#selected">精选研究</a><a href="/#topics">研究方向</a><a href="/#library">全部文章</a></nav>
 <div class="nav-tools"><button class="nav-search" type="button" data-open-search aria-label="搜索研究"><i class="icon icon-search" aria-hidden="true"></i>搜索<kbd>⌘ / Ctrl K</kbd></button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">菜单</button></div>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
+<div class="reading-intro"><a href="/#library"><i class="icon icon-down" aria-hidden="true"></i> RESEARCH &amp; NOTES / 研究与笔记</a><span>保持好奇，也保持证据。</span></div>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-official">官方逐字</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Claude Code 真实用法证据库 · 按复杂度分层</h1>
 <p class="lead">目标：用<b>真实证据</b>说明不同复杂度的需求，应该怎么和 Claude Code 持续对话、用上哪些机制（plan mode / subagent / skills / MCP / 多会话 / 自验证闭环），用于对齐"完成需求"的方式。</p>
 <div class="disc">

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从内部对话理解长程编码任务中循环、环境与验证的关系。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-09/boris-internal-talk-loops.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Boris 内部对话：不写 prompt，写 loop · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="从内部对话理解长程编码任务中循环、环境与验证的关系。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#07131b"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-06-09/boris-internal-talk-loops.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Boris 内部对话：不写 prompt，写 loop · HiKcc.</title><style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --line:#30363d;
     --txt:#c9d1d9; --txt2:#8b949e; --hi:#e6edf3;
@@ -63,13 +63,13 @@
   footer{margin-top:40px;border-top:1px solid var(--line);padding-top:20px;color:var(--txt2);font-size:13px}
   footer a{color:var(--accent);text-decoration:none}
   .legend{font-size:12.5px;color:var(--txt2);margin-top:10px}
-  .warn{color:var(--amber)}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"></head>
+  .warn{color:var(--amber)}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"><link rel="stylesheet" href="/assets/reading.css?v=20260905-2"></head>
 <body class="article-page"><header class="site-nav"><div class="nav-inner">
 <a class="brand" href="/">HiKcc.<small>RESEARCH &amp; NOTES</small></a>
 <nav id="main-navigation" class="nav-links" aria-label="主导航"><a href="/#top">首页</a><a href="/#selected">精选研究</a><a href="/#topics">研究方向</a><a href="/#library">全部文章</a></nav>
 <div class="nav-tools"><button class="nav-search" type="button" data-open-search aria-label="搜索研究"><i class="icon icon-search" aria-hidden="true"></i>搜索<kbd>⌘ / Ctrl K</kbd></button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">菜单</button></div>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
+<div class="reading-intro"><a href="/#library"><i class="icon icon-down" aria-hidden="true"></i> RESEARCH &amp; NOTES / 研究与笔记</a><span>保持好奇，也保持证据。</span></div>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-official">官方逐字</span><time datetime="2026-06-09">2026-06-09</time></div><div class="article-content wrap"><header>
 <h1>不跟 agent 对话,跟 loop 对话<br/>—— Boris 一周年内部复盘里到底说了什么</h1>
 <div class="sub">把网上流传的那段"信息密度极高的 20 分钟对话"还原到出处,并逐条核对四个高传播金句的原话。</div>

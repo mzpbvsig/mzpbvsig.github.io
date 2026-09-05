@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="保留英文原文与中文解释的即用 prompt 对照材料。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay-bilingual.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Claude Code「spec 接力」中英对照 · HiKcc.</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="保留英文原文与中文解释的即用 prompt 对照材料。"><meta name="author" content="HiKcc."><meta name="theme-color" content="#07131b"><link rel="icon" href="data:,"><link rel="canonical" href="https://mzpbvsig.github.io/2026-07-09/claude-code-spec-relay-bilingual.html"><link rel="alternate" type="application/rss+xml" title="HiKcc. RSS" href="/rss.xml"><title>Claude Code「spec 接力」中英对照 · HiKcc.</title><style>
 :root{--bg:#0f1115;--card:#171a21;--ink:#e6e8eb;--mut:#9aa4b2;--line:#262b36;--accent:#22c55e;--blue:#7aa2ff;}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,sans-serif}
@@ -35,13 +35,13 @@ ul{margin:6px 0;padding-left:20px}li{margin:4px 0}
 @media(max-width:760px){.bi{grid-template-columns:1fr;gap:2px}}
 code{background:#0d1b14;border:1px solid #16301f;border-radius:5px;padding:1px 5px;color:#9af5c4;font-size:12.5px}
 .note{color:var(--mut);font-size:12.5px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
-.srcs{font-size:12.7px;color:var(--mut)}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"></head>
+.srcs{font-size:12.7px;color:var(--mut)}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"><link rel="stylesheet" href="/assets/reading.css?v=20260905-2"></head>
 <body class="article-page"><header class="site-nav"><div class="nav-inner">
 <a class="brand" href="/">HiKcc.<small>RESEARCH &amp; NOTES</small></a>
 <nav id="main-navigation" class="nav-links" aria-label="主导航"><a href="/#top">首页</a><a href="/#selected">精选研究</a><a href="/#topics">研究方向</a><a href="/#library">全部文章</a></nav>
 <div class="nav-tools"><button class="nav-search" type="button" data-open-search aria-label="搜索研究"><i class="icon icon-search" aria-hidden="true"></i>搜索<kbd>⌘ / Ctrl K</kbd></button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">菜单</button></div>
 </div></header>
-<section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
+<div class="reading-intro"><a href="/#library"><i class="icon icon-down" aria-hidden="true"></i> RESEARCH &amp; NOTES / 研究与笔记</a><span>保持好奇，也保持证据。</span></div>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Claude Code</span><span class="evidence evidence-optional">看场景可省</span><time datetime="2026-07-09">2026-07-09</time></div><div class="article-content wrap"><h1>Claude Code「spec 接力」中英对照</h1>
 <p class="lead">大功能的标准做法：<b>先把需求写成自包含的 spec 文件 → 换干净会话只读它实现</b>。下面每条 prompt <b>左英文（可直接复制喂给 Claude Code）/ 右中文（理解）</b>。详解与证据见同目录 <a href="claude-code-spec接力-详解.html">spec接力-详解.html</a>。</p>
 <div class="disc"><b>读法：</b>英文是真实证据原文，<b>建议直接用英文</b>跑（模型对英文指令最稳）；中文是对照翻译，帮你看懂每句在要求什么。来源标签：<span class="tag t-v">官方逐字</span>官方文档原样 ·<span class="tag t-prac">实践者逐字</span>Harper Reed 原文。
