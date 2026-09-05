@@ -10,11 +10,11 @@
     .map{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.node{min-height:166px;padding:16px;border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:13px;background:var(--panel)}.node strong{display:block;margin-bottom:6px;font-size:17px}.node small{color:var(--muted)}
     table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}th,td{padding:11px 12px;border:1px solid var(--line);text-align:left;vertical-align:top}th{background:#1b2130;color:#bac3d2}td{background:rgba(18,22,32,.65)}code{padding:2px 5px;border:1px solid rgba(102,217,167,.2);border-radius:5px;background:#0c1913;color:#9ce9c5;font-size:.9em}.callout{padding:16px 18px;border:1px dashed rgba(243,189,101,.45);border-radius:12px;background:rgba(243,189,101,.06);color:#ead7b3}.callout strong{color:#ffe0a6}.relation{display:flex;align-items:stretch;gap:10px}.relation .box{flex:1;padding:16px;border:1px solid var(--line);border-radius:13px;background:var(--panel)}.arrow{display:flex;align-items:center;color:var(--muted);font-size:22px}.sources{padding-left:20px;color:var(--muted);font-size:13px}.sources li{margin:8px 0}.closing{margin:54px 0 70px;padding:24px;border:1px solid rgba(102,217,167,.25);border-radius:16px;background:rgba(102,217,167,.06);font-size:17px}.closing b{color:#a6ebca}
     @media(max-width:780px){header{padding-top:54px}.map{grid-template-columns:1fr 1fr}.relation{flex-direction:column}.arrow{justify-content:center;transform:rotate(90deg)}.table-wrap{overflow-x:auto}table{min-width:700px}.top{min-height:58px}}
-    @media(max-width:500px){.wrap{width:min(calc(100% - 26px),var(--max))}.map{grid-template-columns:1fr}.node{min-height:auto}h1{font-size:36px}.meta{line-height:1.6}.card{padding:18px}}</style><link rel="stylesheet" href="/assets/site.css?v=20260817-2"></head>
+    @media(max-width:500px){.wrap{width:min(calc(100% - 26px),var(--max))}.map{grid-template-columns:1fr}.node{min-height:auto}h1{font-size:36px}.meta{line-height:1.6}.card{padding:18px}}</style><link rel="stylesheet" href="/assets/site.css?v=20260905"><link rel="stylesheet" href="/assets/design.css?v=20260905"></head>
 <body class="article-page"><header class="site-nav"><div class="nav-inner">
-<a class="brand" href="/">HiKcc.</a>
-<nav class="nav-links" aria-label="主导航"><a href="https://github.com/mzpbvsig" target="_blank" rel="noreferrer">GitHub</a><a href="/rss.xml">RSS 订阅</a></nav>
-<button class="nav-search" type="button" data-open-search aria-label="搜索研究">搜索</button>
+<a class="brand" href="/">HiKcc.<small>RESEARCH &amp; NOTES</small></a>
+<nav id="main-navigation" class="nav-links" aria-label="主导航"><a href="/#top">首页</a><a href="/#selected">精选研究</a><a href="/#topics">研究方向</a><a href="/#library">全部文章</a></nav>
+<div class="nav-tools"><button class="nav-search" type="button" data-open-search aria-label="搜索研究"><i class="icon icon-search" aria-hidden="true"></i>搜索<kbd>⌘ / Ctrl K</kbd></button><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">菜单</button></div>
 </div></header>
 <section class="aphorism" aria-label="站点题记"><p>保持好奇，也保持证据。</p></section>
 <main class="article-main"><article class="article-sheet"><div class="article-kicker"><span>Agent 与 Eval</span><span class="evidence evidence-practice">实践补充</span><time datetime="2026-08-14">2026-08-14</time></div><div class="article-content wrap"><header>
@@ -58,14 +58,14 @@
 <section>
 <h2>“从 Issue、PR、Note 三处拼接”具体是什么意思？</h2>
 <p class="lead">假设任务是“限制每个会话最多运行 4 个后台任务”。你打开其中任何一个对象，都只能看到全过程的一部分。</p>
-<div class="table-wrap"><table>
+<div class="table-wrap"><div class="table-wrap" role="region" aria-label="可横向滚动的表格" tabindex="0"><table>
 <thead><tr><th>打开哪里</th><th>通常能回答</th><th>单靠它回答不了</th></tr></thead>
 <tbody>
 <tr><td><b>Issue / Task</b><br/><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/ISSUE_TEMPLATE/task.md" rel="noreferrer" target="_blank">任务模板</a></td><td>为什么提出任务、交付物是什么、怎样验收、目前是 In progress 还是 Done。</td><td>为什么最后采用“每个 session 单独计数”，而没有采用全局计数器。</td></tr>
 <tr><td><b>Agent Note</b><br/><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" rel="noreferrer" target="_blank">Note 规范</a></td><td>设计问题、选中方案、落选方案、代价、收益、验证边界，以及决定是 proposed 还是 implemented。</td><td>这个任务现在做到哪一步、对应哪个具体 PR、谁在处理 review——除非作者另外留下链接。</td></tr>
 <tr><td><b>Pull Request</b><br/><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/pull_request_template.md" rel="noreferrer" target="_blank">PR 模板</a></td><td>实际改了哪些代码和测试、CI 是否通过、review 要求改了什么、最终有没有合并。</td><td>任务的完整排期状态，以及跨多个 PR 长期有效的全部设计背景。</td></tr>
 </tbody>
-</table></div>
+</table></div></div>
 <div class="relation">
 <div class="box"><span class="tag practice">1</span><h3>从 Issue 找 PR</h3><p>通过关联编号、关闭关键字、分支或评论，找到承担实现的一个或多个 PR。</p></div>
 <div aria-hidden="true" class="arrow">→</div>
@@ -78,7 +78,7 @@
 </section>
 <section>
 <h2>一个任务过来，记录下来到底有什么用？</h2>
-<div class="table-wrap"><table>
+<div class="table-wrap"><div class="table-wrap" role="region" aria-label="可横向滚动的表格" tabindex="0"><table>
 <thead><tr><th>如果只保留 Task / 代码</th><th>Agent Note 额外保存什么</th><th>后续价值</th></tr></thead>
 <tbody>
 <tr><td>Task 说“限制后台任务数量”</td><td>为什么限制属于每个 session，而不是全局计数器</td><td>下一次修改不会误把不同会话耦合起来</td></tr>
@@ -87,7 +87,7 @@
 <tr><td>PR 显示发生过若干轮修改</td><td>最终成立的设计理由，而不是会话和 review 的过程噪声</td><td>新的人或 Codex 无需读取完整历史即可恢复关键上下文</td></tr>
 <tr><td>Task 完成后关闭</td><td>决定继续处于 implemented，并随实际代码的路径、名称和默认值更新</td><td>跨后续 Task、PR 和人员变动继续充当工程记忆</td></tr>
 </tbody>
-</table></div>
+</table></div></div>
 <div class="card" style="--accent:var(--green)">
 <span class="tag practice">真正的复用场景</span>
 <h3>几个月后，新任务要求把 session limit 改成 tenant-wide limit</h3>
@@ -114,7 +114,7 @@
 <section>
 <h2>为什么它可能不符合你的思路？</h2>
 <p class="lead">因为它把“任务协调”和“决策记忆”彻底分开，而你关注的可能是任务作为第一等实体的完整生命周期。</p>
-<div class="table-wrap"><table>
+<div class="table-wrap"><div class="table-wrap" role="region" aria-label="可横向滚动的表格" tabindex="0"><table>
 <thead><tr><th>你的可能诉求</th><th>DeepSeek 当前做法</th><th>产生的落差</th></tr></thead>
 <tbody>
 <tr><td>一个任务有唯一入口和完整记录</td><td>Issue 记录任务；Note 记录决定；PR 记录交付，分散在三个系统</td><td>需要跨对象拼接全过程</td></tr>
@@ -123,7 +123,7 @@
 <tr><td>从一个页面进入全部上下文</td><td>刻意拒绝 committed INDEX，要求浏览目录或搜索</td><td>减少 Git 冲突，却增加人的发现成本</td></tr>
 <tr><td>让 Agent 自动接续未完成工作</td><td>Task 状态存在，但 Agent Note 不保存 checkpoint、下一动作和运行上下文</td><td>不能只靠 Note 恢复执行现场</td></tr>
 </tbody>
-</table></div>
+</table></div></div>
 <div class="callout"><strong>所以你的不适感很合理：</strong>Agent Note 是优秀的“决策记忆层”，但不是完整的“任务操作系统”。如果把它当成 Task/Sprint 的替代品，体验一定会割裂。</div>
 </section>
 <section>
@@ -156,7 +156,7 @@
 </section>
 <section>
 <h2>最关键的区别</h2>
-<div class="table-wrap"><table>
+<div class="table-wrap"><div class="table-wrap" role="region" aria-label="可横向滚动的表格" tabindex="0"><table>
 <thead><tr><th>维度</th><th>Task / Issue</th><th>Sprint</th><th>Agent Note</th></tr></thead>
 <tbody>
 <tr><td><b>核心用途</b></td><td>安排并追踪一件工作</td><td>在时间盒内组织一组工作</td><td>保存一个值得长期记住的工程决定</td></tr>
@@ -167,7 +167,7 @@
 <tr><td><b>是否应有 checklist</b></td><td>可以，而且常常需要</td><td>通常会有任务列表</td><td>仅 proposed 阶段可有验收/计划；implemented 阶段明确禁止任务式计划残留</td></tr>
 <tr><td><b>DeepSeek 仓库地位</b></td><td><span class="tag official">正式对象</span></td><td><span class="tag missing">公开流程未建模</span></td><td><span class="tag official">正式对象</span></td></tr>
 </tbody>
-</table></div>
+</table></div></div>
 </section>
 <section>
 <h2>Agent Note 确实记录状态，但记录的是“决策状态”</h2>
@@ -184,7 +184,7 @@
 <h3>归档不是第四种 Status</h3>
 <p>只有已经 implemented、且未来指导价值较低的 Note 才能进入 <code>archived/</code>。它仍写 <code>Status: implemented</code>，另加 <code>Archived: YYYY-MM-DD</code>，随后永久冻结；归档文件不再被视为当前行为的权威依据。</p>
 </div>
-<div class="table-wrap"><table>
+<div class="table-wrap"><div class="table-wrap" role="region" aria-label="可横向滚动的表格" tabindex="0"><table>
 <thead><tr><th>Agent Note 会记录</th><th>Agent Note 不会记录</th></tr></thead>
 <tbody>
 <tr><td>设计尚在提议、已经交付、或被否决</td><td>任务完成 30% / 60% / 90%</td></tr>
@@ -192,7 +192,7 @@
 <tr><td>为什么选这个方案、否决了什么</td><td>待办清单、当前 blocker、reviewer 排队情况</td></tr>
 <tr><td>什么验证长期锁定该决定</td><td><code>In progress</code>、<code>In review</code> 等执行状态——这些属于 Issue/Task</td></tr>
 </tbody>
-</table></div>
+</table></div></div>
 <div class="quote"><span class="tag official">官方逐字</span><span class="en">“Lifecycle … is the Agent Note's status.”</span><span class="zh">生命周期就是 Agent Note 的状态，并随目录迁移而改变。</span><span class="source">— <a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md" rel="noreferrer" target="_blank">Agent Notes README</a></span></div>
 <div class="callout"><strong>最简单的区分：</strong><code>In progress</code> 表示“人/Agent 还在做这个 Task”；<code>Status: proposed</code> 表示“这个设计决定尚未交付”。两者可能同时出现，但不是同一状态机。</div>
 </section>
@@ -243,7 +243,7 @@
 </section>
 <section>
 <h2>别把 Agent Note 写成这三种东西</h2>
-<div class="table-wrap"><table>
+<div class="table-wrap"><div class="table-wrap" role="region" aria-label="可横向滚动的表格" tabindex="0"><table>
 <thead><tr><th>错误写法</th><th>为什么错</th><th>应该放哪</th></tr></thead>
 <tbody>
 <tr><td>“Task 1 改接口，Task 2 补测试，Task 3 更新文档”</td><td>这是执行清单，完成后会过期。</td><td>Task、Issue、PR checklist 或实施计划</td></tr>
@@ -251,12 +251,12 @@
 <tr><td>“我们先试了五次，reviewer 在第三轮要求……”</td><td>这是会话/评审过程叙事，不是当前可验证事实。</td><td>PR thread、commit history；只把仍有效的理由提炼进 Note</td></tr>
 <tr><td>“采用 per-session limit，因为所有权属于 session；否决 global limit，因为不同会话会相互干扰”</td><td>这是长期有效的决定与替代方案。</td><td><b>Agent Note</b></td></tr>
 </tbody>
-</table></div>
+</table></div></div>
 </section>
 <section>
 <h2>这些结论在源码哪里？</h2>
 <p class="lead">分成“规范来源”和“可执行门禁”两层看。前者定义为什么这样做，后者让目录、状态和格式错误直接导致检查失败。</p>
-<div class="table-wrap"><table>
+<div class="table-wrap"><div class="table-wrap" role="region" aria-label="可横向滚动的表格" tabindex="0"><table>
 <thead><tr><th>你要找的事实</th><th>源码位置</th><th>关键内容</th></tr></thead>
 <tbody>
 <tr><td>Agent Note 的全局目录、生命周期和状态</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.agents/notes/README.md#L9-L19" rel="noreferrer" target="_blank"><code>.agents/notes/README.md</code> L9–19</a></td><td>路径格式是 <code>{lifecycle}/{class}/date-topic.md</code>；<code>proposed / implemented / rejected</code> 目录就是状态。</td></tr>
@@ -272,7 +272,7 @@
 <tr><td>Issue 打开/关闭如何进入 Inbox/Done</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/.github/issue-management/policy.mjs#L665-L686" rel="noreferrer" target="_blank"><code>policy.mjs</code> L665–686</a></td><td>opened → Inbox；completed close → Done；not planned → No action；reopened → Inbox。</td></tr>
 <tr><td>门禁是否真的进入 CI 调度</td><td><a href="https://github.com/deepseek-ai/deepseek-harness/blob/master/scripts/run-gates.ts#L599-L604" rel="noreferrer" target="_blank"><code>scripts/run-gates.ts</code> L599–604</a></td><td><code>agent-note-classification</code> 和 <code>agent-note-format</code> 是正式 gate。</td></tr>
 </tbody>
-</table></div>
+</table></div></div>
 <div class="callout"><strong>阅读顺序：</strong>先看 <code>.agents/notes/README.md</code> 理解规则，再看两个 <code>scripts/verify-agent-note-*.ts</code> 理解怎样被强制；Task 状态则直接从 <code>.github/issue-management/config.json</code> 和 <code>policy.mjs</code> 开始。</div>
 </section>
 <section>
@@ -287,5 +287,5 @@
 </ol>
 </section>
 <div class="closing"><b>最终判断：</b>Agent Note 与 Task 的交集，只存在于“实施前需要把边界写清楚”。Task 结束后被关闭；Sprint 结束后被翻篇；Agent Note 在实现后反而进入最重要的阶段——成为未来维护者和下一轮 Codex 可以依赖的设计记忆。</div></div></article><nav class="article-prevnext" aria-label="文章翻页"><a href="/2026-08-15/deepseek-harness-codex-workflow.html"><small>上一篇</small>DeepSeek Harness · Codex AI Coding 工作流证据分析</a><a href="/2026-08-02/ralph-to-loop-engineering.html"><small>下一篇</small>从 Ralph Agent 到 Loop Engineering · 三方证据链</a></nav></main>
-<div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true"><div class="search-panel"><div class="search-row"><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"><button class="search-close" type="button" data-close-search>关闭</button></div><div id="search-results" class="search-results"></div></div></div>
-<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js?v=20260817-2" defer></script></body></html>
+<footer class="reading-footer"><a href="/#library">返回全部文章</a><span>保持好奇，也保持证据。</span><a href="/rss.xml">RSS 订阅</a></footer><div id="search-layer" class="search-layer" role="dialog" aria-modal="true" aria-label="搜索研究" aria-hidden="true" hidden><div class="search-panel"><div class="search-heading"><label for="search-input">搜索研究</label><button class="search-close" type="button" data-close-search>关闭 <kbd>Esc</kbd></button></div><div class="search-row"><i class="icon icon-search" aria-hidden="true"></i><input id="search-input" type="search" placeholder="搜索标题、主题或关键词…" autocomplete="off"></div><p id="search-status" class="search-status" role="status" aria-live="polite"></p><div id="search-results" class="search-results"></div></div></div>
+<script id="article-data" type="application/json">[{"title":"DeepSeek Harness Skills 逐篇分析 02 · dsh-find-simplifications","file":"DeepSeek-Harness-Skill逐篇分析02-寻找简化项.html","date":"2026-08-17","slug":"dsh-find-simplifications","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解寻找简化项 skill 的真实流程：广度调查、消费者证据、生命周期审计、候选分流、Agent Note 立案，以及它与 Task-first 工作流的边界。"},{"title":"DeepSeek Harness Skills 逐篇分析 01 · dsh-code-review","file":"DeepSeek-Harness-Skill逐篇分析01-代码审查.html","date":"2026-08-17","slug":"dsh-code-review","category":"agents","label":"Agent 与 Eval","type":"practice","description":"拆解代码审查 skill 的真实工作流：范围确认、六类硬阻塞、十五类语义检查、证据报告，以及自动门禁与 Agent reviewer 的分工。"},{"title":"DeepSeek Harness · Codex AI Coding 工作流证据分析","file":"DeepSeek-Harness-Codex-AI-Coding工作流证据分析.html","date":"2026-08-15","slug":"deepseek-harness-codex-workflow","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 AGENTS、Agent Notes、skills 与 Git 历史还原真实 Codex 编码闭环，并说明网页版、云端容器与本机能力的边界。"},{"title":"Agent Note 不是 Task · 与 Sprint / PR 的关系","file":"DeepSeek-Harness-AgentNote与Task-Sprint关系.html","date":"2026-08-14","slug":"agent-note-task-sprint-pr","category":"agents","label":"Agent 与 Eval","type":"practice","description":"用 DeepSeek Harness 原始规则分清 Agent Note、Task、Sprint 与 PR：一个管决策，一个管执行，一个管排期。"},{"title":"从 Ralph Agent 到 Loop Engineering · 三方证据链","file":"Ralph到LoopEngineering-OpenAI-Google-ClaudeCode证据链.html","date":"2026-08-02","slug":"ralph-to-loop-engineering","category":"agents","label":"Agent 与 Eval","type":"practice","description":"核验 OpenAI、Addy Osmani 与 Claude Code 创建者的原始发言，分清 Ralph、Harness、Loop 与 Graph Agent。"},{"title":"Claude Code 完整开发流程 · 最佳实践","file":"claude-code-完整开发流程-最佳实践.html","date":"2026-07-09","slug":"claude-code-development-workflow","category":"claude","label":"Claude Code","type":"official","description":"从需求到实现、验证和交付，梳理官方材料中的完整开发流程。"},{"title":"Claude Code 真实用法证据库 · 按复杂度分层","file":"claude-code-证据库-按复杂度.html","date":"2026-07-09","slug":"claude-code-evidence-by-complexity","category":"claude","label":"Claude Code","type":"official","description":"按任务复杂度整理真实用法和可追溯引用，观察工具如何进入工作流。"},{"title":"真实 Claude Code 会话逐轮拆解","file":"claude-code-真实会话逐轮拆解.html","date":"2026-07-09","slug":"claude-code-session-breakdown","category":"claude","label":"Claude Code","type":"practice","description":"逐轮分析 MicroQuickJS 到 Python 的真实协作过程与关键决策。"},{"title":"领域知识与业务，才是真正的关键","file":"claude-code-领域知识才是关键.html","date":"2026-07-09","slug":"domain-knowledge-matters","category":"claude","label":"Claude Code","type":"practice","description":"为什么代码生成能力提高后，领域知识和业务判断反而更重要。"},{"title":"提示词不必每次都结构化","file":"claude-code-提示词不必每次结构化.html","date":"2026-07-09","slug":"prompts-do-not-need-structure","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据理解自然表达、上下文与结构化提示之间的边界。"},{"title":"Claude Code「spec 接力」详解","file":"claude-code-spec接力-详解.html","date":"2026-07-09","slug":"claude-code-spec-relay","category":"claude","label":"Claude Code","type":"practice","description":"拆解 spec 接力的形态、做法、证据和适用条件。"},{"title":"Claude Code「spec 接力」中英对照","file":"claude-code-spec接力-中英对照.html","date":"2026-07-09","slug":"claude-code-spec-relay-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"保留英文原文与中文解释的即用 prompt 对照材料。"},{"title":"SPEC 文档怎么分类 · 目录约定","file":"claude-code-spec文档-目录约定.html","date":"2026-07-09","slug":"spec-document-layout","category":"claude","label":"Claude Code","type":"optional","description":"整理 spec 文档的分类、存放目录和真实项目约定。"},{"title":"Phase / Task 清单 · 真实用法","file":"claude-code-task-phase清单-真实用法.html","date":"2026-07-09","slug":"phase-task-checklist","category":"claude","label":"Claude Code","type":"practice","description":"分析 Phase、Task、Sprint 清单如何服务长程开发。"},{"title":"Phase / Task 清单 · 中英对照","file":"claude-code-task-phase清单-中英对照.html","date":"2026-07-09","slug":"phase-task-checklist-bilingual","category":"claude","label":"Claude Code","type":"optional","description":"逐字材料的中英文对照，便于查阅和复用。"},{"title":"Task / Phase / Sprint 三者关系","file":"claude-code-task-phase-sprint关系.html","date":"2026-07-09","slug":"task-phase-sprint","category":"claude","label":"Claude Code","type":"practice","description":"用真实证据辨析三个规划层级的职责和组合方式。"},{"title":"Transformer 执行流程：从分词到 Top-k","file":"Transformer执行流程-从分词到TopK-时间复杂度分析.html","date":"2026-07-09","slug":"transformer-from-tokenization-to-topk","category":"engineering","label":"AI 工程与原理","type":"practice","description":"逐步拆解 Transformer 推理链路，并分析各阶段时间复杂度。"},{"title":"Boris Cherny 炉边谈话分析","file":"BorisCherny炉边谈话分析.html","date":"2026-06-23","slug":"boris-cherny-fireside-chat","category":"claude","label":"Claude Code","type":"official","description":"Claude Code 负责人在 Code w/ Claude 2026 炉边谈话中的核心观点。"},{"title":"Koji 杨远骋「2026 AI 投资观察与思考」分析","file":"Koji杨远骋AI投资观察分析.html","date":"2026-06-23","slug":"koji-ai-investment-2026","category":"industry","label":"产品与产业","type":"practice","description":"围绕 2026 AI 投资十字路口的观点、证据和判断展开分析。"},{"title":"Boris：不写 prompt，写 loop 的全部内涵","file":"Boris-不写prompt写loop-全部内涵.html","date":"2026-06-22","slug":"boris-loops-not-prompts","category":"claude","label":"Claude Code","type":"official","description":"还原 Boris Cherny 对 agent loop、反馈机制和工程习惯的完整表达。"},{"title":"长程自主任务通用方法论","file":"长程自主任务通用方法论.html","date":"2026-06-22","slug":"long-horizon-autonomous-tasks","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 Deli_AutoResearch 抽取并经对抗验证修正的长程任务方法。"},{"title":"Deli_AutoResearch 原文对照译注手册","file":"Deli_AutoResearch原文对照译注手册.html","date":"2026-06-22","slug":"deli-autoresearch-annotated","category":"agents","label":"Agent 与 Eval","type":"official","description":"SKILL.md 原文、翻译与关键机制注释的完整对照。"},{"title":"一个真实案例的复利过程","file":"复利过程-真实案例GymCoach与Anthropic.html","date":"2026-06-22","slug":"compound-engineering-case-study","category":"agents","label":"Agent 与 Eval","type":"practice","description":"从 lessons.md 到 100% Claude 写码，观察反馈资产如何持续复利。"},{"title":"ChatGPT Pro + DevSpace MCP 的 Codex 设计研究","file":"ChatGPT-Pro-DevSpace-MCP的Codex设计研究.html","date":"2026-06-19","slug":"chatgpt-pro-devspace-mcp","category":"engineering","label":"AI 工程与原理","type":"practice","description":"分析 DevSpace MCP 的产品结构及其与 Codex 工作方式的连接。"},{"title":"Claude Design 产品设计全流程","file":"Claude-Design-产品设计全流程-从需求到生产.html","date":"2026-06-19","slug":"claude-design-workflow","category":"industry","label":"产品与产业","type":"practice","description":"从一个需求到生产，拆解 AI 参与产品设计的完整流程。"},{"title":"Boris 内部对话：不写 prompt，写 loop","file":"Boris内部对话-不写prompt写loop.html","date":"2026-06-09","slug":"boris-internal-talk-loops","category":"claude","label":"Claude Code","type":"official","description":"从内部对话理解长程编码任务中循环、环境与验证的关系。"},{"title":"大厂如何做 Eval · 真实证据","file":"大厂如何做Eval-真实证据.html","date":"2026-06-07","slug":"how-big-tech-runs-evals","category":"agents","label":"Agent 与 Eval","type":"official","description":"追踪领先团队的评估实践，区分公开事实与经验转述。"},{"title":"官方解读 · 动态工作流","file":"官方解读-动态工作流.html","date":"2026-06-02","slug":"dynamic-workflows","category":"agents","label":"Agent 与 Eval","type":"official","description":"从官方原文理解动态工作流及其对 agent 系统的意义。"},{"title":"官方解读 · HTML 的不合理有效性","file":"官方解读-HTML的不合理有效性.html","date":"2026-05-20","slug":"unreasonable-effectiveness-of-html","category":"engineering","label":"AI 工程与原理","type":"official","description":"为什么 HTML 成为人和模型共享信息、生成工具的重要界面。"}]</script><script src="/assets/site.js?v=20260905" defer></script></body></html>
