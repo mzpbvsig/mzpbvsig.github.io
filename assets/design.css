@@ -1,4 +1,4 @@
-/* HiKcc. — shared navigation, immersive home, quiet reading. */
+/* HiKcc — shared navigation, immersive home, quiet reading. */
 :root{--night:#07131b;--mist:#a6b5bd;--frost:rgba(184,211,227,.19);--orange:#e6a476;--design-max:1335px}
 [hidden]{display:none!important}
 .icon{display:inline-block;flex:none;width:19px;height:19px;background:currentColor;mask:var(--icon) center/contain no-repeat;-webkit-mask:var(--icon) center/contain no-repeat;vertical-align:middle}
@@ -18,8 +18,10 @@ a,button,input{-webkit-tap-highlight-color:transparent}a:focus-visible,button:fo
 .home-page .site-nav .brand,.home-page .nav-links a{color:#eef3f6!important}.home-page .brand small{color:#84949d}.home-page .nav-search,.home-page .menu-toggle{color:#cfdae0}
 .home-page .site-nav.scrolled,.home-page .site-nav.menu-open{background:rgba(7,19,27,.9)!important;backdrop-filter:blur(22px);border-bottom:1px solid var(--frost)}
 .research-hero{position:relative;isolation:isolate;overflow:hidden;border-bottom:1px solid var(--frost);background:#06131b}
-.hero-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-1;animation:light-drift 18s ease-in-out infinite alternate}
-@keyframes light-drift{from{transform:scale(1)}to{transform:scale(1.025)}}
+.hero-art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-1;transform-origin:72% 42%;animation:orb-float 8s ease-in-out infinite;will-change:transform}
+@keyframes orb-float{0%,100%{transform:translate3d(0,5px,0) scale(1.03) rotate(-.35deg);filter:brightness(1)}50%{transform:translate3d(-5px,-12px,0) scale(1.055) rotate(.5deg);filter:brightness(1.13)}}
+.hero-controls{display:flex;align-items:center;gap:22px}.motion-toggle{padding:9px 0;border:0;background:transparent;color:#a6bac6;font-size:11px;cursor:pointer}.motion-toggle:hover{color:#fff}
+@media(max-width:760px){@keyframes orb-float{0%,100%{transform:translate3d(0,3px,0) scale(1.03);filter:brightness(1)}50%{transform:translate3d(-2px,-6px,0) scale(1.05);filter:brightness(1.1)}}.hero-controls{gap:10px}.motion-toggle{font-size:10px}}
 @keyframes first-light{from{opacity:0;filter:blur(5px);transform:translateY(12px)}to{opacity:1;filter:blur(0);transform:none}}
 .hero-copy{animation:first-light .8s ease-out both}
 .hero-inner{position:relative;width:min(calc(100% - 144px),var(--design-max));margin:auto;min-height:800px;height:min(870px,100svh);display:flex;flex-direction:column;justify-content:center;padding:145px 0 110px}

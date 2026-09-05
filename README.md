@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/readme/hikcc-logo.png" alt="HiKcc. logo" width="180">
+<img src="assets/readme/hikcc-logo.png" alt="HiKcc logo" width="180">
 
-# HiKcc.
+# HiKcc
 
 > Evidence-first notes on AI systems, agent workflows, evaluation, and the AI product landscape.
 
@@ -14,7 +14,7 @@ English | [简体中文](README.zh-CN.md)
 
 ## About
 
-This repository contains the generated public website for HiKcc., an AI research archive grounded in primary sources. Articles distinguish direct quotations from practical interpretation and link conclusions back to their evidence.
+This repository contains the generated public website for HiKcc, an AI research archive grounded in primary sources. Articles distinguish direct quotations from practical interpretation and link conclusions back to their evidence.
 
 The site is built and published automatically from [mzpbvsig/hikcc](https://github.com/mzpbvsig/hikcc). Generated HTML and assets should be changed in the source repository rather than edited here.
 

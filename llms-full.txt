@@ -1,10 +1,10 @@
-# HiKcc. — Full AI-readable research catalog
+# HiKcc — Full AI-readable research catalog
 
 > This file provides a structured snapshot of every public research article. The canonical HTML pages remain the citation source of record.
 
 ## Site identity
 
-HiKcc. 是一个中文 AI 研究档案。内容围绕 Claude Code、Agent 与 Eval、AI 工程原理，以及产品与产业观察展开。站点强调原始证据、逐字引用与转述分离、结论可追溯；它不是新闻聚合站，也不把实践判断伪装成官方结论。
+HiKcc 是一个中文 AI 研究档案。内容围绕 Claude Code、Agent 与 Eval、AI 工程原理，以及产品与产业观察展开。站点强调原始证据、逐字引用与转述分离、结论可追溯；它不是新闻聚合站，也不把实践判断伪装成官方结论。
 
 Canonical origin: https://mzpbvsig.github.io/
 Server mirror: https://hikcc.top/

@@ -104,7 +104,26 @@
   });
 
   const reducedMotion = matchMedia('(prefers-reduced-motion:reduce)');
+  const heroArt = document.querySelector('.hero-art');
+  const motionToggle = document.querySelector('[data-motion-toggle]');
+  let motionPaused = false;
+  let heroVisible = true;
+  function updateMotion() {
+    if (!heroArt || !motionToggle) return;
+    motionToggle.hidden = reducedMotion.matches;
+    motionToggle.textContent = motionPaused ? '播放动效' : '暂停动效';
+    motionToggle.setAttribute('aria-pressed', String(motionPaused));
+    heroArt.style.animationPlayState = motionPaused || !heroVisible || document.hidden || reducedMotion.matches ? 'paused' : 'running';
+  }
+  motionToggle?.addEventListener('click', () => { motionPaused = !motionPaused; updateMotion(); });
+  document.addEventListener('visibilitychange', updateMotion);
+  reducedMotion.addEventListener('change', updateMotion);
+  updateMotion();
   if ('IntersectionObserver' in window) {
+    if (heroArt) new IntersectionObserver(entries => {
+      heroVisible = entries[0].isIntersecting;
+      updateMotion();
+    }).observe(document.querySelector('.research-hero'));
     const reveals = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) {entry.target.classList.remove('reveal-pending'); reveals.unobserve(entry.target);}
     }), {threshold:.08});
