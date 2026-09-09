@@ -37,7 +37,7 @@
     el('range-summary').textContent=`范围内已记录 ${fmt(rows.reduce((sum,r)=>sum+(r.total_tokens||0),0))} token · ${rows.filter(r=>!r.missing).length} 天有记录`;
     select(el('day').value||data.days.at(-1).date);
   }
-  fetch('/api/codex-stats.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(value=>{
+  fetch('codex-stats.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json();}).then(value=>{
     if(!Array.isArray(value.days)||!value.days.length)throw Error();data=value;byDay=new Map(data.days.map(row=>[row.date,row]));
     el('source-status').textContent=`本机记录 · ${data.days.length} 天 · ${fmt(data.session_files)} 份会话文件 · 更新于 ${new Date(data.generated_at).toLocaleString('zh-CN',{timeZone:'Asia/Shanghai',hour12:false})}（北京时间）`;
     el('day').min=data.days[0].date;el('day').max=data.days.at(-1).date;el('day').disabled=false;
